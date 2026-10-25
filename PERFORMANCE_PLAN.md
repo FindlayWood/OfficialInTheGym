@@ -104,7 +104,8 @@ coordinator the moves take apart.
   - The jumps shown are the **athlete's**. The legacy screens always used the signed-in user, so a
     coach opening an athlete's centre saw their own jumps. Recording is offered only on your own
     centre. **A coach reading `VerticalJump/{athleteId}` needs the Firestore rules to allow it.
-    Rules are not in this repository; check before relying on it.**
+    Rules live in `InTheGym-CloudFunctions/firestore.rules`; `VerticalJump` is any-signed-in there,
+    the legacy rule, so a coach can read it today.**
   - A failed save no longer leaves "Saving Result..." on screen for good.
   - The instructions sheet's close button closes it. It had an empty action.
   - Dead code did not come across: `MyJumpsView` (UIKit, unused), `RecordJumpCoordinator` (every
@@ -266,7 +267,8 @@ the ~150–300ms contact times in drop and repeated jumps. **The height formula 
     chain (`.jumpTest` → `.jumpRecorder` → `.jumpReplay`); the video is deleted once measured.
   - Stored at **`Users/{uid}/JumpTests/{id}`**: `kind`, `date`, `attempts` and a query-only
     `bestHeight`. One collection for every jump test, so the fatigue check and a coach's summary read
-    one place. **Firestore rules must allow the owner this subcollection; they are not in this repo.**
+    one place. **Firestore rules allow the owner this subcollection** (`InTheGym-CloudFunctions/firestore.rules`,
+    since 2026-10-25 — it was denied until then).
   - Vertical Jump runs on it. Its pre-engine results (`VerticalJump/{uid}/Results`) are read as
     one-attempt sessions by `LegacyVerticalJumpSessionsLoader`, merged by
     `CurrentAndLegacyJumpTestSessionsLoader` (a failed legacy read does not hide new sessions).

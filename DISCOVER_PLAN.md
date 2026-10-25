@@ -1,7 +1,8 @@
 # DISCOVER tab — plan
 
-The agreed design for rebuilding DISCOVER on Firestore as its own framework, **DiscoverKit**. Nothing
-here is built yet. Work is split into steps, each listing what changes in this repository (**App**)
+The agreed design for rebuilding DISCOVER on Firestore as its own framework, **DiscoverKit**.
+**Built, and rolled out to production on 2026-10-25** with PROFILE and search; the in-app checks in
+the rollout checklist are what remains. Work is split into steps, each listing what changes in this repository (**App**)
 and in `InTheGym-CloudFunctions` (**Cloud**). The admin app is out of scope for now — moderation
 writes to a queue it will read later.
 
@@ -109,92 +110,97 @@ Users/{uid}/BlockedUsers/{blockedUid}               client — createdAt
 
 ## Rollout checklist
 
-The manual steps that take built work live — nothing here is done by committing. **In order**;
-tick each one as it is done. Rules and indexes are entered in the Firebase console (they are not
-deployed from either repository); the exact text is under each step below.
+**Rolled out to production 2026-10-25**, with PROFILE and search, before any real user. Every
+function is deployed, the rules and indexes are live, and every script has run. **Still open: the
+in-app checks below (unticked) and the two manual deletions.**
+
+Rules and indexes are no longer console work: they live in `InTheGym-CloudFunctions`
+(`firestore.rules`, `firestore.indexes.json`, `storage.rules`) and deploy from there, with rules
+tests in `functions/test/Rules`. The rule text under each step below is the original design; the
+deployed version is the repo's.
 
 **Step 1 — Groundwork**
-- [ ] Console rules: allow clients to create and read `Clips/{clipId}` (the app no longer writes
+- [x] Console rules: allow clients to create and read `Clips/{clipId}` (the app no longer writes
       `TestClips`; uploads are denied until this exists)
-- [ ] `python MigrateTestClips.py` — dry run, check the list
-- [ ] `python MigrateTestClips.py --write` — copy `TestClips` into `Clips`
-- [ ] `python SetAdminClaim.py findlaywood1@gmail.com` — grant the `admin` claim
-- [ ] Deploy functions from the `discover` branch — shared tag validation starts dropping blocked
+- [x] `python MigrateTestClips.py` — dry run, check the list
+- [x] `python MigrateTestClips.py --write` — copy `TestClips` into `Clips`
+- [x] `python SetAdminClaim.py findlaywood1@gmail.com` — grant the `admin` claim
+- [x] Deploy functions from the `discover` branch — shared tag validation starts dropping blocked
       tags from the workout tag index
 - [ ] Once the copy is checked, delete `TestClips` by hand
 
 **Step 2 — Cards**
-- [ ] Console rules: `DiscoverExercises`, `DiscoverWorkouts`, `DiscoverClips` (read-only) and the
+- [x] Console rules: `DiscoverExercises`, `DiscoverWorkouts`, `DiscoverClips` (read-only) and the
       full `Clips` rule
-- [ ] Console indexes: the three composite indexes for the card queries
-- [ ] Deploy functions — `discoverExerciseCard`, `discoverWorkoutCard`, `discoverClipCard`,
+- [x] Console indexes: the three composite indexes for the card queries
+- [x] Deploy functions — `discoverExerciseCard`, `discoverWorkoutCard`, `discoverClipCard`,
       `rebuildDiscoverCards`, and `recordClipWatch` writing counts to the card
-- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com all` — backfill every card
+- [x] `python RebuildDiscoverCards.py findlaywood1@gmail.com all` — backfill every card
 - [ ] Spot-check a few documents in each `Discover*` collection
 
 **Step 3 — Ratings**
-- [ ] Console rules: `Exercises/{id}/Ratings/{userId}` and `WorkoutTemplates/{id}/Ratings/{userId}`
-- [ ] Deploy functions — `discoverExerciseRatings`, `discoverWorkoutRatings`
+- [x] Console rules: `Exercises/{id}/Ratings/{userId}` and `WorkoutTemplates/{id}/Ratings/{userId}`
+- [x] Deploy functions — `discoverExerciseRatings`, `discoverWorkoutRatings`
 - [ ] Rate an exercise and a public workout in the app; check `ratingCount` / `ratingSum` / `score`
       land on their cards, and that rating again changes the sum without changing the count
 
 **Step 4 — Comments and likes**
-- [ ] Console rules: comments and comment likes under `Exercises`, `WorkoutTemplates` and `Clips`,
+- [x] Console rules: comments and comment likes under `Exercises`, `WorkoutTemplates` and `Clips`,
       and `Clips/{id}/Likes`
-- [ ] Console indexes: the two `Comments` composite indexes
-- [ ] Deploy functions — the three `…Comments`, the three `…CommentLikes`, and `discoverClipLikes`
+- [x] Console indexes: the two `Comments` composite indexes
+- [x] Deploy functions — the three `…Comments`, the three `…CommentLikes`, and `discoverClipLikes`
 - [ ] Post, reply, like and delete a comment in the app; check `commentCount`, `replyCount` and
       `likeCount` settle, and that a deleted comment with replies reads "Comment removed"
 - [ ] Play a clip, like it, leave; check `likeCount` and `viewCount` on its card
-- [ ] **Do not release comments to users until step 6 (report and block) is rolled out**
+- [x] **Do not release comments to users until step 6 (report and block) is rolled out**
 
 **Step 5 — Tags**
-- [ ] Console rules: `TagVotes` under `Exercises` and `WorkoutTemplates`, and read-only `Tags`
-- [ ] Console indexes: the two `Tags` composite indexes and the two collection-group `subjectId`
+- [x] Console rules: `TagVotes` under `Exercises` and `WorkoutTemplates`, and read-only `Tags`
+- [x] Console indexes: the two `Tags` composite indexes and the two collection-group `subjectId`
       exemptions — **tag syncs fail without the exemptions**
-- [ ] Deploy functions — the four tag triggers, the updated `rebuildDiscoverCards`; **confirm the
+- [x] Deploy functions — the four tag triggers, the updated `rebuildDiscoverCards`; **confirm the
       deletion of `onWorkoutTemplateWritten`** when the deploy asks
-- [ ] `python SeedExerciseTags.py` — dry run, check the derived tags read sensibly
-- [ ] `python SeedExerciseTags.py --write`
-- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com workout-tags` — index every template's
+- [x] `python SeedExerciseTags.py` — dry run, check the derived tags read sensibly
+- [x] `python SeedExerciseTags.py --write`
+- [x] `python RebuildDiscoverCards.py findlaywood1@gmail.com workout-tags` — index every template's
       existing author tags (and `exercise-tags` too, if seeding ran before the deploy)
 - [ ] Check `Tags` in the console, and the home screen's Tags section
 - [ ] Vote a tag on an exercise: it shows to you outlined, not to others, until three people agree
 - [ ] Delete the old `TaggedWorkoutTemplates` collection by hand
 
 **Step 6 — Moderation**
-- [ ] Console rules: `Reports`, `ModerationQueue`, `Users/{uid}/BlockedUsers`, and the admin
+- [x] Console rules: `Reports`, `ModerationQueue`, `Users/{uid}/BlockedUsers`, and the admin
       status-change additions
-- [ ] Deploy functions — `discoverReportFiled`, and the updated tag sync (hidden cards and tags)
+- [x] Deploy functions — `discoverReportFiled`, and the updated tag sync (hidden cards and tags)
 - [ ] With three test accounts, report one comment: hidden after the third, `ModerationQueue` entry
       `hidden`, the card's `commentCount` drops
 - [ ] Report with the admin account: hidden at once, `adminReported: true`
 - [ ] Report a tag as admin: gone from the directory and from every subject's tag chips
 - [ ] Block a user: their comments and clips disappear; unblock from Blocked Users brings them back
-- [ ] **Once this is rolled out, comments (step 4) may reach real users**
+- [x] **Once this is rolled out, comments (step 4) may reach real users**
 
 **Step 7 — Workout and exercise pages**
-- [ ] Console index: `DiscoverClips` on `exerciseId`, `isPublic`, `status`, `uploadedAt` ↓
+- [x] Console index: `DiscoverClips` on `exerciseId`, `isPublic`, `status`, `uploadedAt` ↓
 - [ ] Open a public workout: exercises and author show; Save to Library → it appears in MyDay's
       library at once, private, and the page reads "Saved" on the next visit
 - [ ] Edit the original as its author; the saved copy does not change
 - [ ] Open an exercise with public clips: the strip shows them, newest first
 
 **Step 8 — `deleteDiscoverData`**
-- [ ] Console indexes: collection-group `authorId` exemptions on `Ratings`, `Comments`, `Likes`,
+- [x] Console indexes: collection-group `authorId` exemptions on `Ratings`, `Comments`, `Likes`,
       `TagVotes` — **without them the deletion's queries fail**
-- [ ] Nothing to deploy on its own — it ships with, and is called by, the account-deletion feature
+- [x] Nothing to deploy on its own — it ships with, and is called by, the account-deletion feature
 
 **Step 9 — Tab wiring**
-- [ ] Steps 1–7's rules, indexes and deploys are all live before this build ships — DISCOVER now
+- [x] Steps 1–7's rules, indexes and deploys are all live before this build ships — DISCOVER now
       reads nothing from the Realtime Database, so an unrolled step is a broken screen
-- [ ] Emulator: `npm run build` in the functions, then `python Emulator/SeedDiscover.py`, then the
+- [x] Emulator: `npm run build` in the functions, then `python Emulator/SeedDiscover.py`, then the
       InTheGym-EM scheme signed in as `demo@inthegym.test` — every DISCOVER screen has data
 - [ ] Coach account: DISCOVER works and workout pages show no Save to Library
 
 ## Steps
 
-### Step 1 — Groundwork — built, not rolled out
+### Step 1 — Groundwork — rolled out 2026-10-25
 
 **Rules and indexes are not deployed from either repository.** `firestore.rules` in
 `InTheGym-CloudFunctions` is not what is live, and its `firebase.json` has no `firestore` section,
@@ -225,7 +231,7 @@ Done:
 - **Scripts** — `SetAdminClaim.py` grants / revokes the `admin` claim; `MigrateTestClips.py` copies
   `TestClips` into `Clips` with a merge (dry run by default).
 
-### Step 2 — Cards and the DiscoverKit skeleton — built, not rolled out
+### Step 2 — Cards and the DiscoverKit skeleton — rolled out 2026-10-25
 
 **Cloud** (`src/Discover/`)
 - `syncCard` is the one way a card's projection is written. It **projects the subject's current
@@ -300,7 +306,7 @@ Queries on another user's cards must filter `isPublic == true`, or the rules rej
 
 **Rollout order**: rules and indexes → deploy functions → `RebuildDiscoverCards.py <admin> all`.
 
-### Step 3 — Ratings — built, not rolled out
+### Step 3 — Ratings — rolled out 2026-10-25
 
 **Cloud** (`src/Discover/`)
 - `discoverExerciseRatings` / `discoverWorkoutRatings` share `syncRatingSummary`, which **recounts**
@@ -357,7 +363,7 @@ match /WorkoutTemplates/{templateId}/Ratings/{userId} {
 ```
 No rating a private workout, and no rating your own. A rating can be changed, never withdrawn.
 
-### Step 4 — Comments and likes — built, not rolled out
+### Step 4 — Comments and likes — rolled out 2026-10-25
 
 **Cloud** (`src/Discover/`)
 - `syncCount` — recount a query into one field, in a transaction, **only if its owner exists** and
@@ -476,7 +482,7 @@ Every comment query filters `status in ['visible', 'removed']`, or `canReadComme
 | `parentId` ↑, `status` ↑, `createdAt` ↓, `__name__` ↓ | top-level comments, newest first |
 | `parentId` ↑, `status` ↑, `createdAt` ↑, `__name__` ↑ | replies, oldest first |
 
-### Step 5 — Tags — built, not rolled out
+### Step 5 — Tags — rolled out 2026-10-25
 
 **Decided here:** seeded tags **and** your own votes. Seeded (curated) tags on a catalogue exercise
 play exactly the role a workout author's tags do — **base tags**, always visible, one vote each — so
@@ -569,7 +575,7 @@ Once `TaggedWorkoutTemplates` is deleted, its rule can go too.
 The two collection-group exemptions are what `syncSubjectTags` finds a subject's entries with —
 **without them every tag sync fails.**
 
-### Step 6 — Moderation — built, not rolled out
+### Step 6 — Moderation — rolled out 2026-10-25
 
 **Decided here:** auto-hide at **3 distinct reporters**, or **1 admin**. Apple guideline 1.2 wants
 prompt action; the queue is where a wrong hide gets restored.
@@ -643,7 +649,7 @@ And, for the admin app later, add `|| isAdminStatusChange()` to the `update` rul
 
 **Console — indexes**: none. Both report queries are single-field equality.
 
-### Step 7 — Workout and exercise pages — built, not rolled out
+### Step 7 — Workout and exercise pages — rolled out 2026-10-25
 
 **Decided here:** the workout page's one action is **Save to Library** — never "Add to Today";
 putting a workout on a day is MyDay's job, from the library, where the date strip is. The save is
@@ -734,7 +740,7 @@ data lives. Nothing calls it until that feature exists.
 | `Likes` | `authorId` |
 | `TagVotes` | `authorId` |
 
-### Step 9 — Tab wiring and legacy removal — built, not rolled out
+### Step 9 — Tab wiring and legacy removal — rolled out 2026-10-25
 
 **App**
 - **Player tab bar** composes DiscoverKit **after** MyDay and hands it `myDayKit.workoutLibrary`, so
@@ -774,20 +780,20 @@ data lives. Nothing calls it until that feature exists.
 **The build is complete. What remains is the rollout checklist above** — rules, indexes, deploys,
 seeding and backfills, in step order.
 
-## Follow-up — unified search — built, not rolled out
+## Follow-up — unified search — rolled out 2026-10-25
 
 Built 2026-10-05 on `search` branches (app from `staging`, functions from `profile`). One search on
 the DISCOVER tab covering **people, workouts and exercises**, which replaced the people-only search
 PROFILE step 7 put on the profile title bar.
 
 **Rollout checklist** — after DISCOVER and PROFILE are rolled out, in order:
-- [ ] Console index (collection scope): `DiscoverWorkouts` — `isPublic` ↑, `status` ↑,
+- [x] Console index (collection scope): `DiscoverWorkouts` — `isPublic` ↑, `status` ↑,
       `searchTokens` (Arrays / array-contains), `titleLower` ↑. Workout search fails without it.
       People search (`searchTokens` alone, `usernameLower` range) and the exercise catalogue read
       (`status` equality) run on automatic indexes.
-- [ ] Deploy functions from the `search` branch — `discoverExerciseCard`, `discoverWorkoutCard`,
+- [x] Deploy functions from the `search` branch — `discoverExerciseCard`, `discoverWorkoutCard`,
       `syncProfile`, and the tag triggers, which embed the card projection
-- [ ] `python RebuildDiscoverCards.py findlaywood1@gmail.com workouts` and
+- [x] `python RebuildDiscoverCards.py findlaywood1@gmail.com workouts` and
       `python RebuildProfiles.py findlaywood1@gmail.com` — every card and profile projected before
       the deploy has no `searchTokens`, and **search cannot find it**
 - [ ] Search a username, a surname, the second word of a workout title, the middle of an exercise

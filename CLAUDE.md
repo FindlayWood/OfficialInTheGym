@@ -14,8 +14,8 @@ Lean, minimal UI aesthetic throughout.
 - `StatsKit` — framework
 - `AccountCreationKit` — framework
 - `LoginKit` — framework
-- `DiscoverKit` — framework (in progress — see `DISCOVER_PLAN.md`)
-- `ProfileKit` — framework (built, not rolled out — see `PROFILE_PLAN.md`)
+- `DiscoverKit` — framework (rolled out 2026-10-25 — see `DISCOVER_PLAN.md`)
+- `ProfileKit` — framework (rolled out 2026-10-25 — see `PROFILE_PLAN.md`)
 - `PerformanceKit` — framework (being moved in — see `PERFORMANCE_PLAN.md`)
 
 ### Inactive — do not modify
@@ -707,9 +707,9 @@ screen.
 Roadmap order:
 1. Fix workout stats → update STATS tab
 2. DISCOVER tab (exercises + workouts: display, scoring, user reviews)
-3. PROFILE tab, `ProfileKit` (built; rollout pending, see `PROFILE_PLAN.md`)
+3. PROFILE tab, `ProfileKit` (rolled out 2026-10-25, see `PROFILE_PLAN.md`)
 4. Unified search on DISCOVER (people, workouts, exercises), built entirely in DiscoverKit, which
-   replaced ProfileKit's people search (built; rollout pending, see *Follow-up — unified search* in
+   replaced ProfileKit's people search (rolled out 2026-10-25, see *Follow-up — unified search* in
    `DISCOVER_PLAN.md`).
 
 Those five are the **player** tab bar (`PlayerInitialViewController`). The **coach** tab bar
@@ -1479,7 +1479,7 @@ users unless moderation is rolled out with them** (Apple guideline 1.2).
 
 ### Search — people, workouts, exercises
 The app's one search, behind the magnifier on DISCOVER's title bar. It replaced ProfileKit's
-people-only search, which is deleted. Built, not rolled out — checklist in `DISCOVER_PLAN.md`.
+people-only search, which is deleted. Rolled out 2026-10-25 — see `DISCOVER_PLAN.md`.
 - **Workouts and people match the start of any word.** The functions write `searchTokens` — every
   prefix of every word, lowercased, accents folded (`Search/SearchTokens.ts`) — onto workout cards
   and `Profiles`, and the app asks for the query's longest word with `array-contains`, checking
@@ -1543,8 +1543,9 @@ Run the app with **InTheGym-EM** and sign in as `demo@inthegym.test`.
 Your own profile, other people's, follows, private accounts, highlights, settings and account
 deletion. Firestore only for everything new. The step-by-step build, every rule and index, and the
 **rollout checklist** are in `PROFILE_PLAN.md`; this section is the shape and the reasons.
-**Nothing is rolled out yet, and steps 7–10 must ship together**: profiles are reachable from
-DISCOVER and search only once report, block and account deletion are live.
+**Rolled out 2026-10-25**, all ten steps together, with DISCOVER and search, before any real
+user: profiles are reachable from DISCOVER and search only because report, block and account
+deletion went live with them.
 
 ### Two documents per person, and why
 - **`Users/{uid}` is private to its owner.** It holds the email and body measurements, and Firestore
@@ -1726,8 +1727,9 @@ every day document of every user.
   writes a stub document holding only a `deletedAt`.
 - **Forward-only, by decision** — sessions finished before this shipped are not backfilled and stay
   readable in their day documents.
-- Requires Firestore rules permitting the new collections. **Rules are not in this repository** —
-  a client write to a new top-level collection is denied until they are deployed.
+- Both collections have rules (owner only; the analytics copy may change only `deletedAt`). Until
+  2026-10-25 **both writes were denied** — the user copy had no rule at all, and the batch failed
+  with it — so no session document exists from before then.
 
 `WorkoutSessionModel` (`MyDayWorkoutModel.swift`) is dead — built by `finishSession`, never read.
 Left in place; `CompletedWorkoutSession` is the model that is actually persisted.
@@ -1747,7 +1749,7 @@ disk-backed mutation queue covers ordinary offline writes.
 **Revisit when the workout history screen is built** — that is when a missing document first becomes
 visible to a user, and when it will be clear whether a sync queue or a one-off backfill is the answer.
 Two caveats that survive until then: permission-denied is a **hard** failure the SDK never retries
-(so deploy the rules before trusting the collection), and `#if EMULATOR` sets
+(a rule mistake loses the write outright), and `#if EMULATOR` sets
 `isPersistenceEnabled = false` (`AppDelegate.swift:41`), so emulator builds have no offline queue at
 all. The exercise raw logs have had this same gap since long before the workout ones — fix both
 together or neither.
@@ -1815,8 +1817,8 @@ appears on some screens and not others.
 | `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
-| `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind`; **needs a rule for the subcollection** |
-| `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session; **needs a rule for the subcollection** |
+| `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
+| `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
@@ -1853,8 +1855,20 @@ no-op `PreviewFirestoreService` in the same file) is the one place a multi-metho
 accepted, because it is generic CRUD — `upload<Model: FirestoreResource>`, `upload(data:at:)`,
 `read<T: Codable>(at:)`, `readAll<T: Codable>(at:)`, all `async throws`.
 
-**Rules are not in this repository.** A client write to a new top-level collection is denied until
-they are deployed elsewhere, and permission-denied is a hard failure the SDK never retries.
+**Rules and indexes live in `InTheGym-CloudFunctions`**, not this repository and not the console:
+`firestore.rules`, `firestore.indexes.json`, `storage.rules`, `database.rules.json`, deployed from
+that repo's root with `firebase deploy --only firestore:rules,firestore:indexes,storage`. A console
+edit is overwritten by the next deploy.
+- **A new path the app writes needs a rule in the same change.** A collection with no matching rule
+  is denied, and a rule on `Users/{uid}` does not cover anything nested under it. Until 2026-10-25
+  that silently denied template sync, session documents, weight entries, jump and balance tests and
+  blocks. Permission-denied is a hard failure the SDK never retries, and on a device it looks like a
+  network error.
+- **A new composite query needs an entry in `firestore.indexes.json`.** The emulator does not enforce
+  composite indexes, so a missing one only fails in production.
+- **Every rule change gets a test** in `functions/test/Rules/firestoreRules.test.ts`.
+- **`Users/{uid}` is readable only by its owner**, and the client may change only `displayName`,
+  `bio`, `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`.
 
 ## Long-term Architecture Goal
 Each tab to become its own framework. Shared core features (e.g. user profile loading)

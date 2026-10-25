@@ -1,9 +1,8 @@
 # PROFILE tab — plan
 
 The agreed design for rebuilding PROFILE on Firestore as its own framework, **ProfileKit**.
-**All eleven steps are built (2026-10-04), on `profile` branches in this repo and in
-`InTheGym-CloudFunctions`. Nothing is rolled out**: the rollout checklist below is the remaining
-work, in step order, and steps 7–10 ship together. Work is split into steps, each listing what changes in this repository (**App**)
+**All eleven steps are built (2026-10-04) and rolled out to production (2026-10-25)**, with
+DISCOVER and search. What remains is the on-device pass in the rollout checklist below. Work is split into steps, each listing what changes in this repository (**App**)
 and in `InTheGym-CloudFunctions` (**Cloud**), the same shape as `DISCOVER_PLAN.md`.
 
 The decisions below come from an interview on 2026-10-03. Anything marked **open** was not settled
@@ -175,7 +174,7 @@ Follows/{followerId}_{followeeId}        follower creates; followee approves / r
 - **Known gap:** the bio comes from Firestore `Users.bio`, while the legacy Edit Profile writes
   RTDB `users/{uid}/profileBio`. A bio edited before step 3 will not show. Step 3 closes this.
 
-### Step 2 — `Profiles` projection, `Users` closed — built, not rolled out
+### Step 2 — `Profiles` projection, `Users` closed — rolled out 2026-10-25
 
 **Cloud** (`InTheGym-CloudFunctions`, branch `profile`, cut from `discover` because it reuses
 `syncCard`)
@@ -227,7 +226,7 @@ match /Users/{userId} {
 }
 ```
 
-### Step 3 — Edit profile: photo, name, bio — built, not rolled out
+### Step 3 — Edit profile: photo, name, bio — rolled out 2026-10-25
 
 **Changed from the plan:** the legacy store is kept in step **server-side**, not by a second client
 writer. The client writes Firestore `Users/{uid}` only. `onCreateAccount` already bridged Firestore
@@ -290,7 +289,7 @@ exists on the coach tab bar and still writes the dead key. `onEditAccount` ignor
 - Storage: `ProfilePhotos/{uid}` must allow the owner to **overwrite**, not only create. Signup only
   ever created.
 
-### Step 4 — Body measurements and the weight log — built, not rolled out
+### Step 4 — Body measurements and the weight log — rolled out 2026-10-25
 
 **Changed from the plan, three ways:**
 - **Signup already persists the measurements.** The functions' `createAccount` has written
@@ -385,7 +384,7 @@ exists on the coach tab bar and still writes the dead key. `onEditAccount` ignor
 
 - No new index: a single-field `orderBy("date")` uses the automatic one.
 
-### Step 5 — Follows — built, not rolled out
+### Step 5 — Follows — rolled out 2026-10-25
 
 **Cloud**
 - `profileFollowCounts` (v2, `Follows/{id}` written) recounts **active** follows into
@@ -476,7 +475,7 @@ is denied**. That is one more reason the step 2 backfill comes first.
 - `followeeId` ASC, `status` ASC, `createdAt` DESC
 - `followerId` ASC, `status` ASC, `createdAt` DESC
 
-### Step 6 — Private accounts and requests — built, not rolled out
+### Step 6 — Private accounts and requests — rolled out 2026-10-25
 
 **Cloud**
 - `profileProjection` adds `isPrivate`, true only for a literal `true`. It is what the `Follows`
@@ -534,7 +533,7 @@ is denied**. That is one more reason the step 2 backfill comes first.
 
 - No new index. The inbox runs on step 5's `(followeeId, status, createdAt desc)`.
 
-### Step 7 — Other users' profiles: DISCOVER, lists, search — built, not rolled out
+### Step 7 — Other users' profiles: DISCOVER, lists, search — rolled out 2026-10-25
 
 **Do not ship this to users before step 9.** A stranger's profile, with its bio and photo, can now
 be reached from DISCOVER, search and every legacy screen, and Apple guideline 1.2 requires a way to
@@ -627,7 +626,7 @@ A list query constrains one of `followeeId` / `followerId` with `==`. The rule i
 side, and the `||` with the unconstrained side is how one rule covers both lists. Test both lists,
 for a public account and a private one, in the Rules Playground before publishing.
 
-### Step 8 — Highlights (PBs) and clips — built, not rolled out
+### Step 8 — Highlights (PBs) and clips — rolled out 2026-10-25
 
 **Decided at the start of the step** (2026-10-04):
 - **Highlights are automatic until pinned.** They are your three most-trained exercises (by
@@ -711,7 +710,7 @@ enforces the privacy rather than only the app hiding it.
 **Indexes** (console): composite on `DiscoverClips`: `createdBy` ASC, `isPublic` ASC, `status` ASC,
 `uploadedAt` DESC.
 
-### Step 9 — Report and block on profiles — built, not rolled out
+### Step 9 — Report and block on profiles — rolled out 2026-10-25
 
 **This is the step step 7 waits for.** Once it is rolled out, steps 7–9 can reach users together.
 
@@ -766,7 +765,7 @@ highlights) needs an approved follow, which the block removed.
   && !exists(/databases/$(database)/documents/Users/$(request.auth.uid)/BlockedUsers/$(request.resource.data.followeeId))
   ```
 
-### Step 10 — Account deletion — built, not rolled out
+### Step 10 — Account deletion — rolled out 2026-10-25
 
 App Store guideline 5.1.1(v): an app that lets you create an account must let you delete it.
 
@@ -856,86 +855,86 @@ they stay, they need an author index or a sweep before this is complete for them
 
 ## Rollout checklist
 
-Built from the steps above as each one lands, in step order, **the same discipline as DISCOVER**:
-rules and indexes are console work, so a merged branch is not a working feature. The order that
-matters most:
+**Rolled out to production 2026-10-25**, all ten steps together, with DISCOVER and search, before
+any real user. Functions, rules, indexes and scripts are done; **the on-device pass and CI are
+not** (unticked below). Rules and indexes now live in `InTheGym-CloudFunctions`, not the console.
 
 **Step 2 — `Profiles`**
-- [ ] Deploy `syncProfile` and `rebuildProfiles` from the functions `profile` branch
-- [ ] Console rules: add `Profiles/{userId}` (read: signed in; write: none)
-- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, then spot-check a few `Profiles` documents
+- [x] Deploy `syncProfile` and `rebuildProfiles` from the functions `profile` branch
+- [x] Console rules: add `Profiles/{userId}` (read: signed in; write: none)
+- [x] `python RebuildProfiles.py findlaywood1@gmail.com`, then spot-check a few `Profiles` documents
 - [ ] Ship an app build whose DISCOVER reads `Profiles` (this branch)
-- [ ] Console rules: close `Users/{userId}` to `get` by its owner, no `list`. **Last**, and only
+- [x] Console rules: close `Users/{userId}` to `get` by its owner, no `list`. **Last**, and only
       once no build in use still reads other users' `Users` documents. DISCOVER has not shipped,
       so that is any build from this branch onward.
 
 **Step 3 — Edit profile**
-- [ ] Deploy `onEditAccount` from the functions `profile` branch
-- [ ] Console rules: the `Users/{userId}` update rule above, then check that no other client write
+- [x] Deploy `onEditAccount` from the functions `profile` branch
+- [x] Console rules: the `Users/{userId}` update rule above, then check that no other client write
       to `Users` is still relied on
-- [ ] Storage rules: the owner may overwrite `ProfilePhotos/{uid}`
+- [x] Storage rules: the owner may overwrite `ProfilePhotos/{uid}`
 
 **Step 4 — Body measurements**
-- [ ] Deploy `syncLatestWeight` from the functions `profile` branch
-- [ ] Console rules: the widened `Users/{userId}` update rule, and `WeightTracking`
-- [ ] Confirm the deployed `createAccount` is the 10 August version that persists the body keys
+- [x] Deploy `syncLatestWeight` from the functions `profile` branch
+- [x] Console rules: the widened `Users/{userId}` update rule, and `WeightTracking`
+- [x] Confirm the deployed `createAccount` is the 10 August version that persists the body keys
 
 **Step 5 — Follows**
-- [ ] Deploy `profileFollowCounts`, `mirrorLegacyFollow`, `mirrorLegacyUnfollow` and the updated
+- [x] Deploy `profileFollowCounts`, `mirrorLegacyFollow`, `mirrorLegacyUnfollow` and the updated
       `rebuildProfiles` from the functions `profile` branch
-- [ ] Console rules: `Follows`
-- [ ] Console indexes: the two `Follows` composites (wait for them to finish building)
-- [ ] `python MigrateFollows.py`, check the counts, then `python MigrateFollows.py --write`
-- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to recount every profile once
+- [x] Console rules: `Follows`
+- [x] Console indexes: the two `Follows` composites (wait for them to finish building)
+- [x] `python MigrateFollows.py`, check the counts, then `python MigrateFollows.py --write`
+- [x] `python RebuildProfiles.py findlaywood1@gmail.com`, to recount every profile once
 
 **Step 6 — Private accounts and requests**
-- [ ] Deploy `approvePendingFollows` and the updated `syncProfile` from the functions `profile`
+- [x] Deploy `approvePendingFollows` and the updated `syncProfile` from the functions `profile`
       branch
-- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `isPrivate`
-- [ ] Console rules: `isPrivate` in the `Users` update rule, and the `Follows` update rule
+- [x] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `isPrivate`
+- [x] Console rules: `isPrivate` in the `Users` update rule, and the `Follows` update rule
 
 **Step 7 — Other users' profiles**
-- [ ] **Step 9 is live first.** Do not ship a build with step 7 to users until profile reporting
+- [x] **Step 9 is live first.** Do not ship a build with step 7 to users until profile reporting
       and blocking are in it.
-- [ ] Console rules: the tightened `Follows` list rule, tested in the Rules Playground for both
+- [x] Console rules: the tightened `Follows` list rule, tested in the Rules Playground for both
       lists, public and private
 
 **Step 8 — Highlights and clips**
-- [ ] Deploy `profileHighlightsFromStats`, `profileHighlightsFromPins`, `profileClipCount` and the
+- [x] Deploy `profileHighlightsFromStats`, `profileHighlightsFromPins`, `profileClipCount` and the
       updated `rebuildProfiles` from the functions `profile` branch
-- [ ] Console index: the `DiscoverClips` composite (wait for it to build)
-- [ ] Console rules: `ProfileHighlights`, and `pinnedHighlights` in the `Users` update rule
-- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, to build every user's highlights and clip
+- [x] Console index: the `DiscoverClips` composite (wait for it to build)
+- [x] Console rules: `ProfileHighlights`, and `pinnedHighlights` in the `Users` update rule
+- [x] `python RebuildProfiles.py findlaywood1@gmail.com`, to build every user's highlights and clip
       count
 
 **Step 9 — Report and block**
-- [ ] Deploy `removeFollowsOnBlock` and the updated `discoverReportFiled` (new `"profile"` kind) from
+- [x] Deploy `removeFollowsOnBlock` and the updated `discoverReportFiled` (new `"profile"` kind) from
       the functions `profile` branch
-- [ ] Console rules: `'profile'` in the `Reports` `targetKind` list, and both block checks in the
+- [x] Console rules: `'profile'` in the `Reports` `targetKind` list, and both block checks in the
       `Follows` create rule
-- [ ] Then steps 7–9 may ship together
+- [x] Then steps 7–9 may ship together
 
 **Follow-up — join month on the profile card**
-- [ ] Deploy the updated `syncProfile` and `rebuildProfiles` from the functions
+- [x] Deploy the updated `syncProfile` and `rebuildProfiles` from the functions
       `profile-joined-month` branch (cut from `main`; it touches only `ProfileProjection.ts`)
-- [ ] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `joinedMonth`.
+- [x] `python RebuildProfiles.py findlaywood1@gmail.com`, so every profile carries `joinedMonth`.
       Until then other people's cards simply leave the line out
-- [ ] No rule change: `Profiles` is already readable by any signed-in user and written by
+- [x] No rule change: `Profiles` is already readable by any signed-in user and written by
       functions only
 
 **Step 10 — Account deletion**
-- [ ] Deploy `deleteAccount` from the functions `profile` branch
-- [ ] Check the single-field exemptions `deleteDiscoverData` needs (`authorId` on Ratings, Comments,
+- [x] Deploy `deleteAccount` from the functions `profile` branch
+- [x] Check the single-field exemptions `deleteDiscoverData` needs (`authorId` on Ratings, Comments,
       Likes, TagVotes: DISCOVER step 8's checklist) exist, or its collection-group queries fail
 - [ ] On a test account, delete through the app and confirm in the console that nothing is left
-- [ ] Ships with steps 7–9. The App Store requires it as soon as account creation exists, which it
+- [x] Ships with steps 7–9. The App Store requires it as soon as account creation exists, which it
       already does
 
 **Before shipping steps 7–10 to users**
 - [ ] **DISCOVER's rollout checklist is complete first** (`DISCOVER_PLAN.md`). PROFILE builds on
       it: `Profiles` reuses DISCOVER's card functions, author names read `Profiles`, and profile
       reports go through DISCOVER's moderation (step 6 of its checklist).
-- [ ] The functions `profile` branch (cut from `discover`, so it carries every DISCOVER function)
+- [x] The functions `profile` branch (cut from `discover`, so it carries every DISCOVER function)
       is pushed and merged, so deploys come from a branch that exists somewhere other than this Mac
 - [ ] An on-device pass over every PROFILE screen. None has been checked on a simulator: own
       profile, edit, body measurements, follow lists, requests, search, someone else's profile
