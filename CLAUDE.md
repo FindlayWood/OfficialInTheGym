@@ -1654,10 +1654,14 @@ The catalogue is edited by hand-run scripts in `InTheGym-Scripts`, never by the 
   Custom exercises will make duplicate names normal.
 - **Writing to `Exercises/{id}` creates a DISCOVER card** (`discoverExerciseCard`). Anything
   that must stay private, such as custom exercises, cannot live there.
-- **Custom exercises are designed, not built — see `CUSTOM_EXERCISES_PLAN.md`.** They are written
-  to `Users/{uid}/CustomExercises` and a top-level `CustomExercises`, reviewed in the dashboards,
-  and promoted into `Exercises` under the **same id**. DISCOVER body-part votes are suggestions
-  only.
+- **Custom exercises are built — see `CUSTOM_EXERCISES_PLAN.md`** (October 2026; not yet deployed
+  or released). Made from MyDay's exercise picker, saved local-first to
+  `Users/{uid}/CustomExercises` and a top-level `CustomExercises`, reviewed in both dashboards, and
+  promoted into `Exercises` under the **same id**, so the creator's history needs no migration.
+  DISCOVER shows what each exercise works and takes **body-part votes, which are suggestions
+  only** — a curator applies or dismisses them in the dashboards; nothing writes `Exercises` from
+  votes. **The Firestore rules and functions must be deployed before an app build that saves
+  custom exercises ships**, or every upload is refused.
 - `ExerciseAudit.py` (read-only) reports exercises missing body fields, with unknown ids or
   categories, or with duplicate names. The emulator seeders take their body fields from
   `Emulator/ExerciseBody.py`.
@@ -1841,7 +1845,11 @@ appears on some screens and not others.
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
 | `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
 | `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
-| `Exercises/{id}` | Firestore | **scripts only** — the catalogue; every write also creates a `DiscoverExercises` card |
+| `Exercises/{id}` | Firestore | **scripts and the two dashboards only** — the catalogue; every write also creates a `DiscoverExercises` card and (`seedExerciseTags`) its starting tags |
+| `Exercises/{id}/BodyVotes/{uid}` | Firestore | `FirestoreBodyVoteWriter` — a user's suggested muscle groups and patterns, whole set |
+| `BodySuggestions/{id}` | Firestore | **Cloud Functions only** (`discoverExerciseBodyVotes`) — the tally of BodyVotes; a curator may only dismiss |
+| `Users/{uid}/CustomExercises/{id}` | Firestore | `FirestoreCustomExerciseUploader` (merge); `status` mirrored by `syncCustomExerciseStatus` |
+| `CustomExercises/{id}` | Firestore | `FirestoreTopLevelCustomExerciseUploader` (merge) — the review copy; `status` set by the functions and the dashboards, never the app |
 | `Usernames/{username}` | Firestore | `FirestoreUsernameReserver` — **case-sensitive document id** |
 | `Clips/{clipId}` | Firestore | `FirestoreMetadataDecorator` — **not `TestClips`** (the Storage files still are) |
 | `DiscoverExercises/{id}`, `DiscoverWorkouts/{id}`, `DiscoverClips/{id}` | Firestore | **Cloud Functions only** — DISCOVER's cards |
@@ -1859,6 +1867,9 @@ appears on some screens and not others.
 | `Documents/MyDays/{uid}/{date}.json` | disk | `MyDayFileManagerSaver` |
 | `Documents/WorkoutTemplates/{uid}/{id}.json` | disk | `FileManagerWorkoutTemplateUploader` |
 | `Documents/PendingSync/workoutTemplates_{uid}.json` | disk | `SyncQueueWorkoutTemplateUploader` |
+| `Documents/CustomExercises/{uid}/{id}.json` | disk | `FileManagerCustomExerciseWriter` — `CustomExerciseStoreLocation` |
+| `Documents/PendingSync/customExercises_{uid}.json` | disk | `SyncQueueCustomExerciseUploader` |
+| `Documents/ExerciseBody/{muscleGroups,movementPatterns}.json` | disk | the muscle group / pattern list cache — `ExerciseBodyListStoreLocation`, not user-scoped |
 
 **The path lives on the model, never at the call site.** `FirebaseInstance` requires
 `var internalPath: String`, `FirebaseModel` requires `static var path: String`, and

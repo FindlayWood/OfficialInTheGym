@@ -4,9 +4,10 @@ Users create exercises the catalogue lacks. Each one is private to its creator, 
 to decide whether it joins the catalogue. DISCOVER users can suggest corrections to a catalogue
 exercise's muscle groups and movement patterns, and every suggestion goes through you.
 
-**Status: designed 24 October 2026; building from 25 October.** Part 1 (MyDayKit's `Exercise`
-decodes `muscleGroups` / `movementPatterns`; the picker keys rows by id and searches across
-categories), step 1 and the admin app's merge fix are merged and deployed. Steps 2–11 are not.
+**Status: designed 24 October 2026, built 25 October — every step.** Part 1, step 1 and the admin
+app's merge fix are merged and deployed. Steps 2–11 are committed on branches in five repos (the
+app, functions and scripts on `custom-exercises`; the dashboard and admin app on
+`complete-exercises`) and are **not merged, deployed or released**. See *Rollout* at the end.
 
 ## Decisions — agreed, do not relitigate
 - **A custom exercise is complete or it is not saved.** Name, category, at least one muscle group,
@@ -287,7 +288,7 @@ since until votes exist it has nothing to show:
 - Verified on the emulator: submit → both copies `pending`; approve → both `approved`, and the new
   catalogue entry tagged by `seedExerciseTags`.
 
-### 11. DISCOVER — showing and voting on body parts
+### 11. DISCOVER — showing and voting on body parts — **built**
 - The exercise card projection gains `muscleGroups` / `movementPatterns`. The exercise page shows
   "Works: Chest · Triceps · Horizontal push". Display names come from the `MuscleGroups` /
   `MovementTypes` documents, never prettified ids.
@@ -298,6 +299,37 @@ since until votes exist it has nothing to show:
   server-owned `BodySuggestions/{exerciseId}`, which only the dashboard reads. **Nothing writes
   `Exercises` fields from votes.**
 - Votes go into the deletion module too.
+
+As built:
+- **Functions**: `discoverExerciseBodyVotes` (on a vote) and `discoverExerciseBodySuggestions` (on
+  the exercise) both run `syncBodySuggestions`: a recount, ids not in `MuscleGroups` /
+  `MovementTypes` dropped, `proposed` = what at least half chose, `disagrees` = differs from what is
+  stored. **Keep current** writes `dismissedProposal` with `disagrees: false` (the only fields a
+  curator may write); while the votes still propose that, it stays out of the queue. The card
+  projection carries `muscleGroups` / `movementPatterns` (cards only — not the tag directory's
+  entries). Account deletion removes a user's `BodyVotes`; `firestore.indexes.json` exempts their
+  `authorId`.
+- **DiscoverKit**: `DiscoverBodyPartsSection` on the exercise page ("Works: Chest · Triceps · Push
+  Horizontal", names from the lists), `DiscoverBodyPartsSheet` (chips; each tap saves the whole set
+  once it has one of each, Done only dismisses), `DiscoverBodyPartsViewModel` (tests). Protocols
+  `BodyPartsLoader` / `MyBodyVoteLoader` / `BodyVoteWriter`, answered in the composition root —
+  names by MyDay's cached loaders, built for both compositions by `CachedExerciseBodyLoaders`.
+- **Dashboards**: the body suggestions queue (moved here from step 10) — React
+  `BodySuggestions.js`, admin app Suggestions tab — vote counts beside each choice, the majority
+  preselected, Apply (merge into `Exercises/{id}`) or Keep current.
+- Verified on the emulator: card carries body parts; a vote with an invented id counts only the real
+  ones and joins the queue; applying removes it; keeping current keeps it out until the proposal
+  changes.
+
+## Rollout
+Order matters — the app must not ship before the server it writes to.
+1. Merge and deploy the functions repo: rules, indexes, and the functions `syncCustomExerciseStatus`,
+   `seedExerciseTags`, `discoverExerciseBodyVotes`, `discoverExerciseBodySuggestions`,
+   `deleteAccount`, `discoverExerciseCard`.
+2. Rebuild existing exercise cards so they carry body parts:
+   `RebuildDiscoverCards.py <admin> exercise` from `InTheGym-Scripts`.
+3. Fix existing incomplete catalogue exercises in the dashboard (the old `upperBody` ones).
+4. Ship the dashboards; then the app.
 
 ### Also decided
 - **The creator sees two statuses only: "In review" and "Added to the catalogue."** A rejected or
