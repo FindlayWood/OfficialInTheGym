@@ -18,11 +18,6 @@ class MyDayKitComposition {
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
-    /// Writes a custom exercise: local file first, then both Firestore copies,
-    /// queued while offline. Set by `composeCombination`; the create screen
-    /// (step 6 of `CUSTOM_EXERCISES_PLAN.md`) is its first caller.
-    private(set) var customExerciseSaver: CustomExerciseUploading?
-
     /// **The sync services live here, for the signed-in session.** They used
     /// to be locals in `composeCombination`, and this composition a local in
     /// `PlayerInitialViewController.viewDidLoad`, so nothing held them once
@@ -141,7 +136,7 @@ class MyDayKitComposition {
             user: FirestoreCustomExerciseUploader(),
             topLevel: FirestoreTopLevelCustomExerciseUploader()
         )
-        customExerciseSaver = CustomExerciseSaver(
+        let customExerciseSaver: CustomExerciseUploading = CustomExerciseSaver(
             local: FileManagerCustomExerciseWriter(userId: userId),
             remote: CustomExerciseSyncer(remote: remoteCustomExerciseUploader, queue: customExerciseQueue)
         )
@@ -151,6 +146,21 @@ class MyDayKitComposition {
         )
         customExerciseSyncService.start()
         self.customExerciseSyncService = customExerciseSyncService
+
+        // The form's lists, cached on disk so it works offline. The same two
+        // readers StatsKit uses — one reader per collection.
+        let customExercises = CustomExerciseDependencies(
+            saver: customExerciseSaver,
+            muscleGroups: CachedExerciseMuscleGroupsLoader(
+                remote: RemoteMuscleGroupsLoader(),
+                cache: FileExerciseBodyListCache(url: ExerciseBodyListStoreLocation.muscleGroups)
+            ),
+            movementPatterns: CachedExerciseMovementPatternsLoader(
+                remote: RemoteMovementTypesLoader(),
+                cache: FileExerciseBodyListCache(url: ExerciseBodyListStoreLocation.movementPatterns)
+            ),
+            userId: userId
+        )
 
         signOutObserver = NotificationCenter.default.addObserver(
             forName: Notification.signOut,
@@ -189,7 +199,8 @@ class MyDayKitComposition {
             welcome: MyDayWelcome(
                 name: UserDefaults.currentUser.displayName,
                 signupDate: UserDefaults.currentUser.createdDate
-            )
+            ),
+            customExercises: customExercises
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         coordinator.onShowPaywall = { [weak navigationController] in

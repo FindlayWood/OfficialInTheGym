@@ -19,3 +19,10 @@ import Foundation
 public protocol CustomExerciseUploading {
     func upload(_ exercise: CustomExercise) async throws
 }
+
+/// Saves nothing, for SwiftUI previews of the form.
+public struct PreviewCustomExerciseUploading: CustomExerciseUploading {
+    public init() {}
+
+    public func upload(_ exercise: CustomExercise) async throws {}
+}

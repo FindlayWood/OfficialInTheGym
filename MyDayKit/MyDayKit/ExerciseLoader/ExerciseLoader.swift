@@ -30,6 +30,10 @@ public class ExerciseManager: ObservableObject {
     let loader: ExerciseLoader
     let customLocal: CustomExerciseFetching
     let customRemote: CustomExerciseFetching
+
+    private var catalogue: [Exercise] = []
+    private var local: [CustomExercise] = []
+    private var remote: [CustomExercise] = []
     
     public init(
         loader: ExerciseLoader,
@@ -47,8 +51,23 @@ public class ExerciseManager: ObservableObject {
         async let catalogue = read("exercises") { try await self.loader.loadAll() }
         async let local = read("local custom exercises") { try await self.customLocal.fetchAll() }
         async let remote = read("remote custom exercises") { try await self.customRemote.fetchAll() }
-        library = ExerciseLibrary(catalogue: await catalogue, local: await local, remote: await remote)
+        (self.catalogue, self.local, self.remote) = (await catalogue, await local, await remote)
+        rebuild()
         isLoading = false
+    }
+
+    /// Adds an exercise the user has just made, so the picker lists it without
+    /// a reload. It is already in the local store; this saves rereading it.
+    @MainActor
+    func add(_ exercise: CustomExercise) {
+        local.removeAll { $0.id == exercise.id }
+        local.append(exercise)
+        rebuild()
+    }
+
+    @MainActor
+    private func rebuild() {
+        library = ExerciseLibrary(catalogue: catalogue, local: local, remote: remote)
     }
 
     private func read<T>(_ label: String, _ body: () async throws -> [T]) async -> [T] {

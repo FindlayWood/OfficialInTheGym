@@ -11,6 +11,8 @@ import SwiftUI
 enum MyDayRoutes: Hashable {
     case root
     case add
+    /// The custom exercise form, its name filled in from the picker's search.
+    case createExercise(String)
     case reps(MyDayNewExerciseManager)
     case units(MyDayNewExerciseManager)
     case weight(MyDayNewExerciseManager)

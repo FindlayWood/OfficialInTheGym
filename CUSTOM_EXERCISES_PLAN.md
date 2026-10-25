@@ -139,12 +139,21 @@ tie (it alone carries `status`), archived exercises left out. `ExerciseManager` 
 Create entry points call the picker's `createExercise` closure, which is `nil` until step 6 wires
 the form, so they are not drawn yet.
 
-### 6. Create screen
+### 6. Create screen — **built**
 One form in MyDay's builder vocabulary. Everything required; Save disabled until it is all
 filled (account creation's `canAdvance` pattern, gated button styling from
 `SessionSetDetailOverlay`). Muscle groups and patterns are multi-select chips from step 3.
 Compound and unilateral are two-option pickers with neither preselected: a preselected toggle
 would count as answered when it was not.
+
+As built: `CustomExerciseFormScreen` on `CustomExerciseFormModel` (tests:
+`CustomExerciseFormModelTests`), in `MyDayKit/MyDayKit/CustomExercises/`. Both coordinators take
+`CustomExerciseDependencies` (saver, the two cached loaders, user id); `nil` leaves Create out of
+the picker. Saving **replaces the form with the next screen** — reps when logging, sets when
+building a workout — as if the exercise had been picked, so back cannot reopen the form and save
+twice. The name is trimmed with spaces collapsed and capped at 60 characters; muscle groups are
+grouped under their region; body parts are stored in the lists' order, not tap order.
+`FlowLayout` moved out of `WorkoutSettingsSheet` into `MyDayKit/MyDayKit/UI/` so both share it.
 
 ### 7. Similar-exercise check
 - **While typing the name**, list close catalogue and own-custom matches under the field ("Did you
