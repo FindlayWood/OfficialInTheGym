@@ -214,7 +214,7 @@ As built, in `InTheGym-CloudFunctions` (branch `custom-exercises`):
 reaches users. Until then every upload is refused, and with the drop above it would be dropped from
 the queue — the exercise survives only on that phone.
 
-### 9. One complete catalogue exercise — dashboards and starting tags
+### 9. One complete catalogue exercise — dashboards and starting tags — **built**
 An exercise created in either dashboard and an approved custom exercise (step 10) write the same
 document, `Exercises/{id}`, and must come out identical. **Every catalogue exercise carries
 every field**: `id`, `name`, `category`, `bodyArea` (a copy of `category`), `muscleGroups`,
@@ -237,6 +237,24 @@ every field**: `id`, `name`, `category`, `bodyArea` (a copy of `category`), `mus
   kept alongside, and neither dashboard computes tags. Approving a custom exercise gets its tags
   the same way.
 - `ExerciseAudit.py` reports any exercise still missing fields; run it after this ships.
+
+As built:
+- **Functions** (`InTheGym-CloudFunctions`, branch `custom-exercises`): `seedExerciseTags` on
+  `Exercises/{id}`, with the rule in `Discover/Tags/CuratedExerciseTags.ts`
+  (`curatedExerciseTags`) — existing tags first, then body parts and category, each through
+  `tagRejection`, capped at 20, written only on change.
+- **Scripts** (`InTheGym-Scripts`, branch `custom-exercises`, stacked on `emulator-body-parts`):
+  `SeedExerciseTags.py` deleted.
+- **React dashboard** (`inthegym-dashboard`, branch `complete-exercises`): the upload form asks for
+  every field, with categories read from `ExerciseCategories` (so the values are right), and
+  saves with a merge; `catalogueExercise.js` holds what complete means; incomplete exercises are
+  outlined in the list with what they lack, which is how the old `upperBody` ones get fixed.
+  **It had no sign-in**, so under the 25 October rules it could neither read nor write the
+  catalogue — every page is now behind Firebase sign-in (`RequireSignIn`).
+- **Admin app** (`InTheGym-Admin`, branch `complete-exercises`): Save needs every field; compound
+  and unilateral start unanswered on a new exercise. Its loader still skips any document missing a
+  field (`try?`), so exercises the React form made before this do not show there — fix them in the
+  React dashboard.
 
 ### 10. Review — admin app and React dashboard
 - **Pending queue**, grouped by normalised name across users, so five people's "landmine press" is

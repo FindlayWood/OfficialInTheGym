@@ -524,9 +524,10 @@ below the threshold; nobody else sees them until three people agree.
   adapter per protocol, `tagVotePath` on `DiscoverSubject+Firestore`.
 - Tests: `DiscoverTaggingViewModelTests`, `DiscoverTaggedDecodingTests`, `TagVoteWriterSpy`.
 
-**Scripts** — `SeedExerciseTags.py [--write]` derives each exercise's base tags from its
-`muscleGroups`, `movementPatterns` and `category` (normalised: `upper_back` → `upperback`), keeps any
-tags already there, caps at 20. `RebuildDiscoverCards.py` takes `exercise-tags` / `workout-tags`,
+**Scripts** — `SeedExerciseTags.py [--write]` derived each exercise's base tags from its
+`muscleGroups`, `movementPatterns` and `category` (normalised: `upper_back` → `upperback`), kept any
+tags already there, capped at 20. **Retired 2026-10-25**: the `seedExerciseTags` Cloud Function now
+applies the same rule on every `Exercises` write (`CUSTOM_EXERCISES_PLAN.md` step 9). `RebuildDiscoverCards.py` takes `exercise-tags` / `workout-tags`,
 and `all` now runs them after the card kinds.
 
 **Console — rules**
