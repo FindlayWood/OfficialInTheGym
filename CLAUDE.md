@@ -1861,6 +1861,8 @@ appears on some screens and not others.
 | `Reports/{uid}_{sha256(path)}` | Firestore | `FirestoreReportWriter` — create-only |
 | `ModerationQueue/{sha256(path)}` | Firestore | **Cloud Functions only** — read by the admin app |
 | `Users/{uid}/BlockedUsers/{uid}` | Firestore | `FirestoreBlockedUsersWriter` |
+| `UserDays/{uid}_{yyyy-MM-dd}` | Firestore | **Cloud Functions** (one person's day, recounted by triggers) — the app writes only `openedApp`, through `FirestoreAppOpenRecorder`. See *Analytics* |
+| `AdminStats/{yyyy-MM-dd}` | Firestore | **Cloud Functions only** — the dashboard's daily figures, counted from `UserDays` |
 | `users/{uid}`, posts, followers, requests | RTDB | `FirebaseDatabaseManager` |
 | `Following/{uid}`, `Followers/{uid}` | RTDB | the **legacy** follow graph, written only by the old Follow button now; migrated and bridged into `Follows` |
 | `CoachPlayers/{coachId}`, `PlayerCoaches/{playerId}` | RTDB | the coach↔athlete link — see *Coach-Assigned Workouts* |
@@ -1896,6 +1898,22 @@ edit is overwritten by the next deploy.
 - **Every rule change gets a test** in `functions/test/Rules/firestoreRules.test.ts`.
 - **`Users/{uid}` is readable only by its owner**, and the client may change only `displayName`,
   `bio`, `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`.
+
+## Analytics — derived on the server; the app writes one field
+Usage analytics (who was active, checked in, trained, retention) is **derived by Cloud Functions**
+from what the app already saves, into `UserDays/{uid}_{yyyy-MM-dd}`, and read by the dashboard
+(`DASHBOARD_PLAN.md` step 5 in `inthegym-dashboard`).
+
+- **The app's only analytics write is "opened the app"**: `openedApp: true` on today's (UTC)
+  `UserDays` document, from `SceneDelegate` on becoming active and on sign-in, through
+  `OncePerDayAppOpenRecorder` → `FirestoreAppOpenRecorder` (`Launch/Composition/Analytics/`).
+  The rule allows exactly `userId`, `date` and `openedApp` on the user's own document for about
+  today — **adding a field to `UserDayOpenedModel` gets every write refused.**
+- **Do not add client analytics writes.** A copy of something the app already saves (a set, a
+  check-in, a workout) would drift from the original, lose writes and be forgeable. New analytics
+  is a field on the server's `UserDays` projection.
+- Firebase Analytics (opens, retention, the onboarding funnel) is planned for later and is not
+  linked; `IS_ANALYTICS_ENABLED` is false in `GoogleService-Info.plist`.
 
 ## Long-term Architecture Goal
 Each tab to become its own framework. Shared core features (e.g. user profile loading)

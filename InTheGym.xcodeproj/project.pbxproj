@@ -147,6 +147,11 @@
 		ACA000000000000000000014 /* UsernameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000A /* UsernameModel.swift */; };
 		ACA000000000000000000015 /* FirestoreUsernameAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */; };
 		ACA000000000000000000016 /* FirestoreUsernameReserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000C /* FirestoreUsernameReserver.swift */; };
+		0AE000000000000000000014 /* UserDayKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE00000000000000000000A /* UserDayKey.swift */; };
+		0AE000000000000000000015 /* UserDayOpenedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE00000000000000000000B /* UserDayOpenedModel.swift */; };
+		0AE000000000000000000016 /* AppOpenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE00000000000000000000C /* AppOpenRecorder.swift */; };
+		0AE000000000000000000017 /* FirestoreAppOpenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE00000000000000000000D /* FirestoreAppOpenRecorder.swift */; };
+		0AE000000000000000000018 /* OncePerDayAppOpenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE00000000000000000000E /* OncePerDayAppOpenRecorder.swift */; };
 		ACA000000000000000000017 /* FunctionsAccountCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000D /* FunctionsAccountCreator.swift */; };
 		ACA000000000000000000018 /* StorageProfileImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000E /* StorageProfileImageUploader.swift */; };
 		ACA000000000000000000019 /* FirebaseAccountCreationSignOut.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA00000000000000000000F /* FirebaseAccountCreationSignOut.swift */; };
@@ -1159,6 +1164,11 @@
 		ACA00000000000000000000A /* UsernameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameModel.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000B /* FirestoreUsernameAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsernameAvailabilityChecker.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000C /* FirestoreUsernameReserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUsernameReserver.swift; sourceTree = "<group>"; };
+		0AE00000000000000000000A /* UserDayKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDayKey.swift; sourceTree = "<group>"; };
+		0AE00000000000000000000B /* UserDayOpenedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDayOpenedModel.swift; sourceTree = "<group>"; };
+		0AE00000000000000000000C /* AppOpenRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppOpenRecorder.swift; sourceTree = "<group>"; };
+		0AE00000000000000000000D /* FirestoreAppOpenRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreAppOpenRecorder.swift; sourceTree = "<group>"; };
+		0AE00000000000000000000E /* OncePerDayAppOpenRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OncePerDayAppOpenRecorder.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000D /* FunctionsAccountCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsAccountCreator.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000E /* StorageProfileImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProfileImageUploader.swift; sourceTree = "<group>"; };
 		ACA00000000000000000000F /* FirebaseAccountCreationSignOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountCreationSignOut.swift; sourceTree = "<group>"; };
@@ -2064,6 +2074,18 @@
 				C0DE0000000000000000001D /* PurchaseSuccessSubview.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		0AE000000000000000000004 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				0AE00000000000000000000A /* UserDayKey.swift */,
+				0AE00000000000000000000B /* UserDayOpenedModel.swift */,
+				0AE00000000000000000000C /* AppOpenRecorder.swift */,
+				0AE00000000000000000000D /* FirestoreAppOpenRecorder.swift */,
+				0AE00000000000000000000E /* OncePerDayAppOpenRecorder.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		ACA000000000000000000004 /* AccountCreation */ = {
@@ -4600,6 +4622,7 @@
 				D1CA00000000000000000004 /* DiscoverKit */,
 				BF1A00000000000000000004 /* ProfileKit */,
 				ACA000000000000000000004 /* AccountCreation */,
+				0AE000000000000000000004 /* Analytics */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
@@ -5733,6 +5756,11 @@
 				ACA000000000000000000014 /* UsernameModel.swift in Sources */,
 				ACA000000000000000000015 /* FirestoreUsernameAvailabilityChecker.swift in Sources */,
 				ACA000000000000000000016 /* FirestoreUsernameReserver.swift in Sources */,
+				0AE000000000000000000014 /* UserDayKey.swift in Sources */,
+				0AE000000000000000000015 /* UserDayOpenedModel.swift in Sources */,
+				0AE000000000000000000016 /* AppOpenRecorder.swift in Sources */,
+				0AE000000000000000000017 /* FirestoreAppOpenRecorder.swift in Sources */,
+				0AE000000000000000000018 /* OncePerDayAppOpenRecorder.swift in Sources */,
 				ACA000000000000000000017 /* FunctionsAccountCreator.swift in Sources */,
 				ACA000000000000000000018 /* StorageProfileImageUploader.swift in Sources */,
 				ACA000000000000000000019 /* FirebaseAccountCreationSignOut.swift in Sources */,
