@@ -9,6 +9,7 @@
 import UIKit
 import Combine
 import CoreData
+import FirebaseAuth
 import ITGWorkoutKit
 import ITGWorkoutKitiOS
 
@@ -61,7 +62,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return StoreKitPurchaseManager()
 #endif
     }()
-    
+
+    /// The app's one analytics write — see `AppOpenRecorder`.
+    private lazy var appOpenRecorder: AppOpenRecorder = {
+        let currentUserId = { Auth.auth().currentUser?.uid }
+        return OncePerDayAppOpenRecorder(
+            wrapping: FirestoreAppOpenRecorder(currentUserId: currentUserId),
+            currentUserId: currentUserId)
+    }()
+
     convenience init(client: Client, httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
         self.client = client
@@ -148,8 +157,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             accountCreationComposer: accountCreationComposer,
             subscriptionManager: purchaseManager) { [weak controller] in
                 controller?.reloadUser()
-            } userLoggedIn: { [weak controller] in
+            } userLoggedIn: { [weak controller, weak self] in
                 controller?.loadUser()
+                // Signing in is opening the app for this account, and the
+                // scene was already active, so sceneDidBecomeActive missed it.
+                self?.recordAppOpen()
             } userSignedOut: { [weak controller] in
                 controller?.loadUser()
             }
@@ -167,8 +179,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return controller
     }
     
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        recordAppOpen()
+    }
+
     func sceneWillResignActive(_ scene: UIScene) {
         localFeedLoader.validateCache { _ in }
+    }
+
+    private func recordAppOpen() {
+        Task { [appOpenRecorder] in
+            do {
+                try await appOpenRecorder.recordOpen()
+            } catch {
+                // Not remembered, so the next open tries again.
+                print("❌ Recording app open: \(error)")
+            }
+        }
     }
     
     private func showComments(for image: WorkoutItem) {
