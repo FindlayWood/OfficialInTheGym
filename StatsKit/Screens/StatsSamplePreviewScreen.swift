@@ -9,8 +9,8 @@ import SwiftUI
 
 /// The STATS home on sample data, unblurred, for someone who has not signed up yet.
 ///
-/// `StatsLockedScreen` draws the same `HomeScreenContent` blurred, because there it sits on a
-/// signed-in user's tab and must never pass for their own training. Before signup there is no own
+/// `StatsProTeaser` draws the same chart and load card blurred, because there it sits on a
+/// signed-in user's tab, under their own week, and must never pass for their own training. Before signup there is no own
 /// training to confuse it with, so here it is legible — the point is to show what logging turns
 /// into. **It is labelled as sample data and as pro, at the top**: a preview that let someone sign
 /// up expecting free stats would end at the paywall and read as a bait-and-switch.

@@ -11,7 +11,19 @@
 		5A7500000000000000000004 /* PreviewStatsProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000003 /* PreviewStatsProAccess.swift */; };
 		5A7500000000000000000006 /* StatsGateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000005 /* StatsGateViewModel.swift */; };
 		5A7500000000000000000008 /* StatsKitRootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000007 /* StatsKitRootScreen.swift */; };
-		5A750000000000000000000A /* StatsLockedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000009 /* StatsLockedScreen.swift */; };
+		5A7500000000000000000102 /* StatsSamplePreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */; };
+		5A7500000000000000000104 /* StatsSamplePreviewBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */; };
+		5A7500000000000000000106 /* StatsKitSamplePreviewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */; };
+		5A7500000000000000000108 /* StatsSamplePreviewNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */; };
+		5A750000000000000000010A /* StatsSamplePreviewHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */; };
+		5A7500000000000000000202 /* StatsFreeSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000201 /* StatsFreeSummary.swift */; };
+		5A7500000000000000000204 /* StatsTopLift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000203 /* StatsTopLift.swift */; };
+		5A7500000000000000000206 /* StatsFreeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000205 /* StatsFreeScreen.swift */; };
+		5A7500000000000000000208 /* StatsFreeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000207 /* StatsFreeViewModel.swift */; };
+		5A750000000000000000020A /* StreakRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000209 /* StreakRow.swift */; };
+		5A750000000000000000020C /* StatsThisWeekCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A750000000000000000020B /* StatsThisWeekCard.swift */; };
+		5A750000000000000000020E /* StatsTopLiftCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A750000000000000000020D /* StatsTopLiftCard.swift */; };
+		5A7500000000000000000210 /* StatsProTeaser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A750000000000000000020F /* StatsProTeaser.swift */; };
 		F026EE6F2F8D77990066FCB4 /* TrainingBalanceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */; };
 		F026EE712F8D80D90066FCB4 /* MovementPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE702F8D80D90066FCB4 /* MovementPattern.swift */; };
 		F026EE732F8D8FB10066FCB4 /* MovementTypesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */; };
@@ -51,11 +63,6 @@
 		F0F6E7C82F8155EF00D02F93 /* ExerciseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */; };
 		F0F6E7CA2F81594400D02F93 /* MuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */; };
 		F0F6E7CC2F8159BD00D02F93 /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */; };
-		5A7500000000000000000102 /* StatsSamplePreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */; };
-		5A7500000000000000000104 /* StatsSamplePreviewBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */; };
-		5A7500000000000000000106 /* StatsKitSamplePreviewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */; };
-		5A7500000000000000000108 /* StatsSamplePreviewNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */; };
-		5A750000000000000000010A /* StatsSamplePreviewHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +80,19 @@
 		5A7500000000000000000003 /* PreviewStatsProAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStatsProAccess.swift; sourceTree = "<group>"; };
 		5A7500000000000000000005 /* StatsGateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsGateViewModel.swift; sourceTree = "<group>"; };
 		5A7500000000000000000007 /* StatsKitRootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitRootScreen.swift; sourceTree = "<group>"; };
-		5A7500000000000000000009 /* StatsLockedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsLockedScreen.swift; sourceTree = "<group>"; };
+		5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewScreen.swift; sourceTree = "<group>"; };
+		5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewBanner.swift; sourceTree = "<group>"; };
+		5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitSamplePreviewRouter.swift; sourceTree = "<group>"; };
+		5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewNavBar.swift; sourceTree = "<group>"; };
+		5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewHostingController.swift; sourceTree = "<group>"; };
+		5A7500000000000000000201 /* StatsFreeSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsFreeSummary.swift; sourceTree = "<group>"; };
+		5A7500000000000000000203 /* StatsTopLift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTopLift.swift; sourceTree = "<group>"; };
+		5A7500000000000000000205 /* StatsFreeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsFreeScreen.swift; sourceTree = "<group>"; };
+		5A7500000000000000000207 /* StatsFreeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsFreeViewModel.swift; sourceTree = "<group>"; };
+		5A7500000000000000000209 /* StreakRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRow.swift; sourceTree = "<group>"; };
+		5A750000000000000000020B /* StatsThisWeekCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsThisWeekCard.swift; sourceTree = "<group>"; };
+		5A750000000000000000020D /* StatsTopLiftCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTopLiftCard.swift; sourceTree = "<group>"; };
+		5A750000000000000000020F /* StatsProTeaser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsProTeaser.swift; sourceTree = "<group>"; };
 		F026EE6E2F8D77990066FCB4 /* TrainingBalanceScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingBalanceScreen.swift; sourceTree = "<group>"; };
 		F026EE702F8D80D90066FCB4 /* MovementPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementPattern.swift; sourceTree = "<group>"; };
 		F026EE722F8D8FB10066FCB4 /* MovementTypesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementTypesLoader.swift; sourceTree = "<group>"; };
@@ -114,11 +133,6 @@
 		F0F6E7C72F8155EF00D02F93 /* ExerciseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCategory.swift; sourceTree = "<group>"; };
 		F0F6E7C92F81594400D02F93 /* MuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupsLoader.swift; sourceTree = "<group>"; };
 		F0F6E7CB2F8159BD00D02F93 /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
-		5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewScreen.swift; sourceTree = "<group>"; };
-		5A7500000000000000000103 /* StatsSamplePreviewBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewBanner.swift; sourceTree = "<group>"; };
-		5A7500000000000000000105 /* StatsKitSamplePreviewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsKitSamplePreviewRouter.swift; sourceTree = "<group>"; };
-		5A7500000000000000000107 /* StatsSamplePreviewNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewNavBar.swift; sourceTree = "<group>"; };
-		5A7500000000000000000109 /* StatsSamplePreviewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSamplePreviewHostingController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -202,8 +216,9 @@
 		F0A11D232F6C622C00CE1E9A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				5A7500000000000000000009 /* StatsLockedScreen.swift */,
 				5A7500000000000000000101 /* StatsSamplePreviewScreen.swift */,
+				5A7500000000000000000207 /* StatsFreeViewModel.swift */,
+				5A7500000000000000000205 /* StatsFreeScreen.swift */,
 				5A7500000000000000000007 /* StatsKitRootScreen.swift */,
 				F0F6DF382F705CED00D02F93 /* SubViews */,
 				F0A11D242F6C623900CE1E9A /* StatsKitHomeScreen.swift */,
@@ -234,6 +249,8 @@
 				F034E5942F902FE800DDB10C /* TrainingLoadMetric.swift */,
 				F034E5982F902FE800DDB10C /* TrainingWeek.swift */,
 				F034E59A2F902FE800DDB10C /* TrainingChartMetric.swift */,
+				5A7500000000000000000203 /* StatsTopLift.swift */,
+				5A7500000000000000000201 /* StatsFreeSummary.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -252,6 +269,10 @@
 				F0F6E50B2F772B0E00D02F93 /* SimpleLineChart.swift */,
 				F0F6E50D2F772DA100D02F93 /* WeeklyLineChart.swift */,
 				F034E5782F902F0C00DDB10C /* MiniBarChart.swift */,
+				5A750000000000000000020F /* StatsProTeaser.swift */,
+				5A750000000000000000020D /* StatsTopLiftCard.swift */,
+				5A750000000000000000020B /* StatsThisWeekCard.swift */,
+				5A7500000000000000000209 /* StreakRow.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -398,8 +419,15 @@
 				5A7500000000000000000002 /* StatsProAccess.swift in Sources */,
 				5A7500000000000000000004 /* PreviewStatsProAccess.swift in Sources */,
 				5A7500000000000000000006 /* StatsGateViewModel.swift in Sources */,
+				5A7500000000000000000210 /* StatsProTeaser.swift in Sources */,
+				5A750000000000000000020E /* StatsTopLiftCard.swift in Sources */,
+				5A750000000000000000020C /* StatsThisWeekCard.swift in Sources */,
+				5A750000000000000000020A /* StreakRow.swift in Sources */,
+				5A7500000000000000000208 /* StatsFreeViewModel.swift in Sources */,
+				5A7500000000000000000206 /* StatsFreeScreen.swift in Sources */,
+				5A7500000000000000000204 /* StatsTopLift.swift in Sources */,
+				5A7500000000000000000202 /* StatsFreeSummary.swift in Sources */,
 				5A7500000000000000000008 /* StatsKitRootScreen.swift in Sources */,
-				5A750000000000000000000A /* StatsLockedScreen.swift in Sources */,
 				5A750000000000000000010A /* StatsSamplePreviewHostingController.swift in Sources */,
 				5A7500000000000000000108 /* StatsSamplePreviewNavBar.swift in Sources */,
 				5A7500000000000000000106 /* StatsKitSamplePreviewRouter.swift in Sources */,

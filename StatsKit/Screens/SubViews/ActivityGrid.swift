@@ -39,10 +39,9 @@ struct ActivityGrid: View {
         Dictionary(totals.map { ($0.id, $0.totalSets) }, uniquingKeysWith: +)
     }
 
-    /// Today's column, Monday = 0. `.weekday` is 1 = Sunday … 7 = Saturday.
+    /// Today's column, Monday = 0.
     private var todayColumn: Int {
-        let weekday = StatsDay.calendar.component(.weekday, from: .now)
-        return (weekday + 5) % 7
+        StatsDay.weekdayColumn(for: .now)
     }
 
     var body: some View {
@@ -70,7 +69,7 @@ struct ActivityGrid: View {
         if let daysAgo = daysAgo(row: row, column: column) {
             let sets = setsByKey[StatsDay.key(daysAgo: daysAgo)] ?? 0
             RoundedRectangle(cornerRadius: 8)
-                .fill(fill(forSets: sets))
+                .fill(Self.fill(forSets: sets))
                 .frame(maxWidth: .infinity)
                 .frame(height: cellHeight)
         } else {
@@ -94,7 +93,10 @@ struct ActivityGrid: View {
     /// A relative scale repaints history every time a heavier week lands, so the
     /// same session shows a different colour depending on what happened after
     /// it — which makes the grid unreadable as a record of what you did.
-    private func fill(forSets sets: Int) -> Color {
+    ///
+    /// Shared with the free "This week" card (`StatsThisWeekCard`), which draws
+    /// this grid's newest row on its own — the two must shade a day the same.
+    static func fill(forSets sets: Int) -> Color {
         switch sets {
         case 0:       return Color(.tertiarySystemFill)
         case 1...5:   return .darkColor.opacity(0.28)
@@ -117,14 +119,14 @@ struct ActivityGrid: View {
         }
     }
 
-    private static let weekdayInitials = ["M", "T", "W", "T", "F", "S", "S"]
+    static let weekdayInitials = ["M", "T", "W", "T", "F", "S", "S"]
 
     private var legend: some View {
         HStack(spacing: 4) {
             Text("Less")
             ForEach([0, 3, 9, 16, 24], id: \.self) { sets in
                 RoundedRectangle(cornerRadius: 2)
-                    .fill(fill(forSets: sets))
+                    .fill(Self.fill(forSets: sets))
                     .frame(width: 9, height: 9)
             }
             Text("More")

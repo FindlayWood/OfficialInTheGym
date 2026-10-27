@@ -105,7 +105,7 @@ bottom, unchanged, so returning users are not slowed down.
 - LoginKit only raises intent. `MainLoginKitInterface(previews:)` takes a `WelcomePreviews` and
   `LoginComposition` supplies MyDayKit's `MyDayDemoWorkoutRouter`, StatsKit's
   `StatsKitSamplePreviewRouter` and PerformanceKit's `PerformanceKitSamplePreviewRouter`.
-- **The stats and performance previews are the locked screens' content, unblurred** —
+- **The stats and performance previews are the pro screens' content, unblurred** —
   `HomeScreenContent` on `MockDailyTotalsProvider`, `PerformanceHomeScreen` on
   `PreviewJumpTestSessionsLoader` with `canRecord: false`. Blurring exists so sample data never
   passes for a signed-in user's own; before signup there is nothing to confuse it with. **Both are
@@ -226,13 +226,14 @@ still had the soft-lock bug the first had fixed. **Do not fork it again.**
 - **Required by App Review 3.1.2:** price and renewal terms beside the button (`termsText`), Restore,
   and working Terms of Use and Privacy Policy links (`ProPaywallLinks`). **`privacyPolicy` is `nil` —
   set it before submitting.**
-- **`ProFeatureList` lists only what pro actually gates** — the STATS tab, clips, the PERFORMANCE tab
+- **`ProFeatureList` lists only what pro actually gates** — full stats, clips, the PERFORMANCE tab
   and the pro badge. The old list sold free and retired features. Coaching joins it when it ships, not
   before.
 
 ### What pro gates, and how
-**Pro is the STATS tab, the PERFORMANCE tab, and clips — recording and watching, in MyDay and on
-DISCOVER.** Logging, workouts, DISCOVER's lists and pages, and profiles stay free. Everything a free
+**Pro is STATS beyond this week, the PERFORMANCE tab, and clips — recording and watching, in MyDay
+and on DISCOVER.** Logging, workouts, DISCOVER's lists and pages, profiles, and STATS' free view
+(this week, the streak, one lift's trend) stay free. Everything a free
 user logs is still written (raw logs, `DailyTotal`s), so subscribing shows their whole history.
 
 - **Each framework declares its own `…ProAccess`** (`StatsProAccess`, `PerformanceProAccess`,
@@ -240,10 +241,18 @@ user logs is still written (raw logs, `DailyTotal`s), so subscribing shows their
   `PurchaseManagerProAccess`, answers all four** — "who has pro" is one question, and coach-granted
   passes will change its answer in one place. Every gate reads it fresh, never at build time.
 - **A whole tab** (STATS, PERFORMANCE) is a gate view model re-checked on every appearance, switching
-  the root between the home and a locked screen. **Both locked screens draw the real home, blurred,
-  from sample data** — `StatsLockedScreen` from `MockDailyTotalsProvider`, `PerformanceLockedScreen`
-  from `PreviewJumpTestSessionsLoader` (fixed numbers, so the fatigue card never changes zone between
-  visits) — with the lock card over it. A tab sells a shape, which a paragraph cannot show.
+  the root between the home and what a free user sees. **Both draw the real pro content, blurred,
+  from sample data** — `PerformanceLockedScreen` the whole home from `PreviewJumpTestSessionsLoader`
+  (fixed numbers, so the fatigue card never changes zone between visits), and STATS'
+  `StatsProTeaser` the chart and training-load card from `MockDailyTotalsProvider` — with the lock
+  card over it. A tab sells a shape, which a paragraph cannot show.
+- **STATS is not wholly locked: without pro it is `StatsFreeScreen`** — the user's own week (Monday to
+  Sunday), last week's day count, the streak, and their top lift's best set against the four weeks
+  before (`StatsFreeSummary`, `StatsTopLift`), with `StatsProTeaser` underneath. It replaced
+  `StatsLockedScreen` (2026-10-26, from the persona reviews): a wholly locked tab kept the one thing
+  that sells pro — the user's own numbers — from exactly the people who had not paid. The teaser
+  says SAMPLE DATA in words, since it now sits under real numbers. Nothing on the free screen taps
+  through to a pro screen. See `FREE_STATS_PLAN.md`.
 - **A single action** is gated at its one chokepoint by a `requiresPro` on the route:
   `MyDayFullScreenCover.requiresPro` in `MyDayCoordinator.presentFullScreen(_:)` (record, view) and
   `DiscoverKitRoutes.requiresPro` in `DiscoverKitRouter.navigate(to:)` (`.clipPlayer`, which also
@@ -1255,9 +1264,11 @@ enabled flag. **Keep new gated buttons in step with it** rather than inventing a
 
 ## STATS Tab — `StatsKit`
 Reads the `DailyTotal` documents and the raw exercise logs written by the MyDay path below, and turns
-them into training-load metrics. **The whole tab is pro** — `StatsKitRootScreen` switches between the
-home and `StatsLockedScreen` on `StatsGateViewModel`, re-checked each time the tab appears (see
-*What pro gates, and how*). `StatsKitRouter` follows the shape under *Architecture*; the six read
+them into training-load metrics. **Everything beyond this week is pro** — `StatsKitRootScreen`
+switches between the home and `StatsFreeScreen` on `StatsGateViewModel`, re-checked each time the tab
+appears (see *What pro gates, and how*). The free screen's week uses `ActivityGrid`'s cell shading
+and `StatsDay.weekdayColumn`, the one definition of a Monday-first week, so a subscriber sees the
+same row grow into the four-week grid. `StatsKitRouter` follows the shape under *Architecture*; the six read
 protocols (`DailyTotalsProviding`, `StatsKitExerciseLoader`, `ExerciseDailyStatsProviding`,
 `ExerciseLoader`, `MuscleGroupsLoader`, `MovementTypesLoader`) are implemented in
 `InTheGym/Launch/Composition/StatsKit/`, one adapter per file.
@@ -1440,7 +1451,7 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 
 ### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests`, `TrainingWeekTests` — is in `CI_iOS_TestPlan.xctestplan`, but CI is not
+`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests` — is in `CI_iOS_TestPlan.xctestplan`, but CI is not
 running. See *Testing → CI*.
 
 ## DISCOVER Tab — `DiscoverKit`
