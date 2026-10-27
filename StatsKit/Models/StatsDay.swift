@@ -48,6 +48,17 @@ public enum StatsDay {
         key(for: self.date(daysAgo: daysAgo, from: date))
     }
 
+    /// The day's column in a Monday-first week: Monday = 0 … Sunday = 6.
+    ///
+    /// **Pinned Monday-first rather than deferring to `calendar.firstWeekday`,** which is
+    /// locale-driven — leaving it to the calendar would shift every cell by device region while
+    /// the day keys underneath stayed exactly where they were. `ActivityGrid` and the free
+    /// "This week" card both lay days out by it; they must agree on which day a week starts.
+    public static func weekdayColumn(for date: Date) -> Int {
+        // `.weekday` is 1 = Sunday … 7 = Saturday.
+        (calendar.component(.weekday, from: date) + 5) % 7
+    }
+
     /// Start of the day containing `date`.
     ///
     /// This is the cutoff a Firestore range query wants: the loaders compare

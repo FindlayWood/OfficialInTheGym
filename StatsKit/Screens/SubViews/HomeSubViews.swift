@@ -339,20 +339,7 @@ struct StreakAndActivityView: View {
 
     var body: some View {
         SectionContainer(title: "Activity · last 4 weeks") {
-            // Streak row
-            HStack(spacing: 12) {
-                Text(streak > 0 ? "🔥" : "💤")
-                    .font(.title2)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(streak > 0 ? "\(streak) day streak" : "No active streak")
-                        .font(.headline)
-                    Text(streak > 0 ? "Keep it going!" : "Log a workout to start one")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-            }
-            .padding(16)
+            StreakRow(streak: streak)
 
             Divider()
                 .padding(.horizontal, 16)

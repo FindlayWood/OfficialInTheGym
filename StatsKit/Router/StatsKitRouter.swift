@@ -10,9 +10,10 @@ import SwiftUI
 
 /// The STATS tab's router.
 ///
-/// **The whole tab is pro.** The root is `StatsKitRootScreen`, which shows the home with pro and
-/// `StatsLockedScreen` without, re-checked every time it appears (`StatsGateViewModel`). Nothing
-/// further in checks again: every other screen is reached from the home.
+/// **Everything beyond this week is pro.** The root is `StatsKitRootScreen`, which shows the home
+/// with pro and `StatsFreeScreen` without, re-checked every time it appears (`StatsGateViewModel`).
+/// Nothing further in checks again: every other screen is reached from the home, and the free
+/// screen links to none of them.
 public final class StatsKitRouter {
 
     // MARK: - Navigation
@@ -92,8 +93,13 @@ public final class StatsKitRouter {
             )
             let gate = StatsGateViewModel(proAccess: proAccess)
             gate.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
+            let free = StatsFreeViewModel(
+                loader: dailyTotalLoader,
+                exerciseDailyStatsLoader: exerciseDailyStatsLoader
+            )
+            free.onShowPaywall = { [weak gate] in gate?.showPaywall() }
             let vc = StatsKitBoundaryViewController()
-            vc.display = StatsKitRootScreen(gate: gate, home: viewModel)
+            vc.display = StatsKitRootScreen(gate: gate, home: viewModel, free: free)
             vc.router = self
             // Coming back to the tab re-checks pro — including from the full-screen paywall.
             vc.onWillAppear = { [weak gate] in gate?.refresh() }

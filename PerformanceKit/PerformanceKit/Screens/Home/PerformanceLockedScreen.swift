@@ -10,11 +10,11 @@ import SwiftUI
 /// sample sessions, with the way to the paywall over it. In emulator builds only, a quiet "Unlock
 /// for testing" under the button lets the tab be used without a purchase.
 ///
-/// **A preview, not a description** — the same decision as StatsKit's `StatsLockedScreen`. It used
-/// to be a lock icon over a paragraph, which described a dashboard the user had never seen. Now the
-/// actual `PerformanceHomeScreen` renders underneath from `PreviewJumpTestSessionsLoader`, blurred
-/// until it reads as cards and numbers rather than results, so nothing on it can be mistaken for the
-/// user's own tests. `canRecord: false`, so the preview offers no start button to tap through to.
+/// **A preview, not a description** — the same decision as StatsKit's `StatsProTeaser` (once its
+/// locked screen). It used to be a lock icon over a paragraph, which described a dashboard the user
+/// had never seen. Now the actual `PerformanceHomeScreen` renders underneath from
+/// `PreviewJumpTestSessionsLoader`, blurred until it reads as cards and numbers rather than results,
+/// so nothing on it can be mistaken for the user's own tests. `canRecord: false`, so the preview offers no start button to tap through to.
 struct PerformanceLockedScreen: View {
 
     @ObservedObject var viewModel: PerformanceGateViewModel
