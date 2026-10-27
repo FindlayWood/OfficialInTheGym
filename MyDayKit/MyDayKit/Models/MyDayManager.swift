@@ -193,13 +193,20 @@ public class MyDayManager: ObservableObject {
     }
     
     
+    /// Publishes on the main actor, as `loadDay` does. This `Task` is started from `init` and
+    /// inherits no actor, so after the `await` it resumes on a background thread — and setting
+    /// `selectedDay` there also publishes `dayMarkers` from its `didSet`.
     func initialLoad() {
         Task {
             if let day: MyDayFullDayModel = try? await loader.load(for: .now) {
-                self.loadedDays.append(day)
-                self.selectedDay = day
+                await MainActor.run {
+                    self.loadedDays.append(day)
+                    self.selectedDay = day
+                }
             } else {
-                self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [], workouts: [])
+                await MainActor.run {
+                    self.selectedDay = MyDayFullDayModel(id: UUID().uuidString, date: .now, exercises: [], workouts: [])
+                }
             }
         }
     }
