@@ -50,8 +50,11 @@ final class BalanceSessionViewModelTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(spy: BalanceServicesSpy = BalanceServicesSpy()) -> BalanceSessionViewModel {
-        BalanceSessionViewModel(writer: spy, now: { .fixed }, makeId: { "b" })
+    private func makeSUT(spy: BalanceServicesSpy = BalanceServicesSpy(), file: StaticString = #filePath, line: UInt = #line) -> BalanceSessionViewModel {
+        let sut = BalanceSessionViewModel(writer: spy, now: { .fixed }, makeId: { "b" })
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
     }
 
     private func stand(_ sway: Double) -> BalanceAttempt {

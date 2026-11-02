@@ -83,9 +83,12 @@ final class DeleteAccountViewModelTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(error: Error? = nil) -> (viewModel: DeleteAccountViewModel, deleter: AccountDeleterSpy) {
+    private func makeSUT(error: Error? = nil, file: StaticString = #filePath, line: UInt = #line) -> (viewModel: DeleteAccountViewModel, deleter: AccountDeleterSpy) {
         let deleter = AccountDeleterSpy()
         deleter.error = error
-        return (DeleteAccountViewModel(deleter: deleter), deleter)
+        let viewModel = DeleteAccountViewModel(deleter: deleter)
+        trackForMemoryLeaks(deleter, file: file, line: line)
+        trackForMemoryLeaks(viewModel, file: file, line: line)
+        return (viewModel, deleter)
     }
 }

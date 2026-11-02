@@ -43,11 +43,14 @@ final class CachingUserProfileLoaderTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT() -> (CachingUserProfileLoader, UserProfileLoaderSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (CachingUserProfileLoader, UserProfileLoaderSpy) {
         let spy = UserProfileLoaderSpy(table: [
             "u1": DiscoverUserProfile(userId: "u1", username: "findlay", displayName: "Findlay"),
             "u2": DiscoverUserProfile(userId: "u2", username: "sam", displayName: "Sam")
         ])
-        return (CachingUserProfileLoader(decoratee: spy), spy)
+        let sut = CachingUserProfileLoader(decoratee: spy)
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return (sut, spy)
     }
 }

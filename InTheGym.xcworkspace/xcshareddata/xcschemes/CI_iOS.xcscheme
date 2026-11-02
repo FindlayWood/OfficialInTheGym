@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7460AB512B94D040000FDF22"
-               BuildableName = "ITGWorkoutKit.framework"
-               BlueprintName = "ITGWorkoutKit"
-               ReferencedContainer = "container:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
+               BlueprintIdentifier = "7479A904229F2B4C00D39E2E"
+               BuildableName = "InTheGym.app"
+               BlueprintName = "InTheGym"
+               ReferencedContainer = "container:InTheGym.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -55,10 +55,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7460AB512B94D040000FDF22"
-            BuildableName = "ITGWorkoutKit.framework"
-            BlueprintName = "ITGWorkoutKit"
-            ReferencedContainer = "container:ITGWorkoutKit/ITGWorkoutKit.xcodeproj">
+            BlueprintIdentifier = "7479A904229F2B4C00D39E2E"
+            BuildableName = "InTheGym.app"
+            BlueprintName = "InTheGym"
+            ReferencedContainer = "container:InTheGym.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
