@@ -1,28 +1,38 @@
 name: CI-iOS
 
-# Controls when the action will run.
-# Triggers the workflow on pull request events but only for the master branch.
+# Runs on every push.
 on: push
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-and-test"
   build-and-test:
-    # The type of runner that the job will run on
-    runs-on: macos-14-xlarge
+    # A standard runner. `macos-14-xlarge` is a paid larger runner, which the repository's free
+    # minutes do not cover, and every job on it was refused on billing before it started.
+    runs-on: macos-26
 
-    timeout-minutes: 8
+    # The app and seven frameworks build from cold, Firebase included, on every run.
+    timeout-minutes: 60
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
+    # The app and every framework target iOS 26, and the framework projects are
+    # `objectVersion = 77`, so it has to be an Xcode 26. Newest installed, not a pinned path,
+    # so a runner image update does not break the job.
     - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_15.3.app
-      
+      run: sudo xcode-select -switch "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+
     - name: Xcode version
       run: /usr/bin/xcodebuild -version
-      
+
     - name: Build and Test
-      run: xcodebuild clean build test -workspace InTheGym/InTheGym.xcworkspace -scheme "CI_iOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.4" ONLY_ACTIVE_ARCH=YES
+      run: >-
+        xcodebuild test
+        -workspace InTheGym.xcworkspace
+        -scheme "CI_iOS"
+        -sdk iphonesimulator
+        -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=latest"
+        -skipPackagePluginValidation
+        -skipMacroValidation
+        CODE_SIGN_IDENTITY=""
+        CODE_SIGNING_REQUIRED=NO
+        ONLY_ACTIVE_ARCH=YES

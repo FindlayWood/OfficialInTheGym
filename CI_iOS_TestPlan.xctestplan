@@ -88,20 +88,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-        "identifier" : "74A6DCEF2BD1A46B002A420C",
-        "name" : "ITGWorkoutKitiOSTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-        "identifier" : "74730B992BC1DC2D00B54778",
-        "name" : "WorkoutAPIEndToEndTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:StatsKit\/StatsKit.xcodeproj",
         "identifier" : "F0750E872F6B62960026D021",
         "name" : "StatsKitTests"

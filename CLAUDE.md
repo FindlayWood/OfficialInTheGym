@@ -675,16 +675,29 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
 `testExecutionOrdering: random` (tests must not depend on each other) and `testTimeoutsEnabled`.
 
 **A test target is invisible to CI until it is added to the test plan.** The plan runs
-`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitiOSTests`, `ITGWorkoutKitCacheIntegrationTests`,
-`WorkoutAPIEndToEndTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
+`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitCacheIntegrationTests`
+**and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
 `AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests`,
 `PerformanceKitTests` — with coverage on the app, ITGWorkoutKit and all seven frameworks. **Add any new framework's test target here.**
 
-**CI is not actually running.** Every run since at least August fails before starting on a GitHub
-billing error. Once that is fixed the workflow itself still needs updating: it pins Xcode 15.3 (which
-cannot open the `objectVersion = 77` framework projects), an iOS 17.4 simulator — the app now
-needs iOS 26 — and a workspace path of `InTheGym/InTheGym.xcworkspace` (the workspace is at the repo
-root).
+**One workflow, CI-iOS, on the standard `macos-26` runner with the newest Xcode 26 on it.** Until
+2026-10-27 it used `macos-14-xlarge`, a paid larger runner that the repository's free minutes do
+not cover, so every job was refused on billing before it started; it also pinned Xcode 15.3 (which
+cannot open the `objectVersion = 77` projects), an iOS 17.4 simulator and a wrong workspace path.
+**Do not move back to an `-xlarge` runner.**
+
+Three ITGWorkoutKit test paths are deliberately not run. ITGWorkoutKit is read-only, so each was
+dropped on our side rather than fixed in it:
+- **`WorkoutAPIEndToEndTests`** fetches a third-party course fixture from squarespace, not
+  InTheGym's backend, and fails whenever that file changes. It is out of the test plan.
+- **`ITGWorkoutKitiOSTests`** is snapshot tests only, recorded on an iOS 17 simulator. Every one
+  fails on iOS 26, and re-recording means writing into ITGWorkoutKit. It is out of the test plan.
+- **The CI-macOS workflow was deleted.** It ran ITGWorkoutKit's own `CI_macOS` plan, whose
+  `ITGWorkoutKitTests` and `ITGWorkoutKitCacheIntegrationTests` CI-iOS already runs; that plan
+  also forces Thread Sanitizer, which crashed the test runner on start under Xcode 26.
+
+**A test that takes minutes is a CI failure.** `StorageProfilePhotoUploaderTests` once built its
+noise image with 360,000 `UIColor` fills and took over seventeen minutes on the simulator.
 
 ## App Structure
 5 tabs: MYDAY, DISCOVER, PERFORMANCE, STATS, PROFILE. NEWSFEED was dropped from the player tab bar
@@ -1451,8 +1464,7 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 
 ### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests` — is in `CI_iOS_TestPlan.xctestplan`, but CI is not
-running. See *Testing → CI*.
+`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
 
 ## DISCOVER Tab — `DiscoverKit`
 Exercises, public workouts and clips, with ratings, comments, likes, tags and moderation. Firestore
