@@ -29,23 +29,40 @@ final class StorageProfilePhotoUploaderTests: XCTestCase {
 
     // MARK: - Helpers
 
-    /// Random pixels compress badly, the worst case for the size cap.
+    /// Random 4x4 blocks compress badly, the worst case for the size cap.
+    ///
+    /// **The bytes are written straight into a bitmap.** This used to fill each
+    /// block through `UIGraphicsImageRenderer` — 360,000 `UIColor`s and `fill`
+    /// calls for a 2400 image — which took over seventeen minutes on the
+    /// simulator and ran the CI job out of time on its own.
     private func noisyImage(side: Int) -> UIImage {
-        let format = UIGraphicsImageRendererFormat.default()
-        format.scale = 1
-        return UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format).image { context in
-            var generator = SystemRandomNumberGenerator()
-            for y in stride(from: 0, to: side, by: 4) {
-                for x in stride(from: 0, to: side, by: 4) {
-                    UIColor(
-                        red: .random(in: 0...1, using: &generator),
-                        green: .random(in: 0...1, using: &generator),
-                        blue: .random(in: 0...1, using: &generator),
-                        alpha: 1
-                    ).setFill()
-                    context.fill(CGRect(x: x, y: y, width: 4, height: 4))
+        let bytesPerRow = side * 4
+        var pixels = [UInt8](repeating: 255, count: bytesPerRow * side)
+        var generator = SystemRandomNumberGenerator()
+        for blockY in stride(from: 0, to: side, by: 4) {
+            for blockX in stride(from: 0, to: side, by: 4) {
+                let colour = (0..<3).map { _ in UInt8.random(in: 0...255, using: &generator) }
+                for y in blockY..<min(blockY + 4, side) {
+                    for x in blockX..<min(blockX + 4, side) {
+                        let offset = y * bytesPerRow + x * 4
+                        pixels[offset] = colour[0]
+                        pixels[offset + 1] = colour[1]
+                        pixels[offset + 2] = colour[2]
+                    }
                 }
             }
         }
+        let image = pixels.withUnsafeMutableBytes { buffer in
+            CGContext(
+                data: buffer.baseAddress,
+                width: side,
+                height: side,
+                bitsPerComponent: 8,
+                bytesPerRow: bytesPerRow,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+            )?.makeImage()
+        }
+        return UIImage(cgImage: image!)
     }
 }
