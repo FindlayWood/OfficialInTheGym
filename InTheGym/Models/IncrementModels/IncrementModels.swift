@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabase
 
 // MARK: - Saved Workout Download Increment
 struct SavedWorkoutDownloadModel {

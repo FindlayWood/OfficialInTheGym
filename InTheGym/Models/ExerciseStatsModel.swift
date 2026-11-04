@@ -55,6 +55,8 @@ extension ExerciseStatsModel: FirebaseResource {
 }
 
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 struct UpdateExerciseStatsModel {
     var exerciseName: String

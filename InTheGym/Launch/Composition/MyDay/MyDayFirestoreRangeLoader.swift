@@ -8,7 +8,6 @@
 
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import MyDayKit
 
 /// The date strip's days, as one range query over `Users/{uid}/MyDay` by document id. The ids are

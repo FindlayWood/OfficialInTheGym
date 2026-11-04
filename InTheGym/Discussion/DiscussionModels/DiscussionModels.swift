@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabase
 
 // MARK: - Comment
 struct Comment: Codable, Hashable {

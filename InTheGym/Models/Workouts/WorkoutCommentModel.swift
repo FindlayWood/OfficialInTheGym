@@ -8,6 +8,8 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 // MARK: - Workout Comment Model
 /// Model for workout comment
