@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 /// this model is used to register this device with notifications
 struct FCMTokenModel {
     @ExplicitNull var fcmToken: String?

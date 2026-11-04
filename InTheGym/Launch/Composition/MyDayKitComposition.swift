@@ -255,7 +255,6 @@ class FirebaseExerciseLoader: ExerciseLoader {
 
 
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import FirebaseFunctions
 
 class MyDayFirestoreSaver: MyDaySaver {

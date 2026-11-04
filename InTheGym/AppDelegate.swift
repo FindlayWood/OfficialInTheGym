@@ -9,6 +9,9 @@
 import UIKit
 import CoreData
 import Firebase
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseCore
 import FirebaseStorage
 import RevenueCat
 import FirebaseMessaging

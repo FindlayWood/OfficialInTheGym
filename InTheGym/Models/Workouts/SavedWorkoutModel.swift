@@ -8,6 +8,8 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 // MARK: - Saved Workout Model
 /// This represents a saved workout
