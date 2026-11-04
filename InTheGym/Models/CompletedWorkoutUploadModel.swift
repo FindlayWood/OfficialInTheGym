@@ -8,6 +8,8 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 // MARK: - Completed Workout Upload Model
 struct CompletedWorkoutUploadModel {

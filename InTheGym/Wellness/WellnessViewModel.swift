@@ -8,7 +8,6 @@
 
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 class WellnessViewModel: ObservableObject {
     // MARK: - Published properties

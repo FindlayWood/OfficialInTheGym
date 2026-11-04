@@ -10,6 +10,8 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 import SCLAlertView
 
 class AdminActivityViewController: UIViewController {

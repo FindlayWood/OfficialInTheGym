@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 import EmptyDataSet_Swift
 
 class CoachProfileViewController: UIViewController, EmptyDataSetSource, EmptyDataSetDelegate{

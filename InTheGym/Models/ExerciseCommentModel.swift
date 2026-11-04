@@ -8,6 +8,8 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 // MARK: - Description Model
 ///Model for exercise description

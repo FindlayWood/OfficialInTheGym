@@ -20,7 +20,7 @@ struct FirebasePasswordReauthenticator {
         do {
             try await user.reauthenticate(with: EmailAuthProvider.credential(withEmail: email, password: password))
         } catch let error as NSError {
-            switch AuthErrorCode.Code(rawValue: error.code) {
+            switch AuthErrorCode(rawValue: error.code) {
             case .wrongPassword, .invalidCredential, .userMismatch:
                 throw AccountDeletionError.wrongPassword
             case .tooManyRequests:

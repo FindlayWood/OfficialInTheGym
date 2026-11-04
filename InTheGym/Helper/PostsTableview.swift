@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 class PostTableView: NSObject, UITableViewDelegate, UITableViewDataSource, workoutTappedDelegate{
     

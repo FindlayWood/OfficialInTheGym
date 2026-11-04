@@ -8,7 +8,7 @@
 
 import Foundation
 import Firebase
-import FirebaseDatabaseSwift
+import FirebaseDatabase
 //import CodableFirebase
 
 final class FirebaseDatabaseManager: FirebaseDatabaseManagerService {

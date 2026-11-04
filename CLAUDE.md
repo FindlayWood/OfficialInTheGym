@@ -531,7 +531,7 @@ Fuller picture, since which half of the app you are in decides what is available
 | Current — use for new work | Legacy — present, do not extend |
 |---|---|
 | SwiftUI, Combine (`ObservableObject`/`@Published`) | UIKit + Combine bare subjects |
-| Firestore + `FirebaseFirestoreSwift` (29 / 8 files) | **Realtime Database** — `FirebaseDatabaseManager`, the whole social/coaching graph |
+| Firestore on the Firebase Apple SDK **13.1.1 or later** — 13.1.1 is the eMudhra CA fix (2026-10-22); never resolve below it. The Codable wrappers that were `FirebaseFirestoreSwift` are in `FirebaseFirestore` since 11, and the `Firebase` umbrella no longer brings in Auth or Database, so import the module you use | **Realtime Database** — `FirebaseDatabaseManager`, the whole social/coaching graph |
 | Firebase Storage, Functions, Auth, Messaging | CoreData (`InTheGym.xcdatamodeld`, dormant) |
 | `async`/`await` + `throws` | `Result` completion handlers |
 | Hand-built charts | `danielgindi/Charts` 4.1.0 (13 files) + axis formatters in `Helper/ChartAxisFormatter/` |

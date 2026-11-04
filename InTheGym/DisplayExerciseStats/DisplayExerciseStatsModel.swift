@@ -8,6 +8,7 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabase
 
 struct DisplayExerciseStatsModel {
     var exerciseName: String = ""
