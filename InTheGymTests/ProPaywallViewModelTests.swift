@@ -106,6 +106,7 @@ final class ProPaywallViewModelTests: XCTestCase {
             backendService: PreviewFirestoreService(),
             trialReminder: reminder
         )
+        trackForMemoryLeaks(sut, file: file, line: line)
         await sut.loadPlans()
         XCTAssertEqual(sut.selectedPlan?.period, .year, "Expected yearly, the trial plan, preselected", file: file, line: line)
         return sut

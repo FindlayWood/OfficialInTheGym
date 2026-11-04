@@ -15,16 +15,6 @@
           "name" : "InTheGym"
         },
         {
-          "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-          "identifier" : "7460AB512B94D040000FDF22",
-          "name" : "ITGWorkoutKit"
-        },
-        {
-          "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-          "identifier" : "74A6DCE82BD1A46B002A420C",
-          "name" : "ITGWorkoutKitiOS"
-        },
-        {
           "containerPath" : "container:StatsKit\/StatsKit.xcodeproj",
           "identifier" : "F0750E7C2F6B62960026D021",
           "name" : "StatsKit"
@@ -70,20 +60,6 @@
         "containerPath" : "container:InTheGym.xcodeproj",
         "identifier" : "7479A91B229F2B4D00D39E2E",
         "name" : "InTheGymTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-        "identifier" : "74A6DCD42BCF09A1002A420C",
-        "name" : "ITGWorkoutKitCacheIntegrationTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:ITGWorkoutKit\/ITGWorkoutKit.xcodeproj",
-        "identifier" : "7460AB5B2B94D040000FDF22",
-        "name" : "ITGWorkoutKitTests"
       }
     },
     {

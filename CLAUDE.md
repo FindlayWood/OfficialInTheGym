@@ -4,8 +4,8 @@
 iOS fitness app. iPhone only, **iOS 26.0 minimum** — the app and all seven active frameworks
 (`IPHONEOS_DEPLOYMENT_TARGET = 26.0` everywhere). It used to read iOS 17+ while StatsKit was built
 for 26.1 and MyDayKit for 18.4, so the app could not have launched below 26.1. **A framework must
-never target a newer iOS than the app.** `ITGWorkoutKit` targets lower,
-which is harmless — embedded code may support older versions than the app does.
+never target a newer iOS than the app.** Lower is harmless — embedded code may support older
+versions than the app does.
 Lean, minimal UI aesthetic throughout.
 
 ## Packages & Frameworks
@@ -18,12 +18,18 @@ Lean, minimal UI aesthetic throughout.
 - `ProfileKit` — framework (rolled out 2026-10-25 — see `PROFILE_PLAN.md`)
 - `PerformanceKit` — framework (being moved in — see `PERFORMANCE_PLAN.md`)
 
-### Inactive — do not modify
-- `ITGWorkoutKit` — ignore, do not touch
-
+### Archived — not in the app
 `ClubKit` and `WorkoutKit` (two legacy SPM packages) were removed from staging. Both were
 constructed in `PlayerInitialViewController` and never shown. They are preserved on the
 `archive/clubkit-workoutkit` branch — restore from there rather than rebuilding them.
+
+`ITGWorkoutKit` (with `ITGWorkoutKitiOS`), a framework built while following an online course,
+went the same way on 2026-11-02 and is on `archive/itgworkoutkit`. The app linked and embedded it
+for one thing: a feed (`Feed Feature/`, `Workout Feed Feature/` and their tests) whose only entry
+point, `SceneDelegate.configureWindow()`, was commented out, and which loaded from the course's
+demo API. The one live call was `sceneWillResignActive` opening a CoreData feed cache and
+validating it on every trip to the background. Its test suite set this project's testing pattern,
+which now lives in *Testing* below.
 
 ### Project shapes — the four frameworks are not built the same way
 Open **`InTheGym.xcworkspace`**, not `InTheGym.xcodeproj`. It stitches the app project to the four
@@ -526,14 +532,15 @@ Fuller picture, since which half of the app you are in decides what is available
 |---|---|
 | SwiftUI, Combine (`ObservableObject`/`@Published`) | UIKit + Combine bare subjects |
 | Firestore on the Firebase Apple SDK **13.1.1 or later** — 13.1.1 is the eMudhra CA fix (2026-10-22); never resolve below it. The Codable wrappers that were `FirebaseFirestoreSwift` are in `FirebaseFirestore` since 11, and the `Firebase` umbrella no longer brings in Auth or Database, so import the module you use | **Realtime Database** — `FirebaseDatabaseManager`, the whole social/coaching graph |
-| Firebase Storage, Functions, Auth, Messaging | CoreData (`InTheGym.xcdatamodeld`, dormant; `ITGWorkoutKit`'s cache) |
+| Firebase Storage, Functions, Auth, Messaging | CoreData (`InTheGym.xcdatamodeld`, dormant) |
 | `async`/`await` + `throws` | `Result` completion handlers |
 | Hand-built charts | `danielgindi/Charts` 4.1.0 (13 files) + axis formatters in `Helper/ChartAxisFormatter/` |
 | RevenueCat 4.44 behind `PurchaseManager`, StoreKit for local testing | `SCLAlertView-Swift` (13 files), `SkyFloatingLabelTextField` (5 files) |
 | AVFoundation (clips, jump measuring), PhotosUI | Storyboards / xibs — launch screen and `Main.storyboard` only, **do not add more** |
 
-Only `ITGWorkoutKit` is localised (`.strings` + localisation tests). Everything else hardcodes
-English at the point of use — do not introduce a localisation table for one screen.
+Nothing is localised. Everything hardcodes English at the point of use — do not introduce a
+localisation table for one screen. (The archived `ITGWorkoutKit` was the only module with
+`.strings`.)
 
 ## Brand Colours
 - Dark: `#1C496E` — `Color.darkColor`
@@ -626,7 +633,7 @@ than an accent. Leave those alone.
   bold. `WorkoutLibraryManager`, `StatsDay`, `WorkoutSetRecord.statsLogId` and
   `WeightUnit.kilograms` are the reference examples. Inline `//` comments carry the same weight where
   a single line is load-bearing (the ordering inside `cancelSession`).
-- **Folder and file names are not sanitised** — `New Group/`, `Feed Feature/`,
+- **Folder and file names are not sanitised** — `New Group/`,
   `WorkoutCreation(4.4)/`, `Protocols/CooridnatorFlows/`, `DisplayWorkoutStatsAdater.swift` all exist
   and are referenced from the pbxproj. Do not rename them incidentally.
 
@@ -641,14 +648,15 @@ call sites and drifted apart. Do not re-inline any of them:
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix`
 
 ## Testing
-Before writing any tests, read all test files and folders within `ITGWorkoutKit`
-and use these as the template for structure, naming, and style.
+Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
+`DiscoverKit/DiscoverKitTests/`, `ProfileKit/ProfileKitTests/` or
+`PerformanceKit/PerformanceKitTests/`, and use them as the template for structure, naming and
+style. `LoginKitTests` and `AccountCreationKitTests` are Xcode-generated placeholders.
 
-`ITGWorkoutKit` is read-only but its suite is the reference. `StatsKit/StatsKitTests/`,
-`DiscoverKit/DiscoverKitTests/` and `ProfileKit/ProfileKitTests/` are the substantial framework
-suites and the model for new ones —
-`LoginKitTests` and `AccountCreationKitTests` are Xcode-generated placeholders, and `MyDayKitTests`
-holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until DISCOVER added one).
+The pattern was set by `ITGWorkoutKit`'s suite — a course-built framework that is now archived
+(see *Packages & Frameworks*). **The rules below are that pattern written down, so it survives
+without the code**; the original suite is on `archive/itgworkoutkit` if an example is ever
+needed.
 
 - **`test_<method>_<expectedBehaviour><condition>()`**, behaviour first —
   `test_rolling_deliversRatioOfOneOnSteadyLoad`,
@@ -666,6 +674,17 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
   asserts.** One double per file, under the suite's `Helpers/`.
 - **Helpers are `Type+TestHelpers.swift`**, one per file, forwarding `file:`/`line:` so a failure
   points at the test. Assertions are extracted too (`…Tests+Assertions.swift`).
+- **`makeSUT` tracks what it builds for memory leaks.** It takes `file: StaticString = #filePath,
+  line: UInt = #line` and calls `trackForMemoryLeaks(_:file:line:)` on the subject and every
+  reference-type collaborator before returning them, so a retain cycle fails the test that built
+  it rather than going unnoticed. A view model that captures `self` strongly in a closure or a
+  stored `Task` outlives its screen and keeps working behind it; nothing on screen shows that.
+  Every suite carries its own `Helpers/XCTestCase+MemoryLeakTracking.swift`, since each is its own
+  module. Value types and pure functions need none.
+- **An arbitrary error is one shared helper, not a value each test invents** — ITGWorkoutKit's
+  `anyNSError()`, `anyURL()`, `anyData()`. The framework suites currently define a
+  `private let anyError = NSError(domain: "test", code: 0)` per file instead; a suite that needs a
+  third copy should gain a `Helpers/SharedTestHelpers.swift` and use it.
 - **`Mock…`/`Preview…` conformers that exist for SwiftUI previews ship in the *framework*, not the
   test target** — `MockDailyTotalsProvider`, `PreviewFirestoreService`, `PreviewExerciseLoader` —
   and are `public` + `@unchecked Sendable`.
@@ -675,10 +694,11 @@ holds only `WorkoutTemplateModelCopyTests` (its scheme had no test action until 
 `testExecutionOrdering: random` (tests must not depend on each other) and `testTimeoutsEnabled`.
 
 **A test target is invisible to CI until it is added to the test plan.** The plan runs
-`InTheGymTests`, `ITGWorkoutKitTests`, `ITGWorkoutKitCacheIntegrationTests`
-**and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
+`InTheGymTests` **and every framework suite** — `StatsKitTests`, `MyDayKitTests`,
 `AccountCreationKitTests`, `LoginKitTests`, `DiscoverKitTests`, `ProfileKitTests`,
-`PerformanceKitTests` — with coverage on the app, ITGWorkoutKit and all seven frameworks. **Add any new framework's test target here.**
+`PerformanceKitTests` — with coverage on the app and all seven frameworks. **Add any new
+framework's test target here.** The scheme builds the `InTheGym` app; it used to build
+`ITGWorkoutKit.framework`.
 
 **One workflow, CI-iOS, on the standard `macos-26` runner with the newest Xcode 26 on it.** Until
 2026-10-27 it used `macos-14-xlarge`, a paid larger runner that the repository's free minutes do
@@ -686,15 +706,10 @@ not cover, so every job was refused on billing before it started; it also pinned
 cannot open the `objectVersion = 77` projects), an iOS 17.4 simulator and a wrong workspace path.
 **Do not move back to an `-xlarge` runner.**
 
-Three ITGWorkoutKit test paths are deliberately not run. ITGWorkoutKit is read-only, so each was
-dropped on our side rather than fixed in it:
-- **`WorkoutAPIEndToEndTests`** fetches a third-party course fixture from squarespace, not
-  InTheGym's backend, and fails whenever that file changes. It is out of the test plan.
-- **`ITGWorkoutKitiOSTests`** is snapshot tests only, recorded on an iOS 17 simulator. Every one
-  fails on iOS 26, and re-recording means writing into ITGWorkoutKit. It is out of the test plan.
-- **The CI-macOS workflow was deleted.** It ran ITGWorkoutKit's own `CI_macOS` plan, whose
-  `ITGWorkoutKitTests` and `ITGWorkoutKitCacheIntegrationTests` CI-iOS already runs; that plan
-  also forces Thread Sanitizer, which crashed the test runner on start under Xcode 26.
+There was a CI-macOS workflow too, running `ITGWorkoutKit`'s own `CI_macOS` plan. It went with the
+module. Before that, two of its suites had already been dropped as testing nothing of the app's:
+`WorkoutAPIEndToEndTests` fetched a third-party course fixture from squarespace, and
+`ITGWorkoutKitiOSTests` was snapshots recorded on iOS 17 that all failed on iOS 26.
 
 **A test that takes minutes is a CI failure.** `StorageProfilePhotoUploaderTests` once built its
 noise image with 360,000 `UIColor` fills and took over seventeen minutes on the simulator.
@@ -2032,7 +2047,6 @@ here, in prose, with the reason attached.
 - Do not use `Array(repeating:count:)` for reference types
 - Do not use `.insetGrouped` list style
 - Do not use `popToRootViewController()`
-- Do not modify `ITGWorkoutKit`
 - Do not put concrete infrastructure in framework layer — composition root only
 - Do not create multi-purpose files — one concept per file
 - Do not give one reader or writer two destinations — one writer per path, composed by a decorator

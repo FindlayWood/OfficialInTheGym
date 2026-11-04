@@ -181,9 +181,11 @@ final class CustomExerciseFormModelTests: XCTestCase {
         name: String = "",
         saver: CustomExerciseUploading = CustomExerciseUploaderSpy(),
         existing: [Exercise] = [],
-        finder: SimilarExerciseFinder = EmptySimilarExerciseFinder()
+        finder: SimilarExerciseFinder = EmptySimilarExerciseFinder(),
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) -> CustomExerciseFormModel {
-        CustomExerciseFormModel(
+        let sut = CustomExerciseFormModel(
             name: name,
             existingExercises: existing,
             dependencies: CustomExerciseDependencies(
@@ -194,6 +196,8 @@ final class CustomExerciseFormModelTests: XCTestCase {
                 userId: "user-1"
             )
         )
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
     }
 
     private func fillIn(_ sut: CustomExerciseFormModel) {

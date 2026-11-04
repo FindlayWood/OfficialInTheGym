@@ -72,7 +72,7 @@ final class DiscoverWorkoutDetailViewModelTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT() -> (DiscoverWorkoutDetailViewModel, WorkoutCopySaverSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (DiscoverWorkoutDetailViewModel, WorkoutCopySaverSpy) {
         let spy = WorkoutCopySaverSpy()
         let sut = DiscoverWorkoutDetailViewModel(
             templateId: "w1",
@@ -82,6 +82,8 @@ final class DiscoverWorkoutDetailViewModelTests: XCTestCase {
             copySaver: spy,
             copyChecker: spy
         )
+        trackForMemoryLeaks(spy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, spy)
     }
 }

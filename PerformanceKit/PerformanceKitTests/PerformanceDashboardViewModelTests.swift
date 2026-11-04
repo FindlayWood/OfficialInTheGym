@@ -83,8 +83,10 @@ final class PerformanceDashboardViewModelTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeSUT(loader: JumpTestSessionsLoader = KindedSessionsLoader()) -> PerformanceDashboardViewModel {
-        PerformanceDashboardViewModel(loader: loader, canRecord: true, now: { .fixed }, calendar: .utc)
+    private func makeSUT(loader: JumpTestSessionsLoader = KindedSessionsLoader(), file: StaticString = #filePath, line: UInt = #line) -> PerformanceDashboardViewModel {
+        let sut = PerformanceDashboardViewModel(loader: loader, canRecord: true, now: { .fixed }, calendar: .utc)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
     }
 
     private func cmj(daysAgo: Double, _ height: Double) -> JumpTestSession {

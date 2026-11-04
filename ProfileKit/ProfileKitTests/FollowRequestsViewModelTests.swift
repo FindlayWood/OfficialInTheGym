@@ -99,7 +99,9 @@ final class FollowRequestsViewModelTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeSUT(
-        pages: [Result<[FollowListEntry], Error>] = []
+        pages: [Result<[FollowListEntry], Error>] = [],
+        file: StaticString = #filePath,
+        line: UInt = #line
     ) -> (viewModel: FollowRequestsViewModel, privacy: PrivacyServicesSpy, follows: FollowServicesSpy) {
         let privacy = PrivacyServicesSpy()
         privacy.requestPages = pages
@@ -110,6 +112,9 @@ final class FollowRequestsViewModelTests: XCTestCase {
             approver: privacy,
             decliner: follows
         )
+        trackForMemoryLeaks(privacy, file: file, line: line)
+        trackForMemoryLeaks(follows, file: file, line: line)
+        trackForMemoryLeaks(viewModel, file: file, line: line)
         return (viewModel, privacy, follows)
     }
 
