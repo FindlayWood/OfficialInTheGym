@@ -19,6 +19,9 @@ public final class MyDayCoordinator {
     let userId: String
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
+    /// Writes a sport session to the day and to its own document. Held only to build
+    /// `sportManager`.
+    let sportSessionSaver: MyDayAndSportSessionSaver
     let videoConverter: VideoConverter
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
@@ -35,6 +38,8 @@ public final class MyDayCoordinator {
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
     private var rootViewController: UIViewController?
+    /// Built here from `dayManager`, which owns the day it adds to, so the two always agree.
+    private let sportManager: MyDaySportManager
     /// Shown instead of a cover whose `requiresPro` is set when the user has no pro.
     public var onShowPaywall: (() -> Void)?
 
@@ -45,6 +50,7 @@ public final class MyDayCoordinator {
         userId: String,
         exerciseManager: ExerciseManager,
         dayManager: MyDayManager,
+        sportSessionSaver: MyDayAndSportSessionSaver,
         videoConverter: VideoConverter,
         uploadManager: UploadManager,
         clipLoader: ClipLoader,
@@ -59,6 +65,8 @@ public final class MyDayCoordinator {
         self.userId = userId
         self.exerciseManager = exerciseManager
         self.dayManager = dayManager
+        self.sportSessionSaver = sportSessionSaver
+        self.sportManager = MyDaySportManager(dayManager: dayManager, saver: sportSessionSaver)
         self.videoConverter = videoConverter
         self.uploadManager = uploadManager
         self.clipLoader = clipLoader

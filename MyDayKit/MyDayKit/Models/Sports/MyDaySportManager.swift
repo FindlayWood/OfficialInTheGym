@@ -30,7 +30,9 @@ final class MyDaySportManager {
     private let saver: MyDayAndSportSessionSaver
 
     // MARK: - Init
-    init(dayManager: MyDayManager, saver: MyDayAndSportSessionSaver) {
+    /// `nonisolated` so the coordinator, which is not main-actor isolated, can build it. It only
+    /// stores its dependencies; everything that touches the day stays on the main actor.
+    nonisolated init(dayManager: MyDayManager, saver: MyDayAndSportSessionSaver) {
         self.dayManager = dayManager
         self.saver = saver
     }
