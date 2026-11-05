@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - Sport Type
 
-enum SportType: String, CaseIterable, Codable, Identifiable {
+public enum SportType: String, CaseIterable, Codable, Identifiable, Sendable {
     
     // Team
     case basketball        = "Basketball"
@@ -79,7 +79,7 @@ enum SportType: String, CaseIterable, Codable, Identifiable {
     case esports           = "Esports"
     case other             = "Other"
     
-    var id: String { rawValue }
+    public var id: String { rawValue }
     
     var icon: String {
         switch self {
@@ -245,7 +245,7 @@ enum SportCategory: String, CaseIterable {
     case other      = "Other"
 }
 
-enum SportSessionType: String, CaseIterable, Codable {
+public enum SportSessionType: String, CaseIterable, Codable, Sendable {
     case training = "Training"
     case game     = "Game"
     
@@ -264,7 +264,7 @@ enum SportSessionType: String, CaseIterable, Codable {
     }
 }
 
-enum GameResult: String, CaseIterable, Codable {
+public enum GameResult: String, CaseIterable, Codable, Sendable {
     case win  = "Win"
     case loss = "Loss"
     case draw = "Draw"
