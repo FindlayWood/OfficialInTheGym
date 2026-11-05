@@ -115,6 +115,11 @@ extension MyDayCoordinator {
             display.startWorkout = { [weak self] entry in
                 self?.navigate(to: .workoutSession(entry))
             }
+            display.removeSport = { [weak self] session in
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.remove(session)
+                }
+            }
             display.welcome = welcome
             display.openGettingStarted = { [weak self] in
                 self?.presentSheet(.gettingStarted)
@@ -311,12 +316,19 @@ extension MyDayCoordinator {
             vc.hidesBottomBarWhenPushed = true
             return vc
         case .sportDetail(let manager):
-            let vc = selectorVC(
-                SportSessionDetailView(
-                    manager: manager
-                )
-            )
-            return vc
+            var detail = SportSessionDetailView(manager: manager)
+            // Back to MyDay at once: the session is on the day before the write starts, so the
+            // card is already there, and waiting on the network would hold the user on a form
+            // they have finished with.
+            detail.addAction = { [weak self] in
+                guard let self else { return }
+                let session = manager.makeEntry()
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.add(session)
+                }
+                self.popToCoordinatorRoot()
+            }
+            return selectorVC(detail)
         }
     }
 

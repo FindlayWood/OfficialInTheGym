@@ -15,7 +15,9 @@ import Foundation
 /// own.** Work done in a session and work logged on its own are the same work — a marker that
 /// lit for one and not the other would depend on how the user happened to record it, the same
 /// rule the stats raw logs follow. A workout that is only *on* the day, planned or started with
-/// nothing logged, is not recorded work.
+/// nothing logged, is not recorded work. **A sport session is recorded work too** — it is only
+/// ever saved once it has been played, so being on the day is enough; a day of basketball alone
+/// lights the marker and opens rating.
 struct MyDayDayMarkers: Equatable {
     let hasCheckIn: Bool
     let hasExercise: Bool
@@ -38,9 +40,10 @@ struct MyDayDayMarkers: Equatable {
                 exercise.setRecords.contains { $0.isCompleted }
             } ?? false
         }
+        let playedSport = !(day.sports ?? []).isEmpty
         self.init(
             hasCheckIn: day.wellnessEntry != nil,
-            hasExercise: loggedExercise || loggedWorkoutSet,
+            hasExercise: loggedExercise || loggedWorkoutSet || playedSport,
             hasRPE: day.rpeEntry != nil
         )
     }
