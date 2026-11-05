@@ -277,11 +277,13 @@ public enum GameResult: String, CaseIterable, Codable, Sendable {
         }
     }
     
+    /// The matte set, not system green / red / orange, which read as alerts beside `darkColor`.
+    /// The one definition — the sport card's outcome and the detail screen both read it.
     var color: Color {
         switch self {
-        case .win:  return .green
-        case .loss: return .red
-        case .draw: return .orange
+        case .win:  return .matteGreen
+        case .loss: return .matteRed
+        case .draw: return .matteAmber
         }
     }
 }

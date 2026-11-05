@@ -91,15 +91,9 @@ struct DailySportCard: View {
         .shadow(color: Color.black.opacity(0.06), radius: 8, x: 0, y: 2)
     }
 
-    /// The matte set, not `GameResult.color`'s system colours, which read as alerts beside
-    /// `darkColor`. A score with no result is just a fact, so it stays secondary.
+    /// The result's own colour; a score with no result is just a fact, so it stays secondary.
     private var outcomeColor: Color {
-        switch session.result {
-        case .win:  return .matteGreen
-        case .loss: return .matteRed
-        case .draw: return .matteAmber
-        case nil:   return .secondary
-        }
+        session.result?.color ?? .secondary
     }
 }
 

@@ -74,7 +74,7 @@ struct SportNoteSelectorView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(
-                            isFocused ? manager.sport.color.opacity(0.5) : Color(UIColor.separator),
+                            isFocused ? Color.darkColor.opacity(0.5) : Color(UIColor.separator),
                             lineWidth: isFocused ? 1.5 : 0.5
                         )
                         .animation(.easeInOut(duration: 0.2), value: isFocused)
@@ -84,7 +84,7 @@ struct SportNoteSelectorView: View {
                     .font(.system(size: 11))
                     .foregroundStyle(
                         noteText.count > Int(Double(characterLimit) * 0.9)
-                            ? Color.orange
+                            ? Color.matteAmber
                             : Color(UIColor.tertiaryLabel)
                     )
             }
@@ -101,9 +101,9 @@ struct SportNoteSelectorView: View {
                     .foregroundStyle(isValid ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(isValid ? manager.sport.color : Color(UIColor.secondarySystemBackground))
+                    .background(isValid ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .animation(.easeInOut(duration: 0.2), value: isValid)
+                    .animation(.easeInOut(duration: 0.15), value: isValid)
             }
             .disabled(!isValid)
             .padding(.horizontal, 16)

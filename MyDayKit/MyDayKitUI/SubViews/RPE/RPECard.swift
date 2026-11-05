@@ -241,13 +241,7 @@ struct RPECard: View {
     }
 
     private func rpeColor(_ score: Int) -> Color {
-        switch score {
-        case 1...3:  return .matteBlue
-        case 4...6:  return .matteGreen
-        case 7...8:  return .matteAmber
-        case 9...10: return .matteRed
-        default:     return .gray
-        }
+        RPEScale.color(for: score)
     }
 
     private func rpeLabel(_ score: Int) -> String {
