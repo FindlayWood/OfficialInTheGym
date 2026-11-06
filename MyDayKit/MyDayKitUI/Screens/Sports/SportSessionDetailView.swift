@@ -78,13 +78,9 @@ struct SportSessionDetailView: View {
                     .foregroundStyle(isValid ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(
-                        isValid
-                            ? manager.sport.color
-                            : Color(UIColor.secondarySystemBackground)
-                    )
+                    .background(isValid ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .animation(.easeInOut(duration: 0.2), value: isValid)
+                    .animation(.easeInOut(duration: 0.15), value: isValid)
             }
             .disabled(!isValid)
             .padding(.horizontal, 16)
@@ -96,8 +92,7 @@ struct SportSessionDetailView: View {
             SportTimeSelectorView(
                 title: manager.sessionType == .game ? "Game Duration" : "Session Duration",
                 subtitle: manager.sessionType == .game ? "Total length of the game" : "How long was your session?",
-                currentValue: manager.sessionType == .game ? manager.duration : manager.duration,
-                color: manager.sport.color
+                currentValue: manager.duration
             ) { value in
                 manager.duration = value
             }
@@ -107,8 +102,7 @@ struct SportSessionDetailView: View {
             SportTimeSelectorView(
                 title: "Playing Time",
                 subtitle: "How long did you actually play?",
-                currentValue: manager.playingTime,
-                color: manager.sport.color
+                currentValue: manager.playingTime
             ) { value in
                 manager.playingTime = value
             }
@@ -185,7 +179,7 @@ struct SportSessionDetailView: View {
                     .padding(.horizontal, 12)
                     .background(
                         manager.sessionType == type
-                            ? manager.sport.color
+                            ? Color.darkColor
                             : Color(UIColor.secondarySystemBackground)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -254,7 +248,7 @@ struct SportSessionDetailView: View {
         placeholder: String
     ) -> some View {
         HStack(spacing: 14) {
-            rowIcon(systemName: icon, color: manager.sport.color)
+            rowIcon(systemName: icon, color: Color.darkColor)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.system(size: 15, weight: .semibold))
@@ -269,7 +263,7 @@ struct SportSessionDetailView: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(
                         value > 0
-                            ? manager.sport.color
+                            ? Color.darkColor
                             : Color(UIColor.tertiaryLabel)
                     )
                 Image(systemName: "chevron.right")
@@ -390,7 +384,7 @@ struct SportSessionDetailView: View {
                         .font(.system(size: 13, weight: .bold))
                         .foregroundStyle(Color.white)
                         .frame(width: 32, height: 32)
-                        .background(manager.sport.color)
+                        .background(Color.darkColor)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
@@ -407,7 +401,7 @@ struct SportSessionDetailView: View {
     private var rpeRow: some View {
         VStack(spacing: 10) {
             HStack(spacing: 14) {
-                rowIcon(systemName: "gauge.with.dots.needle.67percent", color: .orange)
+                rowIcon(systemName: "gauge.with.dots.needle.67percent", color: .matteAmber)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Effort (RPE)")
                         .font(.system(size: 15, weight: .semibold))
@@ -476,7 +470,7 @@ struct SportSessionDetailView: View {
     private var noteRow: some View {
         Button { showingNoteSheet = true } label: {
             HStack(spacing: 14) {
-                rowIcon(systemName: "note.text", color: .purple)
+                rowIcon(systemName: "note.text", color: Color.darkColor)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Note")
                         .font(.system(size: 15, weight: .semibold))
@@ -512,15 +506,17 @@ struct SportSessionDetailView: View {
     
     // MARK: - Session Load Card
     
+    /// The load is a number about the session, not a warning, so it is drawn in the brand
+    /// colour rather than the orange it was — the same reading as a workout's workload.
     private func sessionLoadCard(load: Double) -> some View {
         HStack(spacing: 14) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.orange.opacity(0.12))
+                    .fill(Color.darkColor)
                     .frame(width: 44, height: 44)
                 Image(systemName: "bolt.fill")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color.orange)
+                    .foregroundStyle(Color.white)
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text("Session Load")
@@ -536,15 +532,11 @@ struct SportSessionDetailView: View {
             Spacer()
             Text(load.formatted(.number.precision(.fractionLength(0...1))))
                 .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.orange)
+                .foregroundStyle(Color.darkColor)
         }
         .padding(14)
-        .background(Color.orange.opacity(0.06))
+        .background(Color(UIColor.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay {
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.orange.opacity(0.2), lineWidth: 1)
-        }
     }
     
     // MARK: - Shared Helpers
@@ -571,12 +563,7 @@ struct SportSessionDetailView: View {
     }
     
     private func rpeColor(_ value: Int) -> Color {
-        switch value {
-        case 1...3: return .green
-        case 4...6: return .orange
-        case 7...8: return .red
-        default:    return Color(red: 0.6, green: 0, blue: 0)
-        }
+        RPEScale.color(for: value)
     }
     
     private func formattedDuration(_ seconds: Int) -> String {

@@ -125,7 +125,7 @@ struct SportPickerView: View {
                 .foregroundStyle(isSelected ? Color.white : Color.primary)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
-                .background(isSelected ? Color.blue : Color(UIColor.secondarySystemBackground))
+                .background(isSelected ? Color.darkColor : Color(UIColor.secondarySystemBackground))
                 .clipShape(Capsule())
                 .overlay {
                     Capsule()
@@ -201,10 +201,10 @@ struct SportPickerView: View {
             } label: {
                 Text("Use Other")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.darkColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Color.blue.opacity(0.08))
+                    .background(Color.darkColor.opacity(0.08))
                     .clipShape(Capsule())
             }
             Spacer()

@@ -33,10 +33,10 @@ struct ActivityGrid: View {
     private let spacing: CGFloat = 6
     private let cellHeight: CGFloat = 34
 
-    /// Sets per day key. **Intensity, not presence** — the dot strip drew a day
+    /// Activity per day key. **Intensity, not presence** — the dot strip drew a day
     /// with one set and a day with twenty in the same green.
-    private var setsByKey: [String: Int] {
-        Dictionary(totals.map { ($0.id, $0.totalSets) }, uniquingKeysWith: +)
+    private var activityByKey: [String: Int] {
+        Dictionary(totals.map { ($0.id, $0.activitySets) }, uniquingKeysWith: +)
     }
 
     /// Today's column, Monday = 0.
@@ -67,7 +67,7 @@ struct ActivityGrid: View {
     @ViewBuilder
     private func cell(row: Int, column: Int) -> some View {
         if let daysAgo = daysAgo(row: row, column: column) {
-            let sets = setsByKey[StatsDay.key(daysAgo: daysAgo)] ?? 0
+            let sets = activityByKey[StatsDay.key(daysAgo: daysAgo)] ?? 0
             RoundedRectangle(cornerRadius: 8)
                 .fill(Self.fill(forSets: sets))
                 .frame(maxWidth: .infinity)

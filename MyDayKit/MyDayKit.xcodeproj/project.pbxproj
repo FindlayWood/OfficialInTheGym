@@ -11,6 +11,8 @@
 		22C2001A6FF44A2CAAE6513E /* SessionSetNoteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A3D97CF8B4DCFA300767D /* SessionSetNoteSheet.swift */; };
 		3DA700000000000000000002 /* MyDayProAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA700000000000000000001 /* MyDayProAccess.swift */; };
 		59B2D18A3AB0460A8FA0AA58 /* SessionSetTempoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860F47C12D564132AEC73AF5 /* SessionSetTempoSheet.swift */; };
+		5B0A71000000000000000002 /* DailySportCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A71000000000000000001 /* DailySportCard.swift */; };
+		5B0A71000000000000000004 /* SportCardOptionsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A71000000000000000003 /* SportCardOptionsSheet.swift */; };
 		6F57B9E9F9944157AAB253E3 /* SessionSetDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35E8E17535542B3B9FDC4EB /* SessionSetDetail.swift */; };
 		812E02470FF946869A299800 /* SessionSetDetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */; };
 		8375F131199D4F629458D6A2 /* SessionTimeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50230A6DADD34C93AEC20B01 /* SessionTimeUnit.swift */; };
@@ -201,6 +203,8 @@
 		4087E69E61014F2983DA52ED /* SessionSetDetailMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetDetailMode.swift; sourceTree = "<group>"; };
 		460FCF49623A468BA34BB4AD /* WorkoutSessionSummaryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionSummaryScreen.swift; sourceTree = "<group>"; };
 		50230A6DADD34C93AEC20B01 /* SessionTimeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTimeUnit.swift; sourceTree = "<group>"; };
+		5B0A71000000000000000001 /* DailySportCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailySportCard.swift; sourceTree = "<group>"; };
+		5B0A71000000000000000003 /* SportCardOptionsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCardOptionsSheet.swift; sourceTree = "<group>"; };
 		7B26D5F94A03E1C86D5470FA /* NavBarHidingHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarHidingHostingController.swift; sourceTree = "<group>"; };
 		860F47C12D564132AEC73AF5 /* SessionSetTempoSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSetTempoSheet.swift; sourceTree = "<group>"; };
 		94C1F70A2B863D5E1067A4B8 /* WorkoutSessionFinishBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSessionFinishBar.swift; sourceTree = "<group>"; };
@@ -709,6 +713,8 @@
 				F0750BB62F621AA70026D021 /* SportSessionDetailView.swift */,
 				F0750BB82F621ACC0026D021 /* SportTimeSelectorView.swift */,
 				F0750BBA2F621AF40026D021 /* SportNoteSelectorView.swift */,
+				5B0A71000000000000000001 /* DailySportCard.swift */,
+				5B0A71000000000000000003 /* SportCardOptionsSheet.swift */,
 			);
 			path = Sports;
 			sourceTree = "<group>";
@@ -1251,6 +1257,8 @@
 				F0F35C482F16AEF600ACB11E /* MyDayCoordinator.swift in Sources */,
 				F09A38502FD20F0A009793DD /* WorkoutExerciseBuilderManager.swift in Sources */,
 				F0750BB52F621A7E0026D021 /* SportPickerView.swift in Sources */,
+				5B0A71000000000000000002 /* DailySportCard.swift in Sources */,
+				5B0A71000000000000000004 /* SportCardOptionsSheet.swift in Sources */,
 				F0C8EC192ECF7F32002213C7 /* MyDayHomeViewController.swift in Sources */,
 				F0F4B2B22E85620B007E2469 /* MyDaySaver.swift in Sources */,
 				F06004852E37E17F000B279F /* MyDayExerciseListView.swift in Sources */,

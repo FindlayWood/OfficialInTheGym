@@ -82,6 +82,8 @@ public struct MyDayFullDayModel: Identifiable, Codable {
     var workouts: [DailyWorkoutEntry]
     var rpeEntry: RPEEntry?
     var wellnessEntry: WellnessEntry?
+    /// Optional, and must stay so: no day written before sports existed carries the key.
+    var sports: [SportSessionEntry]?
 }
 
 struct MyDayClipModel: Identifiable, Codable {
