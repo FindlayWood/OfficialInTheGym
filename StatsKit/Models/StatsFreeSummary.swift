@@ -44,14 +44,14 @@ struct StatsFreeSummary {
         StatsDay.weekdayColumn(for: asOf)
     }
 
-    /// Monday to Sunday. A day still to come has `sets == nil` — it has not had the chance to be
+    /// Monday to Sunday. A day still to come has `activitySets == nil` — it has not had the chance to be
     /// trained or not, and drawing it empty would misreport the week in progress.
     var thisWeek: [StatsWeekDay] {
-        let setsByKey = self.setsByKey
+        let activityByKey = self.activityByKey
         return (0..<7).map { column in
             let daysAgo = todayColumn - column
-            guard daysAgo >= 0 else { return StatsWeekDay(id: column, sets: nil) }
-            return StatsWeekDay(id: column, sets: setsByKey[StatsDay.key(daysAgo: daysAgo, from: asOf)] ?? 0)
+            guard daysAgo >= 0 else { return StatsWeekDay(id: column, activitySets: nil) }
+            return StatsWeekDay(id: column, activitySets: activityByKey[StatsDay.key(daysAgo: daysAgo, from: asOf)] ?? 0)
         }
     }
 
@@ -87,8 +87,8 @@ struct StatsFreeSummary {
 
     // MARK: - Helpers
 
-    private var setsByKey: [String: Int] {
-        Dictionary(totals.map { ($0.id, $0.totalSets) }, uniquingKeysWith: +)
+    private var activityByKey: [String: Int] {
+        Dictionary(totals.map { ($0.id, $0.activitySets) }, uniquingKeysWith: +)
     }
 
     private func totals(daysAgo range: ClosedRange<Int>) -> [DailyTotal] {
@@ -98,9 +98,10 @@ struct StatsFreeSummary {
 }
 
 // MARK: - StatsWeekDay
-/// One cell of the free "This week" card. `sets` is `nil` for a day still to come.
+/// One cell of the free "This week" card. `activitySets` is `nil` for a day still to come, and
+/// see `DailyTotal.activitySets` for why it is not simply the day's sets.
 struct StatsWeekDay: Identifiable, Equatable {
     /// Monday = 0 … Sunday = 6.
     let id: Int
-    let sets: Int?
+    let activitySets: Int?
 }

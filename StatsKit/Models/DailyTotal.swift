@@ -35,6 +35,24 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
     /// drive two separate ACWRs rather than being merged into one number.
     public let totalWorkload: Double?
 
+    /// Sport sessions counted on this day (a basketball game, a round of golf).
+    /// Written by `dailyStatsFromSportSessionWrite`; absent from every document
+    /// that has never held one, which reads as zero.
+    public let sportCount: Int
+
+    /// What a day is shaded by, **and the one definition of it**: its sets, but
+    /// never less than one.
+    ///
+    /// **A document existing is what makes a day trained** — the streak and
+    /// "days trained" both count it that way, and the functions delete a document
+    /// once nothing holds it. A day of only sport has zero sets, so shading by
+    /// `totalSets` alone drew it exactly like a day with nothing logged, under a
+    /// card saying "1 day trained". The lowest step says *trained* without
+    /// inventing a number of sets; the thresholds themselves are unchanged.
+    var activitySets: Int {
+        max(totalSets, 1)
+    }
+
     public init(
         id: String,
         date: Date,
@@ -47,7 +65,8 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         exerciseSetCounts: [String: Int],
         muscleGroupVolumes: [String: Double] = [:],
         movementTypeVolumes: [String: Double] = [:],
-        totalWorkload: Double? = nil
+        totalWorkload: Double? = nil,
+        sportCount: Int = 0
     ) {
         self.id = id
         self.date = date
@@ -61,6 +80,7 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         self.muscleGroupVolumes = muscleGroupVolumes
         self.movementTypeVolumes = movementTypeVolumes
         self.totalWorkload = totalWorkload
+        self.sportCount = sportCount
     }
 
     // Custom decoding to handle missing fields gracefully
@@ -71,6 +91,7 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         case muscleGroupVolumes
         case movementTypeVolumes
         case totalWorkload
+        case sportCount
     }
     
     public init(from decoder: Decoder) throws {
@@ -87,6 +108,7 @@ public struct DailyTotal: Identifiable, Hashable, Sendable, Decodable {
         muscleGroupVolumes = try container.decodeIfPresent([String: Double].self, forKey: .muscleGroupVolumes) ?? [:]
         movementTypeVolumes = try container.decodeIfPresent([String: Double].self, forKey: .movementTypeVolumes) ?? [:]
         totalWorkload = try container.decodeIfPresent(Double.self, forKey: .totalWorkload)
+        sportCount = try container.decodeIfPresent(Int.self, forKey: .sportCount) ?? 0
     }
 }
 
@@ -102,6 +124,7 @@ public struct DailyTotalSummary: Sendable {
     public let exerciseSetCounts: [String: Int]
     public let muscleGroupVolumes: [String: Double]
     public let movementTypeVolumes: [String: Double]
+    public let sportSessions: Int
 
     public static let empty = DailyTotalSummary(
         totalSets: 0, totalReps: 0, totalWeight: 0,
@@ -120,8 +143,10 @@ public struct DailyTotalSummary: Sendable {
         activeDays: Int,
         exerciseSetCounts: [String: Int],
         muscleGroupVolumes: [String: Double] = [:],
-        movementTypeVolumes: [String: Double] = [:]
+        movementTypeVolumes: [String: Double] = [:],
+        sportSessions: Int = 0
     ) {
+        self.sportSessions = sportSessions
         self.totalSets = totalSets
         self.totalReps = totalReps
         self.totalWeight = totalWeight
@@ -167,8 +192,26 @@ public struct DailyTotalSummary: Sendable {
             activeDays: totals.count,
             exerciseSetCounts: mergedExerciseSetCounts,
             muscleGroupVolumes: mergedMuscleGroupVolumes,
-            movementTypeVolumes: mergedMovementTypeVolumes
+            movementTypeVolumes: mergedMovementTypeVolumes,
+            sportSessions: totals.reduce(0) { $0 + $1.sportCount }
         )
+    }
+
+    /// The period in words: sets, sport sessions, then time, each only when it applies.
+    ///
+    /// **"0 sets" is left out when sport accounts for the days**, since it reads as though the
+    /// session was lost. It stays otherwise. Time only when there is some, as "0m" on a lifting
+    /// week reads as a fault.
+    var formattedMeasures: String {
+        var parts: [String] = []
+        if totalSets > 0 || sportSessions == 0 {
+            parts.append(totalSets == 1 ? "1 set" : "\(totalSets) sets")
+        }
+        if sportSessions > 0 {
+            parts.append(sportSessions == 1 ? "1 sport session" : "\(sportSessions) sport sessions")
+        }
+        if totalTime > 0 { parts.append(formattedTime) }
+        return parts.joined(separator: " · ")
     }
 
     public var formattedVolume: String {
