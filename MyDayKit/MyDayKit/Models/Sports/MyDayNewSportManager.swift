@@ -21,14 +21,28 @@ class MyDayNewSportManager: ObservableObject, Hashable {
     @Published var note: String?
     
     var sessionLoad: Double? {
-        guard let rpe else { return nil }
-        let relevantTime: Int
-        switch sessionType {
-        case .training: relevantTime = duration
-        case .game:     relevantTime = playingTime > 0 ? playingTime : duration
-        }
-        guard relevantTime > 0 else { return nil }
-        return (Double(relevantTime) / 60.0) * Double(rpe)
+        SportSessionEntry.sessionLoad(type: sessionType, duration: duration, playingTime: playingTime, rpe: rpe)
+    }
+
+    /// The form as the session it records. Game-only answers (playing time, result, scores) are
+    /// dropped for training, so switching the type back after filling them in cannot leave a
+    /// training session carrying a scoreline. A blank note is no note.
+    func makeEntry(id: String = UUID().uuidString, performedAt: Date = .now) -> SportSessionEntry {
+        let isGame = sessionType == .game
+        let trimmedNote = note?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return SportSessionEntry(
+            id: id,
+            sport: sport,
+            sessionType: sessionType,
+            performedAt: performedAt,
+            duration: duration,
+            playingTime: isGame && playingTime > 0 ? playingTime : nil,
+            rpe: rpe,
+            result: isGame ? result : nil,
+            teamScore: isGame ? homeScore : nil,
+            opponentScore: isGame ? awayScore : nil,
+            note: trimmedNote?.isEmpty == false ? trimmedNote : nil
+        )
     }
     
     init(sport: SportType) {

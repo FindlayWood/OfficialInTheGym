@@ -19,6 +19,9 @@ public final class MyDayCoordinator {
     let userId: String
     let exerciseManager: ExerciseManager
     let dayManager: MyDayManager
+    /// Writes a sport session to the day and to its own document. Held only to build
+    /// `sportManager`.
+    let sportSessionSaver: MyDayAndSportSessionSaver
     let videoConverter: VideoConverter
     let uploadManager: UploadManager
     let clipLoader: ClipLoader
@@ -35,6 +38,8 @@ public final class MyDayCoordinator {
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
     private var rootViewController: UIViewController?
+    /// Built here from `dayManager`, which owns the day it adds to, so the two always agree.
+    private let sportManager: MyDaySportManager
     /// Shown instead of a cover whose `requiresPro` is set when the user has no pro.
     public var onShowPaywall: (() -> Void)?
 
@@ -45,6 +50,7 @@ public final class MyDayCoordinator {
         userId: String,
         exerciseManager: ExerciseManager,
         dayManager: MyDayManager,
+        sportSessionSaver: MyDayAndSportSessionSaver,
         videoConverter: VideoConverter,
         uploadManager: UploadManager,
         clipLoader: ClipLoader,
@@ -59,6 +65,8 @@ public final class MyDayCoordinator {
         self.userId = userId
         self.exerciseManager = exerciseManager
         self.dayManager = dayManager
+        self.sportSessionSaver = sportSessionSaver
+        self.sportManager = MyDaySportManager(dayManager: dayManager, saver: sportSessionSaver)
         self.videoConverter = videoConverter
         self.uploadManager = uploadManager
         self.clipLoader = clipLoader
@@ -106,6 +114,11 @@ extension MyDayCoordinator {
             )
             display.startWorkout = { [weak self] entry in
                 self?.navigate(to: .workoutSession(entry))
+            }
+            display.removeSport = { [weak self] session in
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.remove(session)
+                }
             }
             display.welcome = welcome
             display.openGettingStarted = { [weak self] in
@@ -303,12 +316,19 @@ extension MyDayCoordinator {
             vc.hidesBottomBarWhenPushed = true
             return vc
         case .sportDetail(let manager):
-            let vc = selectorVC(
-                SportSessionDetailView(
-                    manager: manager
-                )
-            )
-            return vc
+            var detail = SportSessionDetailView(manager: manager)
+            // Back to MyDay at once: the session is on the day before the write starts, so the
+            // card is already there, and waiting on the network would hold the user on a form
+            // they have finished with.
+            detail.addAction = { [weak self] in
+                guard let self else { return }
+                let session = manager.makeEntry()
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.add(session)
+                }
+                self.popToCoordinatorRoot()
+            }
+            return selectorVC(detail)
         }
     }
 

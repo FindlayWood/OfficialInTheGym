@@ -887,6 +887,7 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   weight unit (kg / lbs / BW), distance unit (m / km / mi) and time unit (sec / min) all
   selectable at log time
 - Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
+- Sport sessions on MyDay and in STATS' session load (see *Sport Sessions*)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -1812,6 +1813,55 @@ Two caveats that survive until then: permission-denied is a **hard** failure the
 all. The exercise raw logs have had this same gap since long before the workout ones — fix both
 together or neither.
 
+## Sport Sessions
+A basketball training session, a game, a round of golf: logged from MyDay's Add flow and counted in
+STATS. **Golf is time and RPE; a game adds playing time, a result and a score.** There is no per-sport
+tracking beyond that, deliberately.
+
+Saving writes **two documents, through two writers**, as *Composition root mechanics* asks:
+`MyDayThenSportSessionSaver` knows no paths and composes the day saver (`MyDaySaver`, the whole
+`Users/{uid}/MyDay/{date}`) with `FirestoreSportSessionSaver` (`Users/{uid}/SportSessions/{id}`).
+
+- **Sports have their own saver, never `workoutSaver`.** `MyDayAndSportSessionSaver` is the composed
+  protocol (`save(day:adding:)`, `save(day:removing:)`), driven by `MyDaySportManager`.
+- **The day is written first.** It is what MyDay reads back. If the session document then fails, the
+  session is still on the day and can be backfilled. There is no retry queue, the same accepted gap
+  as *These writes are remote-only*.
+- **Today only.** The phone's day-file saver names its file by `Date.now`, so adding to a past day
+  would overwrite today's file. `MyDaySportManager` guards this, and past days stay read-only.
+- **`MyDayFullDayModel.sports` is optional**, as every field added to a persisted model must be.
+- **`SportSessionEntry.sessionLoad` is the one load rule on the client**, minutes × RPE. A game counts
+  playing time, falling back to its duration, since time on the bench is not training load. No RPE or
+  no time is no load, not zero load. `SportSessionLoad.ts` in the functions must match it.
+
+### In STATS
+`dailyStatsFromSportSessionWrite` adds each session's load to the day's `DailyTotal`: `totalWorkload`
+and `totalDurationSeconds`, so the session ACWR counts sport. **`sports.{id}` is a per-session ledger**,
+so a redelivered trigger changes nothing, and it is kept apart from `sessions` / `sessionCount`, which
+count workouts.
+
+- **A session with no RPE adds nothing and creates no document**, so on its own it does not count as
+  a day trained. Adding its time alone would drag the day's average RPE towards zero.
+- **A sport-only day still has a document, with its set totals seeded at zero**, because `DailyTotal`
+  decodes them as required. That document is what makes it a day trained for the streak and "days
+  trained". Removing the day's last sport, or its last set, deletes the document only when nothing
+  else holds it.
+- **Cells shade by `DailyTotal.activitySets`, never `totalSets`**: its sets, but at least one. Zero
+  sets drew a trained day like an empty one, under a card saying "1 day trained". A long game
+  therefore shades at the lowest step, since the scale measures sets. **`.volume` is unchanged:** sport
+  adds no reps or weight.
+- **Sport time is not in `totalTime`**, so the chart's time view does not show it.
+
+### UI
+- `SportPickerView` → `SportSessionDetailView`, with `DailySportCard` on MyDay's train step, built on
+  `DailyWorkoutCard`'s chrome. The card has no detail screen to open; its `⋯` holds Remove.
+- **`SportTimeSelectorView` steps 5 min, 30 min and 1 hr, and shows hours and minutes.** No seconds.
+- **`SportType.color` is semantic**, so it stays on the picker tiles and the detail header. Selection
+  and buttons are `Color.darkColor`, results the matte set.
+- `RPEScale` is one RPE scale shared by `RPECard` and the sport detail screen. The workout session
+  sheets and Fitness still have their own copies. Fitness's Save is still not connected.
+- A logged sport counts as exercise on the date strip (`MyDayDayMarkers.hasExercise`) and opens rating.
+
 ## Coach-Assigned Workouts — designed, not built
 The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
 is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
@@ -1875,6 +1925,7 @@ appears on some screens and not others.
 | `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
+| `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
 | `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
@@ -1998,6 +2049,7 @@ in this codebase.**
 | This | …and this | Section |
 |---|---|---|
 | `WorkoutSetRecord.getStats(...)` | `ExerciseCompletions.getStats()` | Exercise Stats Raw Logs |
+| `SportSessionEntry.sessionLoad` | `sportSessionLoad` in the functions' `MyDay/DailyStats/SportSessionLoad.ts` | Sport Sessions |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |

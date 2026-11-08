@@ -49,7 +49,7 @@ struct StatsThisWeekCard: View {
 
             HStack(spacing: spacing) {
                 ForEach(summary.thisWeek) { day in
-                    if let sets = day.sets {
+                    if let sets = day.activitySets {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(ActivityGrid.fill(forSets: sets))
                             .frame(maxWidth: .infinity)
@@ -81,7 +81,7 @@ struct StatsThisWeekCard: View {
             } else {
                 Text(totals.activeDays == 1 ? "1 day trained" : "\(totals.activeDays) days trained")
                     .font(.system(size: 17, weight: .semibold))
-                Text(measures)
+                Text(totals.formattedMeasures)
                     .font(.system(size: 13))
                     .foregroundStyle(.secondary)
             }
@@ -93,13 +93,6 @@ struct StatsThisWeekCard: View {
         }
     }
 
-    /// Sets, plus time only when there is some — "0m" on a lifting week reads as a fault.
-    private var measures: String {
-        var parts = [totals.totalSets == 1 ? "1 set" : "\(totals.totalSets) sets"]
-        if totals.totalTime > 0 { parts.append(totals.formattedTime) }
-        return parts.joined(separator: " · ")
-    }
-
     private var lastWeek: String {
         let days = summary.daysTrainedLastWeek
         return "Last week: \(days == 1 ? "1 day" : "\(days) days")"
@@ -108,7 +101,7 @@ struct StatsThisWeekCard: View {
     private var accessibilityWeek: String {
         let names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         let trained = summary.thisWeek
-            .filter { ($0.sets ?? 0) > 0 }
+            .filter { ($0.activitySets ?? 0) > 0 }
             .map { names[$0.id] }
         return trained.isEmpty
             ? "No days trained this week"

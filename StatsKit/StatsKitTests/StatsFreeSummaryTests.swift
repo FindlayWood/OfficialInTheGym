@@ -37,13 +37,59 @@ final class StatsFreeSummaryTests: XCTestCase {
     func test_thisWeek_leavesDaysStillToComeWithoutSets() {
         let sut = makeSUT(daysAgo: [])
 
-        XCTAssertEqual(sut.thisWeek.map(\.sets), [0, 0, 0, 0, nil, nil, nil])
+        XCTAssertEqual(sut.thisWeek.map(\.activitySets), [0, 0, 0, 0, nil, nil, nil])
     }
 
     func test_thisWeek_deliversSetsOnTheDaysTrained() {
         let sut = makeSUT(daysAgo: [0, 3], sets: 4)
 
-        XCTAssertEqual(sut.thisWeek.map(\.sets), [4, 0, 0, 4, nil, nil, nil])
+        XCTAssertEqual(sut.thisWeek.map(\.activitySets), [4, 0, 0, 4, nil, nil, nil])
+    }
+
+    // A day of only sport has a document and zero sets. Shading by sets alone
+    // drew it like a day with nothing logged, under a card saying "1 day trained".
+    func test_thisWeek_shadesASportOnlyDayAtTheLowestStep() {
+        let sut = StatsFreeSummary(
+            totals: [makeTotal(daysAgo: 0, sets: 0, sportCount: 1)],
+            asOf: fixedDate
+        )
+
+        XCTAssertEqual(sut.thisWeek.map(\.activitySets), [0, 0, 0, 1, nil, nil, nil])
+        XCTAssertEqual(sut.thisWeekTotals.activeDays, 1)
+    }
+
+    func test_thisWeekTotals_sumsSportSessionsAcrossTheWeek() {
+        let sut = StatsFreeSummary(
+            totals: [
+                makeTotal(daysAgo: 0, sets: 0, sportCount: 2),
+                makeTotal(daysAgo: 1, sets: 4, sportCount: 1),
+                makeTotal(daysAgo: 4, sets: 0, sportCount: 3),
+            ],
+            asOf: fixedDate
+        )
+
+        XCTAssertEqual(sut.thisWeekTotals.sportSessions, 3)
+    }
+
+    // "0 sets" under "1 day trained" reads as though the session was lost.
+    func test_formattedMeasures_leavesOutZeroSetsWhenSportAccountsForTheDays() {
+        let sut = summary(sets: 0, sportSessions: 1, time: 0)
+
+        XCTAssertEqual(sut.formattedMeasures, "1 sport session")
+    }
+
+    func test_formattedMeasures_deliversSetsSportAndTimeTogether() {
+        let sut = summary(sets: 12, sportSessions: 2, time: 90)
+
+        XCTAssertEqual(sut.formattedMeasures, "12 sets · 2 sport sessions · 1m")
+    }
+
+    func test_formattedMeasures_deliversSetsAloneWithoutSportOrTime() {
+        XCTAssertEqual(summary(sets: 1, sportSessions: 0, time: 0).formattedMeasures, "1 set")
+    }
+
+    func test_formattedMeasures_keepsZeroSetsWhenThereIsNoSport() {
+        XCTAssertEqual(summary(sets: 0, sportSessions: 0, time: 0).formattedMeasures, "0 sets")
     }
 
     // Last Sunday is four days before a Thursday. A rolling seven days would
@@ -136,9 +182,23 @@ final class StatsFreeSummaryTests: XCTestCase {
         )
     }
 
+    private func summary(sets: Int, sportSessions: Int, time: Int) -> DailyTotalSummary {
+        DailyTotalSummary(
+            totalSets: sets,
+            totalReps: 0,
+            totalWeight: 0,
+            totalVolume: 0,
+            totalTime: time,
+            activeDays: 1,
+            exerciseSetCounts: [:],
+            sportSessions: sportSessions
+        )
+    }
+
     private func makeTotal(
         daysAgo: Int,
         sets: Int = 1,
+        sportCount: Int = 0,
         exerciseSetCounts: [String: Int] = [:],
         from asOf: Date? = nil
     ) -> DailyTotal {
@@ -152,7 +212,8 @@ final class StatsFreeSummaryTests: XCTestCase {
             totalWeight: 50,
             totalVolume: 100,
             totalTime: 60,
-            exerciseSetCounts: exerciseSetCounts
+            exerciseSetCounts: exerciseSetCounts,
+            sportCount: sportCount
         )
     }
 }

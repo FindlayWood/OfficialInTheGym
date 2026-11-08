@@ -36,6 +36,25 @@ final class DailyTotalDecodingTests: XCTestCase {
         XCTAssertEqual(sut.exerciseSetCounts, [:])
     }
 
+    // Every document that has never held a sport session lacks the key.
+    func test_decode_deliversZeroSportCountWhenAbsent() throws {
+        XCTAssertEqual(try decode(makeJSON()).sportCount, 0)
+    }
+
+    func test_decode_deliversSportCountWhenPresent() throws {
+        XCTAssertEqual(try decode(makeJSON(extra: ["sportCount": 2])).sportCount, 2)
+    }
+
+    func test_activitySets_deliversTheDaysSets() throws {
+        XCTAssertEqual(try decode(makeJSON()).activitySets, 12)
+    }
+
+    func test_activitySets_deliversOneForADayWithNoSets() throws {
+        let sut = try decode(makeJSON(extra: ["totalSets": 0, "sportCount": 1]))
+
+        XCTAssertEqual(sut.activitySets, 1)
+    }
+
     // MARK: - Helpers
 
     private func decode(_ json: Data) throws -> DailyTotal {

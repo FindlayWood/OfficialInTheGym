@@ -38,6 +38,9 @@ struct MyDayHomeScreen: View {
     var edit: ((MyDayNewExerciseManager) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
     var startWorkout: ((DailyWorkoutEntry) -> ())?
+    /// Takes a sport session off today. Through `MyDaySportManager`, which this screen does not
+    /// hold — it only raises intent, as `startWorkout` does.
+    var removeSport: ((SportSessionEntry) -> ())?
     /// Who signed up and when; `nil` draws no welcome at all.
     var welcome: MyDayWelcome?
     var openGettingStarted: (() -> ())?
@@ -300,7 +303,7 @@ struct MyDayHomeScreen: View {
     @ViewBuilder
     private func dayTimeline(for day: MyDayFullDayModel) -> some View {
         let markers = MyDayDayMarkers(day: day)
-        if !isToday && markers.isEmpty && day.workouts.isEmpty && day.exercises.isEmpty {
+        if !isToday && markers.isEmpty && !hasTraining(day) {
             emptyPastDay(for: day)
         } else {
             activeTimeline(for: day, markers: markers)
@@ -325,7 +328,7 @@ struct MyDayHomeScreen: View {
                     state: nodeState(
                         done: markers.hasExercise,
                         available: true,
-                        hasContent: !day.workouts.isEmpty || !day.exercises.isEmpty
+                        hasContent: hasTraining(day)
                     )
                 ) {
                     trainStep(for: day)
@@ -449,13 +452,18 @@ struct MyDayHomeScreen: View {
         }
     }
 
+    /// Anything on the train step at all — a workout (logged or not), an exercise or a sport.
+    private func hasTraining(_ day: MyDayFullDayModel) -> Bool {
+        !day.workouts.isEmpty || !day.exercises.isEmpty || !(day.sports ?? []).isEmpty
+    }
+
     @ViewBuilder
     private func trainStep(for day: MyDayFullDayModel) -> some View {
-        if day.workouts.isEmpty && day.exercises.isEmpty {
+        if !hasTraining(day) {
             if isToday {
                 MyDayTimelinePlaceholder(
                     title: "Train",
-                    subtitle: "Log an exercise or add a workout",
+                    subtitle: "Log an exercise, a workout or a sport",
                     actionTitle: "Add",
                     actionTint: .white,
                     actionLabelColor: .darkColor,
@@ -495,6 +503,34 @@ struct MyDayHomeScreen: View {
                     }
                 }
      
+                // MARK: - Sport Cards
+                if let sports = day.sports, !sports.isEmpty {
+                    HStack {
+                        Text("Sport")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                        Spacer()
+                    }
+
+                    ForEach(sports) { session in
+                        DailySportCard(
+                            session: session,
+                            onRemove: isToday ? {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    removeSport?(session)
+                                }
+                            } : nil
+                        )
+                        .transition(.asymmetric(
+                            insertion: .opacity,
+                            removal: .opacity.combined(with: .scale(scale: 0.94))
+                        ))
+                    }
+                }
+
                 // MARK: - Individual Exercises
                 if !day.exercises.isEmpty {
                     HStack {

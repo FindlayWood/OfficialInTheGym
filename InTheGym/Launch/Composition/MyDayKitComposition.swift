@@ -82,6 +82,14 @@ class MyDayKitComposition {
             rangeLoader: MyDayFirestoreRangeLoader()
         )
         
+        // Sport — the day saver writes the day, the sport saver its own
+        // document; the decorator knows neither path and writes the day first.
+        let sportSessionSaver: MyDayAndSportSessionSaver = MyDayThenSportSessionSaver(
+            day: localAndRemoteMyDaySaver,
+            session: FirestoreSportSessionSaver(userId: userId),
+            deleter: FirestoreSportSessionDeleter(userId: userId)
+        )
+
         // Clip
         let thumbnailGenerator = VideoThumbnailGenerator()
         let converter = VideoConverter(
@@ -181,6 +189,7 @@ class MyDayKitComposition {
             userId: userId,
             exerciseManager: exerciseManager,
             dayManager: dayManager,
+            sportSessionSaver: sportSessionSaver,
             videoConverter: converter,
             uploadManager: uploadManager,
             clipLoader: clipLoader,

@@ -13,26 +13,25 @@ struct SportTimeSelectorView: View {
     
     let title: String
     let subtitle: String
-    let color: Color
     let onSave: (Int) -> Void
     
     @State private var value: Int
     
     private var isValid: Bool { value > 0 }
     
-    let steps: [Int] = [1, 5, 10, 30, 60, 300]
+    /// 5 minutes, 30 minutes, an hour. A sport session is not timed to the second, and the old
+    /// 1 / 5 / 10 / 30-second steps meant a 90-minute game took a dozen taps.
+    let steps: [Int] = [300, 1_800, 3_600]
     let columns = Array(repeating: GridItem(.flexible()), count: 3)
     
     init(
         title: String,
         subtitle: String,
         currentValue: Int,
-        color: Color,
         onSave: @escaping (Int) -> Void
     ) {
         self.title = title
         self.subtitle = subtitle
-        self.color = color
         self.onSave = onSave
         self._value = State(initialValue: currentValue)
     }
@@ -61,7 +60,6 @@ struct SportTimeSelectorView: View {
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 timeComponent(value: value / 3600, unit: "h")
                 timeComponent(value: (value % 3600) / 60, unit: "m")
-                timeComponent(value: value % 60, unit: "s")
             }
             .contentTransition(.numericText())
             .animation(.easeInOut(duration: 0.15), value: value)
@@ -74,11 +72,11 @@ struct SportTimeSelectorView: View {
             
             // Steps
             VStack(spacing: 12) {
-                stepSection(label: "Remove", icon: "minus.circle.fill", color: .red, disabled: value == 0) { step in
+                stepSection(label: "Remove", icon: "minus.circle.fill", color: .secondary, disabled: value == 0) { step in
                     withAnimation(.easeInOut(duration: 0.15)) { value = max(0, value - step) }
                 }
                 Divider()
-                stepSection(label: "Add", icon: "plus.circle.fill", color: color, disabled: false) { step in
+                stepSection(label: "Add", icon: "plus.circle.fill", color: Color.darkColor, disabled: false) { step in
                     withAnimation(.easeInOut(duration: 0.15)) { value = min(86400, value + step) }
                 }
             }
@@ -95,9 +93,9 @@ struct SportTimeSelectorView: View {
                     .foregroundStyle(isValid ? Color.white : Color.secondary)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(isValid ? color : Color(UIColor.secondarySystemBackground))
+                    .background(isValid ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .animation(.easeInOut(duration: 0.2), value: isValid)
+                    .animation(.easeInOut(duration: 0.15), value: isValid)
             }
             .disabled(!isValid)
             .padding(.horizontal, 16)
@@ -177,5 +175,5 @@ struct SportTimeSelectorView: View {
 }
 
 #Preview {
-    SportTimeSelectorView(title: "", subtitle: "", currentValue: 0, color: .green, onSave: { _ in })
+    SportTimeSelectorView(title: "Session Duration", subtitle: "How long was your session?", currentValue: 0, onSave: { _ in })
 }
