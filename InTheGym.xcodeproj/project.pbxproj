@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D4AA00000000000000000002 /* MyDayFirestoreRangeLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */; };
 		C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */; };
+		5CED0000000000000000002A /* ScheduleStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000029 /* ScheduleStoreTests.swift */; };
 		C2DE00000000000000000004 /* StartedTrialTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000003 /* StartedTrialTests.swift */; };
 		C2DE00000000000000000006 /* TrialReminderSchedulerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */; };
 		C2DE00000000000000000008 /* PurchaseManagerStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000007 /* PurchaseManagerStub.swift */; };
@@ -936,6 +937,15 @@
 		CE0E0000000000000000001E /* CustomExerciseSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E0000000000000000001D /* CustomExerciseSyncer.swift */; };
 		CE0E00000000000000000020 /* CustomExerciseSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E0000000000000000001F /* CustomExerciseSaver.swift */; };
 		CE0E00000000000000000022 /* CustomExerciseSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000021 /* CustomExerciseSyncService.swift */; };
+		5CED00000000000000000002 /* ScheduleStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000001 /* ScheduleStoreLocation.swift */; };
+		5CED00000000000000000004 /* FileManagerScheduleWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000003 /* FileManagerScheduleWriter.swift */; };
+		5CED00000000000000000006 /* FileManagerScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000005 /* FileManagerScheduleFetcher.swift */; };
+		5CED00000000000000000008 /* FirestoreScheduleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000007 /* FirestoreScheduleUploader.swift */; };
+		5CED0000000000000000000A /* FirestoreScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000009 /* FirestoreScheduleFetcher.swift */; };
+		5CED0000000000000000000C /* ScheduleSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED0000000000000000000B /* ScheduleSaver.swift */; };
+		5CED0000000000000000000E /* ScheduleSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED0000000000000000000D /* ScheduleSyncer.swift */; };
+		5CED00000000000000000010 /* SyncQueueScheduleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED0000000000000000000F /* SyncQueueScheduleUploader.swift */; };
+		5CED00000000000000000012 /* ScheduleSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000011 /* ScheduleSyncService.swift */; };
 		CE0E00000000000000000002 /* ExerciseBodyListStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */; };
 		CE0E00000000000000000004 /* FileExerciseBodyListCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */; };
 		CE0E00000000000000000006 /* CachedExerciseMuscleGroupsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */; };
@@ -1000,6 +1010,7 @@
 /* Begin PBXFileReference section */
 		D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayFirestoreRangeLoader.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallViewModelTests.swift; sourceTree = "<group>"; };
+		5CED00000000000000000029 /* ScheduleStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleStoreTests.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000003 /* StartedTrialTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartedTrialTests.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000005 /* TrialReminderSchedulerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrialReminderSchedulerSpy.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000007 /* PurchaseManagerStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManagerStub.swift; sourceTree = "<group>"; };
@@ -1914,6 +1925,15 @@
 		CE0E0000000000000000001D /* CustomExerciseSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExerciseSyncer.swift; sourceTree = "<group>"; };
 		CE0E0000000000000000001F /* CustomExerciseSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExerciseSaver.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000021 /* CustomExerciseSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomExerciseSyncService.swift; sourceTree = "<group>"; };
+		5CED00000000000000000001 /* ScheduleStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleStoreLocation.swift; sourceTree = "<group>"; };
+		5CED00000000000000000003 /* FileManagerScheduleWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerScheduleWriter.swift; sourceTree = "<group>"; };
+		5CED00000000000000000005 /* FileManagerScheduleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerScheduleFetcher.swift; sourceTree = "<group>"; };
+		5CED00000000000000000007 /* FirestoreScheduleUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreScheduleUploader.swift; sourceTree = "<group>"; };
+		5CED00000000000000000009 /* FirestoreScheduleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreScheduleFetcher.swift; sourceTree = "<group>"; };
+		5CED0000000000000000000B /* ScheduleSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSaver.swift; sourceTree = "<group>"; };
+		5CED0000000000000000000D /* ScheduleSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSyncer.swift; sourceTree = "<group>"; };
+		5CED0000000000000000000F /* SyncQueueScheduleUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueueScheduleUploader.swift; sourceTree = "<group>"; };
+		5CED00000000000000000011 /* ScheduleSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSyncService.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseBodyListStoreLocation.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExerciseBodyListCache.swift; sourceTree = "<group>"; };
 		CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedExerciseMuscleGroupsLoader.swift; sourceTree = "<group>"; };
@@ -3361,6 +3381,7 @@
 			children = (
 				C2DE00000000000000000003 /* StartedTrialTests.swift */,
 				C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */,
+				5CED00000000000000000029 /* ScheduleStoreTests.swift */,
 				746DA0D72C0A615C0094EA3B /* InTheGymTests-Bridging-Header.h */,
 				7479A922229F2B4D00D39E2E /* Info.plist */,
 				746DA0E12C0A7F980094EA3B /* Helpers */,
@@ -4731,6 +4752,15 @@
 				CE0E0000000000000000001D /* CustomExerciseSyncer.swift */,
 				CE0E0000000000000000001F /* CustomExerciseSaver.swift */,
 				CE0E00000000000000000021 /* CustomExerciseSyncService.swift */,
+				5CED00000000000000000001 /* ScheduleStoreLocation.swift */,
+				5CED00000000000000000003 /* FileManagerScheduleWriter.swift */,
+				5CED00000000000000000005 /* FileManagerScheduleFetcher.swift */,
+				5CED00000000000000000007 /* FirestoreScheduleUploader.swift */,
+				5CED00000000000000000009 /* FirestoreScheduleFetcher.swift */,
+				5CED0000000000000000000B /* ScheduleSaver.swift */,
+				5CED0000000000000000000D /* ScheduleSyncer.swift */,
+				5CED0000000000000000000F /* SyncQueueScheduleUploader.swift */,
+				5CED00000000000000000011 /* ScheduleSyncService.swift */,
 				CE0E00000000000000000001 /* ExerciseBodyListStoreLocation.swift */,
 				CE0E00000000000000000003 /* FileExerciseBodyListCache.swift */,
 				CE0E00000000000000000005 /* CachedExerciseMuscleGroupsLoader.swift */,
@@ -4930,6 +4960,15 @@
 				CE0E0000000000000000001E /* CustomExerciseSyncer.swift in Sources */,
 				CE0E00000000000000000020 /* CustomExerciseSaver.swift in Sources */,
 				CE0E00000000000000000022 /* CustomExerciseSyncService.swift in Sources */,
+				5CED00000000000000000002 /* ScheduleStoreLocation.swift in Sources */,
+				5CED00000000000000000004 /* FileManagerScheduleWriter.swift in Sources */,
+				5CED00000000000000000006 /* FileManagerScheduleFetcher.swift in Sources */,
+				5CED00000000000000000008 /* FirestoreScheduleUploader.swift in Sources */,
+				5CED0000000000000000000A /* FirestoreScheduleFetcher.swift in Sources */,
+				5CED0000000000000000000C /* ScheduleSaver.swift in Sources */,
+				5CED0000000000000000000E /* ScheduleSyncer.swift in Sources */,
+				5CED00000000000000000010 /* SyncQueueScheduleUploader.swift in Sources */,
+				5CED00000000000000000012 /* ScheduleSyncService.swift in Sources */,
 				CE0E00000000000000000002 /* ExerciseBodyListStoreLocation.swift in Sources */,
 				CE0E00000000000000000004 /* FileExerciseBodyListCache.swift in Sources */,
 				CE0E00000000000000000006 /* CachedExerciseMuscleGroupsLoader.swift in Sources */,
@@ -5810,6 +5849,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */,
+				5CED0000000000000000002A /* ScheduleStoreTests.swift in Sources */,
 				C2DE00000000000000000004 /* StartedTrialTests.swift in Sources */,
 				C2DE00000000000000000006 /* TrialReminderSchedulerSpy.swift in Sources */,
 				C2DE00000000000000000008 /* PurchaseManagerStub.swift in Sources */,

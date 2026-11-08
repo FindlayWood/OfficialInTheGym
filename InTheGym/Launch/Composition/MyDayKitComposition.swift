@@ -18,6 +18,8 @@ class MyDayKitComposition {
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
+    /// What the user has scheduled, local-first. See `SCHEDULES_PLAN.md`.
+    private(set) var scheduleManager: ScheduleManager?
     /// **The sync services live here, for the signed-in session.** They used
     /// to be locals in `composeCombination`, and this composition a local in
     /// `PlayerInitialViewController.viewDidLoad`, so nothing held them once
@@ -27,6 +29,7 @@ class MyDayKitComposition {
     /// out stops them — `stop()` had no caller before.
     private var templateSyncService: WorkoutTemplateSyncService?
     private var customExerciseSyncService: CustomExerciseSyncService?
+    private var scheduleSyncService: ScheduleSyncService?
     private var signOutObserver: NSObjectProtocol?
 
     deinit {
@@ -155,6 +158,25 @@ class MyDayKitComposition {
         customExerciseSyncService.start()
         self.customExerciseSyncService = customExerciseSyncService
 
+        // Schedules — the same pipeline, with one remote path.
+        let scheduleQueue = SyncQueueScheduleUploader(userId: userId)
+        let remoteScheduleUploader: ScheduleUploading = FirestoreScheduleUploader(userId: userId)
+        let scheduleSaver: ScheduleUploading = ScheduleSaver(
+            local: FileManagerScheduleWriter(userId: userId),
+            remote: ScheduleSyncer(remote: remoteScheduleUploader, queue: scheduleQueue)
+        )
+        let scheduleSyncService = ScheduleSyncService(
+            remote: remoteScheduleUploader,
+            syncQueue: scheduleQueue
+        )
+        scheduleSyncService.start()
+        self.scheduleSyncService = scheduleSyncService
+        scheduleManager = ScheduleManager(
+            saver: scheduleSaver,
+            local: FileManagerScheduleFetcher(userId: userId),
+            remote: FirestoreScheduleFetcher(userId: userId)
+        )
+
         // The form's lists, cached on disk so it works offline. The same two
         // readers StatsKit uses — one reader per collection.
         let customExercises = CustomExerciseDependencies(
@@ -217,13 +239,15 @@ class MyDayKitComposition {
 // MARK: - Sync services
 extension MyDayKitComposition {
 
-    /// Stops both monitors. Queued writes stay on disk, scoped by user id, and
+    /// Stops every monitor. Queued writes stay on disk, scoped by user id, and
     /// are flushed by the next session that user signs in to.
     private func stopSyncServices() {
         templateSyncService?.stop()
         customExerciseSyncService?.stop()
+        scheduleSyncService?.stop()
         templateSyncService = nil
         customExerciseSyncService = nil
+        scheduleSyncService = nil
     }
 }
 
