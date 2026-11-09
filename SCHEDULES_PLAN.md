@@ -57,7 +57,9 @@ written only when the user acts on the card.
 Due items sit in the existing train step, beside anything already logged.
 
 **A due item is hidden when** today already holds an entry with its `scheduleId`, today's
-`skippedSchedules` holds its id, or the schedule is stopped.
+`skippedSchedules` holds its id, or the schedule is stopped. A workout is also hidden when its
+template cannot be found, or when it is already on the day, added by hand, since two identical cards
+would leave the user guessing which to open.
 
 ### Workouts
 - The card is `DailyWorkoutCard` with a `.planned` `DailyWorkoutEntry` that is **built for display
@@ -65,7 +67,8 @@ Due items sit in the existing train step, beside anything already logged.
 - **Tapping it saves the entry** with a snapshot of the template at that moment, then opens the
   normal session screen. Until then it shows the current template; afterwards, editing the template
   changes only future days. Start, Finish, required RPE and everything after are unchanged.
-- **The `⋯` offers "Not today"** instead of Remove from Today, and adds to `skippedSchedules`.
+- **The `⋯` offers "Not Today"** instead of Remove from Today until the workout is started, and
+  adds to `skippedSchedules`. Once started it says Remove, since it then discards what was logged.
 - **`removeWorkoutFromDay` on an entry with a `scheduleId` must also skip it**, or the card returns
   the moment the entry is gone.
 - A schedule whose template cannot be found draws nothing.

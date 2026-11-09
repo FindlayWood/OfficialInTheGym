@@ -84,6 +84,8 @@ public struct MyDayFullDayModel: Identifiable, Codable {
     var wellnessEntry: WellnessEntry?
     /// Optional, and must stay so: no day written before sports existed carries the key.
     var sports: [SportSessionEntry]?
+    /// Schedules the user said "Not today" to on this day. Optional for the same reason.
+    var skippedSchedules: [String]?
 }
 
 struct MyDayClipModel: Identifiable, Codable {

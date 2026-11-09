@@ -98,7 +98,15 @@ struct DailyWorkoutCard: View {
     private var statusChip: some View {
         switch entry.status {
         case .planned:
-            EmptyView()
+            if entry.scheduleId != nil {
+                HStack(spacing: 4) {
+                    Image(systemName: "calendar")
+                        .font(.system(size: 10, weight: .bold))
+                    Text("Scheduled")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+                .foregroundColor(Color.darkColor)
+            }
         case .inProgress:
             HStack(spacing: 5) {
                 Circle()

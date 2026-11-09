@@ -31,6 +31,7 @@ struct MyDayHomeScreen: View {
     }()
     
     @ObservedObject var dayManager: MyDayManager
+    @ObservedObject var scheduled: MyDayScheduledItems
     
     var addButtonAction: (() -> ())?
     var addSpecificExercise: ((MyDayNewExerciseManager) -> ())?
@@ -346,6 +347,9 @@ struct MyDayHomeScreen: View {
             .padding(.trailing, 16)
             .padding(.vertical, 12)
         }
+        .task {
+            await scheduled.loadIfNeeded()
+        }
     }
 
     /// A past day with nothing on it at all: the day named once, the three steps as rows saying
@@ -457,9 +461,16 @@ struct MyDayHomeScreen: View {
         !day.workouts.isEmpty || !day.exercises.isEmpty || !(day.sports ?? []).isEmpty
     }
 
+    /// Workouts on today's plan that are not on the day yet. Today only: past days show what was
+    /// logged and nothing else, so a missed session never reads as a failure.
+    private func dueWorkouts(for day: MyDayFullDayModel) -> [DailyWorkoutEntry] {
+        isToday ? scheduled.dueWorkouts(for: day) : []
+    }
+
     @ViewBuilder
     private func trainStep(for day: MyDayFullDayModel) -> some View {
-        if !hasTraining(day) {
+        let due = dueWorkouts(for: day)
+        if !hasTraining(day) && due.isEmpty {
             if isToday {
                 MyDayTimelinePlaceholder(
                     title: "Train",
@@ -475,7 +486,7 @@ struct MyDayHomeScreen: View {
         } else {
             LazyVStack(spacing: 12) {
                 // MARK: - Workout Cards
-                if !day.workouts.isEmpty {
+                if !day.workouts.isEmpty || !due.isEmpty {
                     HStack {
                         Text("Workouts")
                             .font(.caption)
@@ -486,10 +497,17 @@ struct MyDayHomeScreen: View {
                         Spacer()
                     }
      
-                    ForEach(day.workouts) { entry in
+                    ForEach(day.workouts + due) { entry in
                         DailyWorkoutCard(
                             entry: entry,
-                            onStart: { startWorkout?(entry) },
+                            onStart: {
+                                // A due card is saved at the moment it is opened. Already on the
+                                // day, this changes nothing.
+                                if entry.scheduleId != nil {
+                                    dayManager.addScheduledWorkout(entry)
+                                }
+                                startWorkout?(entry)
+                            },
                             onDelete: {
                                 withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                                     dayManager.removeWorkoutFromDay(entry)
@@ -697,7 +715,8 @@ struct MyDayHomeScreen: View {
             workoutStatsSaver: PreviewExerciseStatsSaver(),
             completedSessionSaver: PreviewCompletedWorkoutSessionSaver(),
             completedSessionDeleter: PreviewCompletedWorkoutSessionDeleter()
-        )
+        ),
+        scheduled: .none
     )
 }
 

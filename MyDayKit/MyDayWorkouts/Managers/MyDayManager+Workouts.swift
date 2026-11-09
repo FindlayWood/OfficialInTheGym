@@ -30,14 +30,20 @@ extension MyDayManager {
     /// once assignment ships a coach may have been told about it. `DailyWorkoutCard`
     /// hides the options menu for a completed entry; this guard is what makes it an
     /// invariant rather than a convention the next caller can breach.
+    ///
+    /// **A scheduled workout is also marked skipped**, whether or not it was saved yet: a due card has
+    /// no entry to remove, and one that was saved would otherwise come straight back as a due card.
     public func removeWorkoutFromDay(_ entry: DailyWorkoutEntry) {
         guard entry.status != .completed else { return }
         guard var day = selectedDay else { return }
         day.workouts.removeAll { $0.id == entry.id }
+        if let scheduleId = entry.scheduleId {
+            day = day.skippingSchedule(scheduleId)
+        }
         selectedDay = day
         deleteWorkoutStats(for: entry)
         deleteCompletedSession(for: entry)
-        Task {
+        Task { [workoutSaver, day] in
             try await workoutSaver.save(data: day)
         }
     }

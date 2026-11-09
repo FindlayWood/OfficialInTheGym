@@ -100,6 +100,10 @@ extension MyDayCoordinator {
         case .root:
             var display = MyDayHomeScreen(
                 dayManager: dayManager,
+                scheduled: MyDayScheduledItems(
+                    scheduleManager: scheduleManager,
+                    libraryManager: workoutLibraryManager
+                ),
                 addButtonAction: { [weak self] in
                     self?.presentSheet(.option)
                 },
