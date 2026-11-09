@@ -343,6 +343,16 @@ extension MyDayCoordinator {
                 self.popToCoordinatorRoot()
             }
             return selectorVC(detail)
+        case .scheduled:
+            guard let scheduleManager else {
+                assertionFailure("Scheduled is only offered when scheduleManager is set")
+                return UIViewController()
+            }
+            let vc = selectorVC(
+                MyDayScheduledScreen(manager: scheduleManager, libraryManager: workoutLibraryManager)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
         }
     }
 
@@ -455,12 +465,18 @@ extension MyDayCoordinator {
                     workoutSelected: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                         self?.navigate(to: .workoutCreationHome)
+                    },
+                    scheduledSelected: scheduleManager == nil ? nil : { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                        self?.navigate(to: .scheduled)
                     }
                 )
             )
 
             if let sheet = hosting.sheetPresentationController {
-                sheet.detents = [.medium()]
+                // Taller than `.medium()` by the Scheduled row, which would otherwise be cut off on
+                // a small phone.
+                sheet.detents = [.custom { _ in 440 }]
                 sheet.prefersGrabberVisible = true
             }
 

@@ -4,7 +4,8 @@ Set a workout or a sport for a future date, or on a repeating pattern, and it is
 when the day comes. "I train basketball every Tuesday and Thursday" should not mean tapping through
 the Add flow every time, and neither should a morning routine done every day.
 
-**Status: designed 8 November 2026. Nothing is built.**
+**Status: designed 8 November 2026, built 9 November, every step.** The app and the functions are
+both on a `schedules` branch, **not merged, deployed or released**. See *Rollout*.
 
 ## Decisions — agreed, do not relitigate
 - **Exercises are scheduled as workouts.** A morning routine is a workout built in the workout
@@ -107,8 +108,9 @@ entry carries `scheduleId` across.
   - Picking today's weekday on a repeat means it is due today.
 - **The workout page lists its own schedules** (`WorkoutScheduleRows`), under the metrics. It is the
   confirmation that Save worked, and a row reopens the sheet, which also holds Stop Schedule.
-- **`MyDayScheduledScreen`:** every active schedule with its pattern and next date. Edit and Stop.
-  Finished one-offs drop off. Reached from MyDay's Add flow.
+- **`MyDayScheduledScreen`:** every active schedule with its pattern and next date, soonest first. A
+  row opens the same sheet to edit or stop it. Finished one-offs drop off. Reached from a quiet row at
+  the bottom of MyDay's Add sheet, apart from the four options, since it adds nothing.
 - All new fields and selected states follow *Brand Colours*: `Color.darkColor`, with
   `.tint(Color.darkColor)` on any text input.
 
@@ -147,7 +149,15 @@ Each step ends with what changed per project and what to check.
    rows in `CLAUDE.md`.
 
 ## Rollout
-Deploy the rule **before** any app build that saves schedules, or every upload is refused.
+Deploy the rule **before** any app build that saves schedules, or every upload is refused. From the
+`InTheGym-CloudFunctions` root, once its `schedules` branch is merged:
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+A build without the rule still saves to the device and shows the cards, then drops the remote copy
+as refused, so another device would never see it.
 
 ## Open questions
 - **Monthly.** Left out because it needs a rule first: "the 31st" does not exist in every month, and

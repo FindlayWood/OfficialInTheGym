@@ -13,6 +13,8 @@ struct SelectOptionSheet: View {
     var fitnessSelected: (() -> ())?
     var sportSelected: (() -> ())?
     var workoutSelected: (() -> ())?
+    /// `nil` leaves the row off.
+    var scheduledSelected: (() -> ())?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -66,13 +68,37 @@ struct SelectOptionSheet: View {
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 24)
+            .padding(.bottom, 12)
+
+            if let scheduledSelected {
+                scheduledRow(action: scheduledSelected)
+            }
         }
+        .padding(.bottom, 12)
         .presentationDetents([.height(360)])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
     }
     
+    // MARK: - Scheduled
+
+    /// Quieter than the options above and apart from them: the sheet asks what is being added, and
+    /// this adds nothing. It is here because it is the way into what is planned for the day.
+    private func scheduledRow(action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 8) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 14, weight: .semibold))
+                Text("See what's scheduled")
+                    .font(.system(size: 14, weight: .semibold))
+            }
+            .foregroundStyle(Color.darkColor)
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+        }
+        .buttonStyle(.plain)
+    }
+
     // MARK: - Option Row
     
     @ViewBuilder

@@ -38,14 +38,6 @@ struct ScheduleRows: View {
         }
     }
 
-    /// A sport's usual time is part of what was scheduled, so the row says it. A workout has none.
-    private func title(for schedule: Schedule) -> String {
-        guard case .sport(_, let duration) = schedule.item else {
-            return schedule.recurrence.summary
-        }
-        return "\(schedule.recurrence.summary) · \(SportSessionSummary.formatted(seconds: duration))"
-    }
-
     private func row(for schedule: Schedule) -> some View {
         Button {
             onSelect(schedule)
@@ -56,7 +48,7 @@ struct ScheduleRows: View {
                     .foregroundStyle(Color.darkColor)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title(for: schedule))
+                    Text(schedule.summary)
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color.primary)
                     if let next = schedule.nextDue(onOrAfter: today) {
