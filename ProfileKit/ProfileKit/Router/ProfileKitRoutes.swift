@@ -12,6 +12,7 @@ enum ProfileKitRoutes {
     case myProfile
     case settings
     case bodyMeasurements
+    case reminders
     case followList(FollowListKind, userId: String)
     case followRequests
     case userProfile(userId: String)

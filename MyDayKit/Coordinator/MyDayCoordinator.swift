@@ -421,6 +421,22 @@ extension MyDayCoordinator {
         presentSheet(.gettingStarted)
     }
 
+    /// Opens today's MyDay from outside it — a tapped reminder, through the app. Lands on the
+    /// root with today selected, where the check-in and the rating step both sit, rather than
+    /// opening either for the user: the timeline shows what is left, and a sheet thrown up over
+    /// whatever they were doing would be a surprise.
+    public func showToday() {
+        if navigationController.presentedViewController != nil {
+            navigationController.dismiss(animated: false)
+        }
+        if let rootViewController {
+            navigationController.popToViewController(rootViewController, animated: false)
+        }
+        if !dayManager.isTodaySelected() {
+            dayManager.changeSelectedDay(to: .now)
+        }
+    }
+
     private func dismissThen(_ action: @escaping (MyDayCoordinator) -> Void) {
         navigationController.dismiss(animated: true) { [weak self] in
             guard let self else { return }

@@ -13,4 +13,6 @@ extension Notification {
     static let deletedPost = Notification.Name("deletedPost")
     static let signOut = Notification.Name("signOut")
     static let signIn = Notification.Name("signIn")
+    /// A MyDay reminder was tapped. Posted by `AppDelegate`, handled by the player tab bar.
+    static let openReminder = Notification.Name("openReminder")
 }

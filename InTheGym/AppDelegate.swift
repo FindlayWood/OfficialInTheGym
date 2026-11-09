@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MyDayKit
 import CoreData
 import Firebase
 import FirebaseAuth
@@ -161,6 +162,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse) async {
         let userInfo = response.notification.request.content.userInfo
+
+        // A MyDay reminder opens today's MyDay. Posted on the main actor, where the tab bar
+        // observes it. On a cold launch the tab bar may not exist yet; MyDay opens on today
+        // anyway, so nothing is lost.
+        if userInfo[ReminderKind.userInfoKey] != nil {
+            await MainActor.run {
+                NotificationCenter.default.post(name: Notification.openReminder, object: nil)
+            }
+            return
+        }
         
         // ...
         

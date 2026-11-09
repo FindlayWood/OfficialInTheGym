@@ -73,6 +73,9 @@ public final class ProfileKitRouter {
     /// MyDay's Getting Started, which ProfileKit cannot build. `nil` leaves the
     /// row out of Settings — the coach tab bar has no MyDay to open it in.
     public var onOpenGettingStarted: (() -> Void)?
+    /// MyDay's reminders, edited from Settings. `nil` leaves the row out — the coach tab bar has
+    /// no MyDay to remind about. Set by the tab's composition only.
+    public var reminderSettings: ReminderSettingsService?
     /// A clip from a profile grid, opened in DISCOVER's clip player, which
     /// ProfileKit cannot build. Set on every router, tab or embedded, by
     /// `ProfileKitComposition.makeRouter`.
@@ -235,8 +238,18 @@ extension ProfileKitRouter {
                 viewModel.onOpenGettingStarted = { [weak self] in self?.onOpenGettingStarted?() }
             }
             viewModel.onOpenBodyMeasurements = { [weak self] in self?.navigate(to: .bodyMeasurements) }
+            if reminderSettings != nil {
+                viewModel.onOpenReminders = { [weak self] in self?.navigate(to: .reminders) }
+            }
             viewModel.onOpenDeleteAccount = { [weak self] in self?.navigate(to: .deleteAccount) }
             let vc = UIHostingController(rootView: ProfileSettingsScreen(viewModel: viewModel))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .reminders:
+            guard let reminderSettings else { return UIViewController() }
+            let viewModel = ReminderSettingsViewModel(service: reminderSettings)
+            let vc = UIHostingController(rootView: ReminderSettingsScreen(viewModel: viewModel))
             vc.hidesBottomBarWhenPushed = true
             return vc
 

@@ -223,10 +223,11 @@ still had the soft-lock bug the first had fixed. **Do not fork it again.**
   screen then states the trial's end date and whether a reminder is set. `StartedTrial` is the one
   definition of the end date and reminder date.
 - **The app never asks for notifications at launch.** It used to, before signup, when nobody had a
-  reason to say yes — and iOS shows that prompt once. This screen is the app's one ask. **Do not add
-  a notification promise for something that does not send one**: today only the trial reminder
-  exists. When comments, likes and replies send pushes, a non-subscriber version of the screen asks
-  for those.
+  reason to say yes — and iOS shows that prompt once. It is asked in context only: here, and when
+  someone first turns on a MyDay reminder (see *Reminders*). **Do not add a notification promise
+  for something that does not send one**: today the trial reminder and MyDay's reminders exist.
+  When comments, likes and replies send pushes, a non-subscriber version of the screen asks for
+  those.
 - **A paywall must always be dismissible.** The close button is never hidden, delayed or disabled.
   The old onboarding paywall once lost its "Not Now" behind a stuck `isLoading`.
 - **Required by App Review 3.1.2:** price and renewal terms beside the button (`termsText`), Restore,
@@ -646,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation`
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1908,6 +1909,38 @@ The steps, and what is still open, are in `SCHEDULES_PLAN.md`.
   read that someone with nothing due should not pay for opening MyDay.
 - Free, as all logging is.
 
+## Reminders
+Local notifications that bring people back to check in and rate the day, set in Settings →
+**Reminders** (ProfileKit) and planned by MyDayKit. Part 1 of `READINESS_PLAN.md`; schedule and
+injury reminders are still to come.
+
+- **Everything is off until the user turns it on**, and permission is asked at that moment
+  (`ReminderSettingsViewModel.setOn`), never at launch. Refused, the switch stays off and a banner
+  sends the user to Settings.
+- **`ReminderPlanner` is the one definition of what is pending.** A local notification cannot
+  look at anything when it fires, so the planner writes **one-off requests per day, 14 days
+  ahead**, never a repeating trigger, and every return to the app, every save on today and every
+  settings change plans again. Saving a check-in removes that morning's request; that is the
+  whole of "skip it once I've checked in".
+- **Rating reminders are today only, once training is recorded** — MyDay's rating step does not
+  open before then (`MyDayDayMarkers.hasExercise`). A later day's is planned by the save that
+  logs on it.
+- **`MyDayManager.onDayChanged` sees every save**, because every save lands on `selectedDay`.
+  `ReminderManager.dayChanged` ignores any day but today and any change its markers do not show.
+- **Replacements run one after another** (`ReminderManager.scheduling`); two at once can
+  interleave and bring back a cancelled request.
+- **The scheduler only touches `reminder.` identifiers.** The trial reminder shares the
+  notification centre. Ids are `reminder.{kind}.{yyyy-MM-dd}`, derived, so a re-plan replaces.
+- **Times are an hour and a minute, never a `Date`** (`ReminderTime`), applied to each day in the
+  phone's zone, so 08:00 stays 08:00 across a clock change or a flight.
+- **Settings are on the device, per user** (`UserDefaultsReminderPreferencesStore`,
+  `reminderPreferences_{uid}`), by decision: a notification only fires on the phone that planned
+  it. Signing out removes every pending reminder (and delivered ones). Free, as all logging is.
+- **A tapped reminder opens today on MyDay** (`AppDelegate` → `Notification.openReminder` →
+  `MyDayCoordinator.showToday()`), and opens no step for the user.
+- ProfileKit edits `ProfileReminderSettings`; `MyDayReminderSettingsService` in the composition
+  root maps it to MyDayKit's `ReminderPreferences`. The coach tab bar has no Reminders row.
+
 ## Coach-Assigned Workouts — designed, not built
 The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
 is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
@@ -2130,6 +2163,7 @@ in this codebase.**
 | `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
 | `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
+| ProfileKit's `ReminderWeekdayPicker` / `ProfileWeekday` raw values | MyDayKit's `ScheduleWeekdayPicker` / `ScheduleWeekday` | Reminders |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

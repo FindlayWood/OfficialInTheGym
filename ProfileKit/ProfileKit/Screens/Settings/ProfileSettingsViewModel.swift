@@ -62,6 +62,8 @@ final class ProfileSettingsViewModel: ObservableObject {
     var onOpenAbout: (() -> Void)?
     var onOpenGettingStarted: (() -> Void)?
     var onOpenBodyMeasurements: (() -> Void)?
+    /// `nil` leaves the Reminders row out.
+    var onOpenReminders: (() -> Void)?
     var onOpenDeleteAccount: (() -> Void)?
 
     init(

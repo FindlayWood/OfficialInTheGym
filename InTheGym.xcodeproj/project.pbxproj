@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AF000000000000000000020 /* UserNotificationReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000010 /* UserNotificationReminderScheduler.swift */; };
+		0AF000000000000000000021 /* UserNotificationReminderPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000011 /* UserNotificationReminderPermission.swift */; };
+		0AF000000000000000000022 /* UserDefaultsReminderPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000012 /* UserDefaultsReminderPreferencesStore.swift */; };
+		0AF000000000000000000023 /* MyDayReminderSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000013 /* MyDayReminderSettingsService.swift */; };
 		D4AA00000000000000000002 /* MyDayFirestoreRangeLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */; };
 		C2DE00000000000000000002 /* ProPaywallViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */; };
 		5CED0000000000000000002A /* ScheduleStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CED00000000000000000029 /* ScheduleStoreTests.swift */; };
@@ -1008,6 +1012,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AF000000000000000000010 /* UserNotificationReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationReminderScheduler.swift; sourceTree = "<group>"; };
+		0AF000000000000000000011 /* UserNotificationReminderPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationReminderPermission.swift; sourceTree = "<group>"; };
+		0AF000000000000000000012 /* UserDefaultsReminderPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsReminderPreferencesStore.swift; sourceTree = "<group>"; };
+		0AF000000000000000000013 /* MyDayReminderSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayReminderSettingsService.swift; sourceTree = "<group>"; };
 		D4AA00000000000000000001 /* MyDayFirestoreRangeLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayFirestoreRangeLoader.swift; sourceTree = "<group>"; };
 		C2DE00000000000000000001 /* ProPaywallViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallViewModelTests.swift; sourceTree = "<group>"; };
 		5CED00000000000000000029 /* ScheduleStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleStoreTests.swift; sourceTree = "<group>"; };
@@ -2005,6 +2013,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AF000000000000000000001 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				0AF000000000000000000010 /* UserNotificationReminderScheduler.swift */,
+				0AF000000000000000000011 /* UserNotificationReminderPermission.swift */,
+				0AF000000000000000000012 /* UserDefaultsReminderPreferencesStore.swift */,
+				0AF000000000000000000013 /* MyDayReminderSettingsService.swift */,
+			);
+			path = Reminders;
+			sourceTree = "<group>";
+		};
 		C0DE00000000000000000020 /* ProPaywall */ = {
 			isa = PBXGroup;
 			children = (
@@ -4542,6 +4561,7 @@
 				BF1A00000000000000000004 /* ProfileKit */,
 				ACA000000000000000000004 /* AccountCreation */,
 				0AE000000000000000000004 /* Analytics */,
+				0AF000000000000000000001 /* Reminders */,
 				F0D3443F2F25616A00AB6121 /* MyDay */,
 				9FC11F5E29DDC9B80054D79A /* LoginComposition.swift */,
 				9FB4D1DB29E752AB0019CA57 /* AccountCreationComposition.swift */,
@@ -5693,6 +5713,10 @@
 				0AE000000000000000000015 /* UserDayOpenedModel.swift in Sources */,
 				0AE000000000000000000016 /* AppOpenRecorder.swift in Sources */,
 				0AE000000000000000000017 /* FirestoreAppOpenRecorder.swift in Sources */,
+				0AF000000000000000000020 /* UserNotificationReminderScheduler.swift in Sources */,
+				0AF000000000000000000021 /* UserNotificationReminderPermission.swift in Sources */,
+				0AF000000000000000000022 /* UserDefaultsReminderPreferencesStore.swift in Sources */,
+				0AF000000000000000000023 /* MyDayReminderSettingsService.swift in Sources */,
 				0AE000000000000000000018 /* OncePerDayAppOpenRecorder.swift in Sources */,
 				ACA000000000000000000017 /* FunctionsAccountCreator.swift in Sources */,
 				ACA000000000000000000018 /* StorageProfileImageUploader.swift in Sources */,
