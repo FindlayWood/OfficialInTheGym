@@ -38,9 +38,9 @@ struct MyDayWorkoutTemplateDetailScreen: View {
             metricsStrip
 
             if let scheduleManager {
-                WorkoutScheduleRows(
+                ScheduleRows(
                     manager: scheduleManager,
-                    templateId: template.id,
+                    matches: { $0 == .workout(templateId: template.id) },
                     onSelect: { scheduleSheet = .edit($0) }
                 )
             }

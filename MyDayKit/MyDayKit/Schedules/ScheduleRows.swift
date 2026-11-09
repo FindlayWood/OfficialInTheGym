@@ -1,5 +1,5 @@
 //
-//  WorkoutScheduleRows.swift
+//  ScheduleRows.swift
 //  MyDayKit
 //
 //  Created by Findlay Wood on 08/11/2026.
@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-/// When this workout is scheduled, on its detail page. Draws nothing until there is a schedule, and
-/// a row opens it again to change or stop.
+/// When a workout or sport is scheduled, on the page that sets it. Draws nothing until there is a
+/// schedule, and a row opens it again to change or stop.
 ///
 /// It is the confirmation that Save worked, and the way to undo it, in the place the user set it.
-struct WorkoutScheduleRows: View {
+struct ScheduleRows: View {
 
     @ObservedObject var manager: ScheduleManager
-    let templateId: String
+    /// Whether a schedule is for what this page shows.
+    let matches: (ScheduleItem) -> Bool
     let onSelect: (Schedule) -> Void
 
     private var today: ScheduleDay {
@@ -22,7 +23,7 @@ struct WorkoutScheduleRows: View {
     }
 
     private var schedules: [Schedule] {
-        manager.active(on: today).filter { $0.item == .workout(templateId: templateId) }
+        manager.active(on: today).filter { matches($0.item) }
     }
 
     var body: some View {
@@ -37,6 +38,14 @@ struct WorkoutScheduleRows: View {
         }
     }
 
+    /// A sport's usual time is part of what was scheduled, so the row says it. A workout has none.
+    private func title(for schedule: Schedule) -> String {
+        guard case .sport(_, let duration) = schedule.item else {
+            return schedule.recurrence.summary
+        }
+        return "\(schedule.recurrence.summary) · \(SportSessionSummary.formatted(seconds: duration))"
+    }
+
     private func row(for schedule: Schedule) -> some View {
         Button {
             onSelect(schedule)
@@ -47,7 +56,7 @@ struct WorkoutScheduleRows: View {
                     .foregroundStyle(Color.darkColor)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(schedule.recurrence.summary)
+                    Text(title(for: schedule))
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color.primary)
                     if let next = schedule.nextDue(onOrAfter: today) {

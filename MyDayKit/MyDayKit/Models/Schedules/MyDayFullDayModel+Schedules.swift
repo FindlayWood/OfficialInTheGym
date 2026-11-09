@@ -52,6 +52,36 @@ extension MyDayFullDayModel {
         }
     }
 
+    /// The sports due on this day and not logged yet, as cards to draw. Not saved, as `dueWorkouts`
+    /// is not.
+    ///
+    /// **Left out when** the day already holds a session from that schedule, the user said "Not today",
+    /// or that sport was logged by hand today, game or training. A session logged the normal way is
+    /// the session the schedule meant, and a card still asking for it would read as unfinished.
+    ///
+    /// Removing a logged session takes it off the day, so its card comes back. Unlike a workout, there
+    /// is nothing to start: someone removing a session most likely logged it by mistake.
+    func dueSports(schedules: [Schedule], calendar: Calendar = .current) -> [ScheduledSport] {
+        let scheduleDay = ScheduleDay(date, calendar: calendar)
+        let logged = sports ?? []
+        let usedSchedules = Set(logged.compactMap(\.scheduleId))
+        let usedSports = Set(logged.map(\.sport))
+        let skipped = Set(skippedSchedules ?? [])
+
+        return schedules.compactMap { schedule in
+            guard
+                schedule.isDue(on: scheduleDay),
+                !usedSchedules.contains(schedule.id),
+                !skipped.contains(schedule.id),
+                case .sport(let sport, let duration) = schedule.item,
+                !usedSports.contains(sport)
+            else {
+                return nil
+            }
+            return ScheduledSport(scheduleId: schedule.id, day: scheduleDay, sport: sport, duration: duration)
+        }
+    }
+
     /// The day with `entry` saved on it. Unchanged if it is already there, so a second tap cannot add
     /// it twice or put a planned copy over a session in progress.
     func addingScheduledWorkout(_ entry: DailyWorkoutEntry) -> MyDayFullDayModel {

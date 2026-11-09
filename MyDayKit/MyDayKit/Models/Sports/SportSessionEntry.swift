@@ -34,6 +34,9 @@ public struct SportSessionEntry: Identifiable, Codable, Equatable, Sendable {
     public let teamScore: Int?
     public let opponentScore: Int?
     public let note: String?
+    /// The schedule this session was logged from, or `nil` if the user added it. Stops the due card
+    /// being drawn beside the session it became. Optional, as the note at the top of this type says.
+    public let scheduleId: String?
 
     public init(
         id: String,
@@ -46,7 +49,8 @@ public struct SportSessionEntry: Identifiable, Codable, Equatable, Sendable {
         result: GameResult?,
         teamScore: Int?,
         opponentScore: Int?,
-        note: String?
+        note: String?,
+        scheduleId: String? = nil
     ) {
         self.id = id
         self.sport = sport
@@ -59,6 +63,7 @@ public struct SportSessionEntry: Identifiable, Codable, Equatable, Sendable {
         self.teamScore = teamScore
         self.opponentScore = opponentScore
         self.note = note
+        self.scheduleId = scheduleId
     }
 
     /// Duration in minutes × RPE — the same session load a workout carries as `workload`.

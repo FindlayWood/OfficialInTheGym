@@ -128,6 +128,11 @@ extension MyDayCoordinator {
                     await self?.sportManager.remove(session)
                 }
             }
+            display.logScheduledSport = { [weak self] session in
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.add(session)
+                }
+            }
             display.welcome = welcome
             display.openGettingStarted = { [weak self] in
                 self?.presentSheet(.gettingStarted)
@@ -325,7 +330,7 @@ extension MyDayCoordinator {
             vc.hidesBottomBarWhenPushed = true
             return vc
         case .sportDetail(let manager):
-            var detail = SportSessionDetailView(manager: manager)
+            var detail = SportSessionDetailView(manager: manager, scheduleManager: scheduleManager)
             // Back to MyDay at once: the session is on the day before the write starts, so the
             // card is already there, and waiting on the network would hold the user on a form
             // they have finished with.

@@ -42,6 +42,8 @@ struct MyDayHomeScreen: View {
     /// Takes a sport session off today. Through `MyDaySportManager`, which this screen does not
     /// hold — it only raises intent, as `startWorkout` does.
     var removeSport: ((SportSessionEntry) -> ())?
+    /// Saves a scheduled sport from its card. Through `MyDaySportManager` too.
+    var logScheduledSport: ((SportSessionEntry) -> ())?
     /// Who signed up and when; `nil` draws no welcome at all.
     var welcome: MyDayWelcome?
     var openGettingStarted: (() -> ())?
@@ -467,10 +469,15 @@ struct MyDayHomeScreen: View {
         isToday ? scheduled.dueWorkouts(for: day) : []
     }
 
+    private func dueSports(for day: MyDayFullDayModel) -> [ScheduledSport] {
+        isToday ? scheduled.dueSports(for: day) : []
+    }
+
     @ViewBuilder
     private func trainStep(for day: MyDayFullDayModel) -> some View {
         let due = dueWorkouts(for: day)
-        if !hasTraining(day) && due.isEmpty {
+        let dueSports = dueSports(for: day)
+        if !hasTraining(day) && due.isEmpty && dueSports.isEmpty {
             if isToday {
                 MyDayTimelinePlaceholder(
                     title: "Train",
@@ -522,7 +529,8 @@ struct MyDayHomeScreen: View {
                 }
      
                 // MARK: - Sport Cards
-                if let sports = day.sports, !sports.isEmpty {
+                let sports = day.sports ?? []
+                if !sports.isEmpty || !dueSports.isEmpty {
                     HStack {
                         Text("Sport")
                             .font(.caption)
@@ -541,6 +549,26 @@ struct MyDayHomeScreen: View {
                                     removeSport?(session)
                                 }
                             } : nil
+                        )
+                        .transition(.asymmetric(
+                            insertion: .opacity,
+                            removal: .opacity.combined(with: .scale(scale: 0.94))
+                        ))
+                    }
+
+                    ForEach(dueSports) { item in
+                        ScheduledSportCard(
+                            item: item,
+                            onDone: { duration, rpe in
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    logScheduledSport?(item.makeEntry(duration: duration, rpe: rpe, performedAt: Date()))
+                                }
+                            },
+                            onNotToday: {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                    dayManager.skipSchedule(item.scheduleId)
+                                }
+                            }
                         )
                         .transition(.asymmetric(
                             insertion: .opacity,

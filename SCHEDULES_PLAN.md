@@ -75,11 +75,12 @@ would leave the user guessing which to open.
 
 ### Sports
 - A new `ScheduledSportCard`, on `DailySportCard`'s chrome: time filled from the schedule, `RPEScale`
-  inline, Done, Not today.
+  inline, Done, Not today. Changing the time on the card changes today only.
 - **Done needs an RPE**, since a session without one adds nothing to STATS. Nothing is saved until
   Done, through `MyDaySportManager`, so it writes the same two documents as a normal sport session.
 - **Scheduled sessions are training sessions.** A game has a result and a score, so it stays in the
-  normal Add flow.
+  normal Add flow. Logging that sport by hand, game or training, hides the day's card, as a workout
+  added by hand does.
 - **Removing a logged scheduled sport brings the planned card back.** It is what someone who logged
   by mistake wants, and Not today is one tap away. This differs from workouts on purpose.
 
@@ -93,7 +94,9 @@ entry carries `scheduleId` across.
 
 ## Creating and managing
 - **Workouts:** a **Schedule** button beside **Add to Today** on `MyDayWorkoutTemplateDetailScreen`.
-- **Sports:** a "Schedule this" action in the sport flow, with the usual duration.
+- **Sports:** a **Schedule** button on the sport detail screen for training sessions, using the
+  duration set there. That screen lists the sport's schedules too. To change a schedule's usual
+  time, stop it and set a new one.
 - **`ScheduleSheet`**, shared by both:
   - Repeats toggle. Off: a date, from today on, starting on tomorrow.
   - On: Weekly / Every 2 weeks, then a row of Monday-first weekday chips, one or more, none picked

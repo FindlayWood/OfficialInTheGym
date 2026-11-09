@@ -24,4 +24,15 @@ extension MyDayManager {
             try await workoutSaver.save(data: updated)
         }
     }
+
+    /// "Not today" on a card that was never saved. Writes the day and nothing else, since no session
+    /// exists. Today only, for the same reason as above.
+    func skipSchedule(_ scheduleId: String) {
+        guard isTodaySelected(), let day = selectedDay else { return }
+        let updated = day.skippingSchedule(scheduleId)
+        selectedDay = updated
+        Task { [workoutSaver] in
+            try await workoutSaver.save(data: updated)
+        }
+    }
 }

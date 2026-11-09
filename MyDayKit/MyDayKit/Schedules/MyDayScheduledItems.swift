@@ -40,6 +40,10 @@ final class MyDayScheduledItems: ObservableObject {
         day.dueWorkouts(schedules: scheduleManager?.schedules ?? [], templates: templates)
     }
 
+    func dueSports(for day: MyDayFullDayModel) -> [ScheduledSport] {
+        day.dueSports(schedules: scheduleManager?.schedules ?? [])
+    }
+
     /// Called each time the timeline appears. Only reaches for the library once the schedules are in
     /// and one of them is a workout due today.
     @MainActor

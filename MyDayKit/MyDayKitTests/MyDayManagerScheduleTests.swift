@@ -33,6 +33,26 @@ final class MyDayManagerScheduleTests: XCTestCase {
         XCTAssertEqual(sut.selectedDay?.workouts.count, 0)
     }
 
+    // MARK: - Skipping
+
+    func test_skipSchedule_recordsItOnToday() async {
+        let sut = await makeSUT()
+        sut.selectedDay = makeDay(date: Date())
+
+        sut.skipSchedule("schedule")
+
+        XCTAssertEqual(sut.selectedDay?.skippedSchedules, ["schedule"])
+    }
+
+    func test_skipSchedule_doesNothingOnAnotherDay() async {
+        let sut = await makeSUT()
+        sut.selectedDay = makeDay(date: Date().addingTimeInterval(-86_400 * 2))
+
+        sut.skipSchedule("schedule")
+
+        XCTAssertNil(sut.selectedDay?.skippedSchedules)
+    }
+
     // MARK: - Removing
 
     // Without the skip, the saved entry going would bring the due card straight back.
