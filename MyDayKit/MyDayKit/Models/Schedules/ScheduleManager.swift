@@ -32,6 +32,7 @@ public final class ScheduleManager: ObservableObject {
     private let remote: ScheduleFetching
     private let now: () -> Date
     private var isFetching = false
+    private var hasLoadedRemote = false
 
     // MARK: - Init
 
@@ -49,6 +50,16 @@ public final class ScheduleManager: ObservableObject {
 
     // MARK: - Loading
 
+    /// Called on every appearance of a screen that reads schedules. Only a load that reached the
+    /// remote copy counts as settled, so one made offline is tried again on the next appearance. The
+    /// manager outlives every screen, so without that it would miss another device's schedules
+    /// until relaunch.
+    @MainActor
+    public func loadIfNeeded() async {
+        guard !hasLoadedRemote else { return }
+        await load()
+    }
+
     /// Merged with what is already held at each stage rather than replacing it, so a schedule saved
     /// while this is running is not lost when it settles.
     @MainActor
@@ -63,6 +74,7 @@ public final class ScheduleManager: ObservableObject {
         do {
             let remoteSchedules = try await remote.fetchAll()
             schedules = Schedule.merged(local: schedules, remote: remoteSchedules)
+            hasLoadedRemote = true
         } catch {
             print("❌ Couldn't load remote schedules: \(error)")
         }

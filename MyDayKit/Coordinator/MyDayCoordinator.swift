@@ -34,6 +34,8 @@ public final class MyDayCoordinator {
     /// What the custom exercise form needs. `nil` leaves Create out of the
     /// exercise picker.
     let customExercises: CustomExerciseDependencies?
+    /// What the user has scheduled. `nil` leaves scheduling out.
+    let scheduleManager: ScheduleManager?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -59,7 +61,8 @@ public final class MyDayCoordinator {
         workoutLibraryManager: WorkoutLibraryManager,
         proAccess: MyDayProAccess,
         welcome: MyDayWelcome? = nil,
-        customExercises: CustomExerciseDependencies? = nil
+        customExercises: CustomExerciseDependencies? = nil,
+        scheduleManager: ScheduleManager? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -76,6 +79,7 @@ public final class MyDayCoordinator {
         self.proAccess = proAccess
         self.welcome = welcome
         self.customExercises = customExercises
+        self.scheduleManager = scheduleManager
     }
 
     // MARK: - Root
@@ -256,7 +260,8 @@ extension MyDayCoordinator {
                 clipViewRecorder: clipViewRecorder,
                 workoutManager: workoutManager,
                 libraryManager: workoutLibraryManager,
-                customExercises: customExercises
+                customExercises: customExercises,
+                scheduleManager: scheduleManager
             )
             sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub

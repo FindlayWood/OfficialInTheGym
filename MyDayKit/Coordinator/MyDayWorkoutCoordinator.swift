@@ -28,6 +28,8 @@ class MyDayWorkoutCoordinator {
     /// What the custom exercise form needs. `nil` leaves Create out of the
     /// exercise picker.
     let customExercises: CustomExerciseDependencies?
+    /// `nil` leaves Schedule off the workout page.
+    let scheduleManager: ScheduleManager?
     
     // MARK: - Callbacks
 
@@ -52,7 +54,8 @@ class MyDayWorkoutCoordinator {
         clipViewRecorder: ViewClipRecorder,
         workoutManager: WorkoutBuilderManager,
         libraryManager: WorkoutLibraryManager,
-        customExercises: CustomExerciseDependencies? = nil
+        customExercises: CustomExerciseDependencies? = nil,
+        scheduleManager: ScheduleManager? = nil
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -64,6 +67,7 @@ class MyDayWorkoutCoordinator {
         self.workoutManager = workoutManager
         self.libraryManager = libraryManager
         self.customExercises = customExercises
+        self.scheduleManager = scheduleManager
     }
 
     // MARK: - Root
@@ -100,6 +104,7 @@ extension MyDayWorkoutCoordinator {
             let vc = NavBarHidingHostingController(
                 rootView: MyDayWorkoutTemplateDetailScreen(
                     template: template,
+                    scheduleManager: scheduleManager,
                     onAddToTodayTapped: dayManager.addWorkoutToDay,
                     onReadyToDismiss: { [weak self] in
                         self?.onWorkoutAddedToDay?()

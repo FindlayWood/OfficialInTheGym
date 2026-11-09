@@ -18,8 +18,6 @@ class MyDayKitComposition {
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
-    /// What the user has scheduled, local-first. See `SCHEDULES_PLAN.md`.
-    private(set) var scheduleManager: ScheduleManager?
     /// **The sync services live here, for the signed-in session.** They used
     /// to be locals in `composeCombination`, and this composition a local in
     /// `PlayerInitialViewController.viewDidLoad`, so nothing held them once
@@ -171,7 +169,7 @@ class MyDayKitComposition {
         )
         scheduleSyncService.start()
         self.scheduleSyncService = scheduleSyncService
-        scheduleManager = ScheduleManager(
+        let scheduleManager = ScheduleManager(
             saver: scheduleSaver,
             local: FileManagerScheduleFetcher(userId: userId),
             remote: FirestoreScheduleFetcher(userId: userId)
@@ -226,7 +224,8 @@ class MyDayKitComposition {
                 name: UserDefaults.currentUser.displayName,
                 signupDate: UserDefaults.currentUser.createdDate
             ),
-            customExercises: customExercises
+            customExercises: customExercises,
+            scheduleManager: scheduleManager
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         coordinator.onShowPaywall = { [weak navigationController] in

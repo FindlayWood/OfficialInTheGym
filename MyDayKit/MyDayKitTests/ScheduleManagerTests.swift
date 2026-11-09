@@ -51,6 +51,28 @@ final class ScheduleManagerTests: XCTestCase {
         XCTAssertEqual(sut.schedules.map(\.id), ["new"])
     }
 
+    func test_loadIfNeeded_doesNotReadAgainOnceRemoteHasLoaded() async {
+        let remote = ScheduleFetcherSpy(.success([]))
+        let sut = ScheduleManager(saver: ScheduleUploaderSpy(), local: ScheduleFetcherStub(), remote: remote)
+
+        await sut.loadIfNeeded()
+        await sut.loadIfNeeded()
+
+        XCTAssertEqual(remote.fetchCount, 1)
+    }
+
+    // Opened offline, the manager must try again next time. It outlives every screen, so otherwise it
+    // would miss another device's schedules until relaunch.
+    func test_loadIfNeeded_readsAgainAfterRemoteFailed() async {
+        let remote = ScheduleFetcherSpy(.failure(anyError))
+        let sut = ScheduleManager(saver: ScheduleUploaderSpy(), local: ScheduleFetcherStub(), remote: remote)
+
+        await sut.loadIfNeeded()
+        await sut.loadIfNeeded()
+
+        XCTAssertEqual(remote.fetchCount, 2)
+    }
+
     // MARK: - Saving
 
     func test_save_uploadsAndHoldsTheSchedule() async throws {

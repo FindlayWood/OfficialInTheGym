@@ -92,11 +92,15 @@ entry carries `scheduleId` across.
 - **Workouts:** a **Schedule** button beside **Add to Today** on `MyDayWorkoutTemplateDetailScreen`.
 - **Sports:** a "Schedule this" action in the sport flow, with the usual duration.
 - **`ScheduleSheet`**, shared by both:
-  - Repeats toggle. Off: a date, from tomorrow on.
-  - On: Weekly / Every 2 weeks, then a row of Monday-first weekday chips, one or more.
-  - Every 2 weeks also asks which week to start, since the weekdays alone cannot say.
+  - Repeats toggle. Off: a date, from today on, starting on tomorrow.
+  - On: Weekly / Every 2 weeks, then a row of Monday-first weekday chips, one or more, none picked
+    at first.
+  - Every 2 weeks also asks "This week / Next week", since the weekdays alone cannot say which weeks
+    are meant, and those are the only two answers that matter.
   - A "Next: Tue 10 Nov" line, so the result can be checked before saving.
   - Picking today's weekday on a repeat means it is due today.
+- **The workout page lists its own schedules** (`WorkoutScheduleRows`), under the metrics. It is the
+  confirmation that Save worked, and a row reopens the sheet, which also holds Stop Schedule.
 - **`MyDayScheduledScreen`:** every active schedule with its pattern and next date. Edit and Stop.
   Finished one-offs drop off. Reached from MyDay's Add flow.
 - All new fields and selected states follow *Brand Colours*: `Color.darkColor`, with
