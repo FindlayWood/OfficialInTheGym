@@ -10,6 +10,9 @@ import SwiftUI
 struct SportSessionDetailView: View {
     
     @ObservedObject var manager: MyDayNewSportManager
+    /// `nil` leaves Schedule off the screen.
+    var scheduleManager: ScheduleManager?
+    @State private var scheduleSheet: ScheduleSheetTarget?
     @State private var showingNoteSheet: Bool = false
     @State private var showingDurationPicker: Bool = false
     @State private var showingPlayingTimePicker: Bool = false
@@ -28,6 +31,17 @@ struct SportSessionDetailView: View {
             
             // ── Sport header ───────────────────────────────────────────
             sportHeader
+
+            if let scheduleManager {
+                ScheduleRows(
+                    manager: scheduleManager,
+                    matches: { item in
+                        guard case .sport(let sport, _) = item else { return false }
+                        return sport == manager.sport
+                    },
+                    onSelect: { scheduleSheet = .edit($0) }
+                )
+            }
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 12) {
@@ -84,7 +98,24 @@ struct SportSessionDetailView: View {
             }
             .disabled(!isValid)
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.top, 12)
+            .padding(.bottom, canSchedule ? 4 : 12)
+
+            if canSchedule {
+                scheduleButton
+            }
+        }
+        .sheet(item: $scheduleSheet) { target in
+            if let scheduleManager {
+                ScheduleSheet(
+                    model: ScheduleFormModel(
+                        title: manager.sport.rawValue,
+                        item: .sport(sport: manager.sport, duration: manager.duration),
+                        editing: target.schedule,
+                        manager: scheduleManager
+                    )
+                )
+            }
         }
         .navigationTitle(manager.sport.rawValue)
         .navigationBarTitleDisplayMode(.inline)
@@ -116,6 +147,35 @@ struct SportSessionDetailView: View {
         }
     }
     
+    // MARK: - Schedule
+
+    /// Training only: a game has a result and a score that no schedule can know.
+    private var canSchedule: Bool {
+        scheduleManager != nil && manager.sessionType == .training
+    }
+
+    /// Takes the duration set above as the usual time, so it asks for that first, as Save does.
+    private var scheduleButton: some View {
+        Button {
+            scheduleSheet = .new
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 14, weight: .semibold))
+                Text("Schedule This Session")
+                    .font(.system(size: 14, weight: .semibold))
+            }
+            .foregroundStyle(isValid ? Color.darkColor : Color.secondary)
+            .frame(maxWidth: .infinity)
+            .frame(height: 44)
+        }
+        .buttonStyle(.plain)
+        .disabled(!isValid)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 4)
+        .animation(.easeInOut(duration: 0.15), value: isValid)
+    }
+
     // MARK: - Sport Header
     
     private var sportHeader: some View {

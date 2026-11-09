@@ -645,7 +645,8 @@ call sites and drifted apart. Do not re-inline any of them:
 `SessionSetInput.target(for:)` · `WorkoutTag.normalized(_:)` · `SessionSetPillValue.values(for:record:)` ·
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
-`PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix`
+`PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -888,6 +889,7 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   selectable at log time
 - Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
 - Sport sessions on MyDay and in STATS' session load (see *Sport Sessions*)
+- Workouts and sports scheduled ahead, waiting on MyDay on the day (see *Schedules*)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -1862,6 +1864,50 @@ count workouts.
   sheets and Fitness still have their own copies. Fitness's Save is still not connected.
 - A logged sport counts as exercise on the date strip (`MyDayDayMarkers.hasExercise`) and opens rating.
 
+## Schedules
+A workout or a sport set for a date, weekly or every two weeks, waiting on MyDay when the day comes.
+**A morning routine is a workout on a schedule**: single exercises are not scheduled, by decision.
+The steps, and what is still open, are in `SCHEDULES_PLAN.md`.
+
+- **A schedule creates nothing in advance.** `Schedule` is its own record, and MyDay works out what is
+  due while drawing today (`dueWorkouts`, `dueSports`). A day entry is written only when the user acts
+  on the card. It could not be otherwise: `MyDayFileManagerSaver` names its file by today's date, so
+  saving a future day would overwrite today. It also means **a plan cannot count as training**, since
+  stats, streaks, markers and `UserDays` all read what was saved.
+- **Today only.** Due cards are drawn on today and nowhere else. Past days do not change, cannot be
+  logged to, and never say "missed". Logging late is undecided and needs thinking through by itself.
+- **`ScheduleDay` is a day with no time or zone**, stored as `yyyy-MM-dd`. A stored `Date` lands on
+  another day after a change of time zone. A `Date` becomes one in **`Calendar.current`'s zone**, as
+  MyDay's strip judges a day, **not `StatsDay`'s UTC**, and always on the Gregorian calendar. After
+  that it is arithmetic on a day number, so a clock change cannot move a day or a week.
+- **`ScheduleRecurrence` is the one definition of which days a schedule falls on.** The card and the
+  sheet's "Next" line read the same code, so what the sheet promises is what the day shows. Every two
+  weeks counts Monday-based weeks from the one holding `start`, and asks "This week / Next week",
+  since those are the only two answers that change anything.
+- **A due card is hidden when** the day holds an entry from that schedule (`scheduleId`), it was
+  skipped (`MyDayFullDayModel.skippedSchedules`), it was stopped, or **that workout or sport is already
+  on the day, added by hand**. That last one cannot tell "did it another way" from "doing it twice", so
+  a second go that day goes through Add to Today. A finished workout must not sit above a card asking
+  for it again.
+- **Workouts are saved when opened**, with the template as it is then, and from there are ordinary
+  entries. Removing one skips its schedule for the day, or the card would return at once.
+- **Sports are logged on `ScheduledSportCard`**: time filled in, Done needs an RPE, since a session
+  without one adds nothing to STATS. Scheduled sessions are always training; a game has a result no
+  schedule can know. **Removing a logged one brings the card back**, since that most likely means it
+  was logged by mistake. Differing from workouts is deliberate.
+- **Ids are derived from the schedule and the day**, so a second press or a second device corrects
+  one entry rather than adding another.
+- **Stopping sets `stoppedAt` and never deletes**, and the rules refuse a client delete. Copies merge
+  by id (`Schedule.merged`), so a deleted document would come back from the other copy.
+  `ScheduleManager` stamps `updatedAt` in whole seconds and **local wins a tie**, because local files
+  store dates to the whole second and two quick edits would otherwise lose the second one.
+- **`FirestoreScheduleUploader` replaces, never merges.** `item` and `recurrence` are maps keyed by
+  their case, so a merge would leave a document holding both `weekly` and `everyTwoWeeks`, which
+  decodes nowhere. This is the opposite of `FirestoreCustomExerciseUploader`, for that reason.
+- **The library is read only when a workout is due** (`MyDayScheduledItems`). It costs a Firestore
+  read that someone with nothing due should not pay for opening MyDay.
+- Free, as all logging is.
+
 ## Coach-Assigned Workouts — designed, not built
 The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
 is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
@@ -1926,6 +1972,7 @@ appears on some screens and not others.
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
+| `Users/{uid}/Schedules/{id}` | Firestore | `FirestoreScheduleUploader` (a replace), read by `FirestoreScheduleFetcher`; no client delete |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
 | `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
@@ -1960,6 +2007,8 @@ appears on some screens and not others.
 | `Documents/PendingSync/workoutTemplates_{uid}.json` | disk | `SyncQueueWorkoutTemplateUploader` |
 | `Documents/CustomExercises/{uid}/{id}.json` | disk | `FileManagerCustomExerciseWriter` — `CustomExerciseStoreLocation` |
 | `Documents/PendingSync/customExercises_{uid}.json` | disk | `SyncQueueCustomExerciseUploader` |
+| `Documents/Schedules/{uid}/{id}.json` | disk | `FileManagerScheduleWriter` — `ScheduleStoreLocation` |
+| `Documents/PendingSync/schedules_{uid}.json` | disk | `SyncQueueScheduleUploader` |
 | `Documents/ExerciseBody/{muscleGroups,movementPatterns}.json` | disk | the muscle group / pattern list cache — `ExerciseBodyListStoreLocation`, not user-scoped |
 
 **The path lives on the model, never at the call site.** `FirebaseInstance` requires
@@ -2050,6 +2099,8 @@ in this codebase.**
 |---|---|---|
 | `WorkoutSetRecord.getStats(...)` | `ExerciseCompletions.getStats()` | Exercise Stats Raw Logs |
 | `SportSessionEntry.sessionLoad` | `sportSessionLoad` in the functions' `MyDay/DailyStats/SportSessionLoad.ts` | Sport Sessions |
+| `ScheduledSportCard` | `DailySportCard`'s chrome, and the RPE bars on `SportSessionDetailView` | Schedules |
+| `FileManagerScheduleWriter` date strategy | `FileManagerScheduleFetcher` and `SyncQueueScheduleUploader` | Schedules |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |

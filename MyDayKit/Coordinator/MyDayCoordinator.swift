@@ -34,6 +34,8 @@ public final class MyDayCoordinator {
     /// What the custom exercise form needs. `nil` leaves Create out of the
     /// exercise picker.
     let customExercises: CustomExerciseDependencies?
+    /// What the user has scheduled. `nil` leaves scheduling out.
+    let scheduleManager: ScheduleManager?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -59,7 +61,8 @@ public final class MyDayCoordinator {
         workoutLibraryManager: WorkoutLibraryManager,
         proAccess: MyDayProAccess,
         welcome: MyDayWelcome? = nil,
-        customExercises: CustomExerciseDependencies? = nil
+        customExercises: CustomExerciseDependencies? = nil,
+        scheduleManager: ScheduleManager? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -76,6 +79,7 @@ public final class MyDayCoordinator {
         self.proAccess = proAccess
         self.welcome = welcome
         self.customExercises = customExercises
+        self.scheduleManager = scheduleManager
     }
 
     // MARK: - Root
@@ -96,6 +100,10 @@ extension MyDayCoordinator {
         case .root:
             var display = MyDayHomeScreen(
                 dayManager: dayManager,
+                scheduled: MyDayScheduledItems(
+                    scheduleManager: scheduleManager,
+                    libraryManager: workoutLibraryManager
+                ),
                 addButtonAction: { [weak self] in
                     self?.presentSheet(.option)
                 },
@@ -118,6 +126,11 @@ extension MyDayCoordinator {
             display.removeSport = { [weak self] session in
                 Task { @MainActor [weak self] in
                     await self?.sportManager.remove(session)
+                }
+            }
+            display.logScheduledSport = { [weak self] session in
+                Task { @MainActor [weak self] in
+                    await self?.sportManager.add(session)
                 }
             }
             display.welcome = welcome
@@ -256,7 +269,8 @@ extension MyDayCoordinator {
                 clipViewRecorder: clipViewRecorder,
                 workoutManager: workoutManager,
                 libraryManager: workoutLibraryManager,
-                customExercises: customExercises
+                customExercises: customExercises,
+                scheduleManager: scheduleManager
             )
             sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub
@@ -316,7 +330,7 @@ extension MyDayCoordinator {
             vc.hidesBottomBarWhenPushed = true
             return vc
         case .sportDetail(let manager):
-            var detail = SportSessionDetailView(manager: manager)
+            var detail = SportSessionDetailView(manager: manager, scheduleManager: scheduleManager)
             // Back to MyDay at once: the session is on the day before the write starts, so the
             // card is already there, and waiting on the network would hold the user on a form
             // they have finished with.
@@ -329,6 +343,16 @@ extension MyDayCoordinator {
                 self.popToCoordinatorRoot()
             }
             return selectorVC(detail)
+        case .scheduled:
+            guard let scheduleManager else {
+                assertionFailure("Scheduled is only offered when scheduleManager is set")
+                return UIViewController()
+            }
+            let vc = selectorVC(
+                MyDayScheduledScreen(manager: scheduleManager, libraryManager: workoutLibraryManager)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
         }
     }
 
@@ -441,12 +465,18 @@ extension MyDayCoordinator {
                     workoutSelected: { [weak self] in
                         self?.navigationController.dismiss(animated: true)
                         self?.navigate(to: .workoutCreationHome)
+                    },
+                    scheduledSelected: scheduleManager == nil ? nil : { [weak self] in
+                        self?.navigationController.dismiss(animated: true)
+                        self?.navigate(to: .scheduled)
                     }
                 )
             )
 
             if let sheet = hosting.sheetPresentationController {
-                sheet.detents = [.medium()]
+                // Taller than `.medium()` by the Scheduled row, which would otherwise be cut off on
+                // a small phone.
+                sheet.detents = [.custom { _ in 440 }]
                 sheet.prefersGrabberVisible = true
             }
 

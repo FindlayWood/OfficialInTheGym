@@ -10,6 +10,8 @@ import SwiftUI
 struct MyDayWorkoutTemplateDetailScreen: View {
 
     let template: WorkoutTemplateModel
+    /// `nil` leaves Schedule off the page.
+    var scheduleManager: ScheduleManager?
 
     var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
     var onReadyToDismiss: (() -> Void)?
@@ -18,6 +20,7 @@ struct MyDayWorkoutTemplateDetailScreen: View {
     @State private var showDim = false
     @State private var showCard = false
     @State private var selectedSet: SessionSetDetail?
+    @State private var scheduleSheet: ScheduleSheetTarget?
 
     @Namespace private var animation
 
@@ -33,6 +36,14 @@ struct MyDayWorkoutTemplateDetailScreen: View {
             )
 
             metricsStrip
+
+            if let scheduleManager {
+                ScheduleRows(
+                    manager: scheduleManager,
+                    matches: { $0 == .workout(templateId: template.id) },
+                    onSelect: { scheduleSheet = .edit($0) }
+                )
+            }
 
             Divider()
 
@@ -69,7 +80,19 @@ struct MyDayWorkoutTemplateDetailScreen: View {
         // `NavBarHidingHostingController` so the set detail overlay can dim
         // over `MyDayWorkoutNavBar`. Do not reinstate them here.
         .safeAreaInset(edge: .bottom) {
-            addToTodayButton
+            bottomBar
+        }
+        .sheet(item: $scheduleSheet) { target in
+            if let scheduleManager {
+                ScheduleSheet(
+                    model: ScheduleFormModel(
+                        title: template.title,
+                        item: .workout(templateId: template.id),
+                        editing: target.schedule,
+                        manager: scheduleManager
+                    )
+                )
+            }
         }
         .overlay {
             if showDim {
@@ -177,7 +200,40 @@ struct MyDayWorkoutTemplateDetailScreen: View {
         .padding(.vertical, 14)
     }
 
-    // MARK: - Add to Today Button
+    // MARK: - Bottom Bar
+
+    private var bottomBar: some View {
+        HStack(spacing: 10) {
+            if scheduleManager != nil {
+                scheduleButton
+            }
+            addToTodayButton
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical)
+        .background(Color(UIColor.systemBackground))
+    }
+
+    private var scheduleButton: some View {
+        Button {
+            scheduleSheet = .new
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 16, weight: .semibold))
+                Text("Schedule")
+                    .font(.system(size: 17, weight: .semibold))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color(UIColor.tertiarySystemFill))
+            )
+            .foregroundStyle(Color.darkColor)
+        }
+        .buttonStyle(.plain)
+    }
 
     private var addToTodayButton: some View {
         Button {
@@ -208,9 +264,6 @@ struct MyDayWorkoutTemplateDetailScreen: View {
             )
             .foregroundColor(.white)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical)
-        .background(Color(UIColor.systemBackground))
     }
 
     // MARK: - Helpers

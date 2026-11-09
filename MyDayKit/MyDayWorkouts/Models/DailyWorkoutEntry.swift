@@ -35,6 +35,11 @@ public struct DailyWorkoutEntry: Identifiable, Codable, Hashable {
     public let assignedBy: String?
     public let assignmentId: String?
 
+    /// The schedule that put this workout on the day, or `nil` if the user added it. **Provenance
+    /// again**, and optional like every field added to a persisted model. It is what stops a due card
+    /// being drawn beside the entry it became.
+    public let scheduleId: String?
+
     public init(
         id: String = UUID().uuidString,
         template: WorkoutTemplateModel,
@@ -44,7 +49,8 @@ public struct DailyWorkoutEntry: Identifiable, Codable, Hashable {
         startedAt: Date? = nil,
         sessionRecord: WorkoutSessionRecord? = nil,
         assignedBy: String? = nil,
-        assignmentId: String? = nil
+        assignmentId: String? = nil,
+        scheduleId: String? = nil
     ) {
         self.id = id
         self.template = template
@@ -55,6 +61,7 @@ public struct DailyWorkoutEntry: Identifiable, Codable, Hashable {
         self.sessionRecord = sessionRecord
         self.assignedBy = assignedBy
         self.assignmentId = assignmentId
+        self.scheduleId = scheduleId
     }
 }
 

@@ -15,6 +15,12 @@ struct WorkoutCardOptionsSheet: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    /// A scheduled workout not started yet is put off rather than removed: it comes back on its next
+    /// day. Once started, this also discards what was logged, so it says "Remove" as any workout does.
+    private var isPutOff: Bool {
+        entry.scheduleId != nil && entry.status == .planned
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(entry.template.title)
@@ -52,11 +58,11 @@ struct WorkoutCardOptionsSheet: View {
                 onDelete?()
             } label: {
                 HStack(spacing: 14) {
-                    Image(systemName: "trash")
+                    Image(systemName: isPutOff ? "calendar.badge.minus" : "trash")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.red)
                         .frame(width: 28)
-                    Text("Remove from Today")
+                    Text(isPutOff ? "Not Today" : "Remove from Today")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.red)
                     Spacer()

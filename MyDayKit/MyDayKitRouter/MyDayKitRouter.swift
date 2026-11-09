@@ -29,6 +29,8 @@ enum MyDayRoutes: Hashable {
     
     case sportPicker
     case sportDetail(MyDayNewSportManager)
+    /// Everything the user has scheduled.
+    case scheduled
 }
 
 enum MyDaySheets: Identifiable {
