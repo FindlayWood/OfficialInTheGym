@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner`
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -891,6 +891,8 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
 - Sport sessions on MyDay and in STATS' session load (see *Sport Sessions*)
 - Workouts and sports scheduled ahead, waiting on MyDay on the day (see *Schedules*)
+- Reminders to check in and rate the day (see *Reminders*)
+- Injuries rated day by day in the check-in (see *Injuries*)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -1941,6 +1943,37 @@ injury reminders are still to come.
 - ProfileKit edits `ProfileReminderSettings`; `MyDayReminderSettingsService` in the composition
   root maps it to MyDayKit's `ReminderPreferences`. The coach tab bar has no Reminders row.
 
+## Injuries
+Something that hurts, rated each morning in MyDay's check-in step: pain 0–10 and how much it is
+changing training. Part 3 of `READINESS_PLAN.md`; steps 3 and 4 (charts, the injury page with
+load before and during) are still to come. **Free**, as all logging is.
+
+- **A fixed list of regions with a side** (`InjuryRegion`, `InjurySide`), never free text and not
+  `MuscleGroups` — a knee is not a muscle group, and "knee" / "Knee" would be two injuries.
+  Raw values are stored: add cases, never rename.
+- **Impact is three steps** (`InjuryImpact`: as normal / around it / not training). A yes / no
+  would make most niggle days a lie.
+- **It ends when the user says so** (`resolvedOn`), never when pain reaches 0. **Removing is for
+  mistakes** (`removedAt`) and never deletes — the rules refuse a delete, for the reason
+  schedules have none.
+- **Check-ins live on the injury**, `checkIns` keyed by `ScheduleDay.key`, one per day; a second
+  save that day corrects it. Days are `ScheduleDay`s, judged in `Calendar.current`, **not
+  `StatsDay`'s UTC**.
+- **One document per injury, replaced on every save — so two devices can each upload a copy
+  missing the other's day.** `Injury.merged` unions check-ins day by day (later `updatedAt` per
+  check-in, local wins a tie), and **`InjuryManager.load` writes the merge back** whenever it
+  differs from the remote copy. Do not soften the uploader to a merge: it could never clear
+  `resolvedOn`.
+- **The pipeline is the schedules one**, file for file (`FileManagerInjuryWriter` → … →
+  `InjurySyncService`), held by `MyDayKitComposition` and stopped on sign-out.
+- **On MyDay: today only**, inside the check-in step (`MyDayInjurySection`), not a timeline step
+  of its own and not dependent on the wellness questions. A row pre-fills from the last check-in,
+  so an unchanged day is one tap, and stores nothing until Save. Past days are read-only.
+- **Private, always.** Owner-only rule (`Users/{uid}/Injuries/{id}`, tested in
+  `firestoreRules.test.ts`); taken by `deleteAccount`'s `recursiveDelete` of `Users/{uid}` and by
+  `LocalUserDataEraser`. **Deploy the rule before an app build that saves injuries ships**, or
+  every upload is refused.
+
 ## Coach-Assigned Workouts — designed, not built
 The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
 is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
@@ -2006,6 +2039,7 @@ appears on some screens and not others.
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
 | `Users/{uid}/Schedules/{id}` | Firestore | `FirestoreScheduleUploader` (a replace), read by `FirestoreScheduleFetcher`; no client delete |
+| `Users/{uid}/Injuries/{id}` | Firestore | `FirestoreInjuryUploader` (a replace, check-ins on the document), read by `FirestoreInjuryFetcher`; owner only, no client delete |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
 | `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
@@ -2042,6 +2076,8 @@ appears on some screens and not others.
 | `Documents/PendingSync/customExercises_{uid}.json` | disk | `SyncQueueCustomExerciseUploader` |
 | `Documents/Schedules/{uid}/{id}.json` | disk | `FileManagerScheduleWriter` — `ScheduleStoreLocation` |
 | `Documents/PendingSync/schedules_{uid}.json` | disk | `SyncQueueScheduleUploader` |
+| `Documents/Injuries/{uid}/{id}.json` | disk | `FileManagerInjuryWriter` — `InjuryStoreLocation` |
+| `Documents/PendingSync/injuries_{uid}.json` | disk | `SyncQueueInjuryUploader` |
 | `Documents/ExerciseBody/{muscleGroups,movementPatterns}.json` | disk | the muscle group / pattern list cache — `ExerciseBodyListStoreLocation`, not user-scoped |
 
 **The path lives on the model, never at the call site.** `FirebaseInstance` requires
@@ -2134,6 +2170,8 @@ in this codebase.**
 | `SportSessionEntry.sessionLoad` | `sportSessionLoad` in the functions' `MyDay/DailyStats/SportSessionLoad.ts` | Sport Sessions |
 | `ScheduledSportCard` | `DailySportCard`'s chrome, and the RPE bars on `SportSessionDetailView` | Schedules |
 | `FileManagerScheduleWriter` date strategy | `FileManagerScheduleFetcher` and `SyncQueueScheduleUploader` | Schedules |
+| `FileManagerInjuryWriter` date strategy | `FileManagerInjuryFetcher` and `SyncQueueInjuryUploader` | Injuries |
+| `InjuryOptionsSheet` | `SportCardOptionsSheet` | Injuries |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |

@@ -99,11 +99,16 @@ Users/{uid}/Readiness/{yyyy-MM-dd}   <- Cloud Functions only
 ### The model
 ```
 Injury                      Users/{uid}/Injuries/{id}
-  id, bodyPart (region + side), startedOn (day), resolvedOn (day)?,
-  description?, createdAt, updatedAt
-InjuryCheckIn               Users/{uid}/Injuries/{id}/CheckIns/{yyyy-MM-dd}
-  pain 0–10, impact: none | modified | stopped, note?
+  id, region, side?, startedOn (day), resolvedOn (day)?, note?,
+  checkIns: { yyyy-MM-dd: { pain 0–10, impact: none | modified | stopped, updatedAt } },
+  createdAt, updatedAt, removedAt?
 ```
+- **Check-ins are a map on the injury, not a subcollection** (changed while building step 2). One
+  document keeps the schedules pipeline — one writer, one path, one sync queue — instead of two,
+  and reading every injury with its history is one collection read. The cost is that two
+  devices can each replace the document with a copy missing the other's day: `Injury.merged`
+  unions check-ins day by day, and `InjuryManager.load` writes the merge back. Step 3's
+  projection reads the map off the injury's write trigger.
 - **Body regions are a fixed list with a side** (hamstring L/R, knee L/R, lower back, shoulder…),
   not `MuscleGroups` — joints and tendons are not muscle groups, and a free-text part would make
   "knee" and "Knee" two injuries.
@@ -141,7 +146,11 @@ InjuryCheckIn               Users/{uid}/Injuries/{id}/CheckIns/{yyyy-MM-dd}
    `ReminderManagerTests`, `ReminderSettingsViewModelTests`. Not built yet from this step: the
    in-context offer on MyDay after a first check-in ("Want a nudge tomorrow morning?"). Not
    checked on a device or simulator.
-2. **Injury model and logging** — model, local store, sync, rules, deletion, check-in rows.
+2. **Injury model and logging — built 2026-11-10** on the `injuries` branches of both repos (not
+   merged). `MyDayKit/MyDayKit/Models/Injuries/`, `MyDayKit/MyDayKit/Injuries/` (UI), the
+   pipeline in `InTheGym/Launch/Composition/MyDay/`; tests in `InjuryTests`, `InjuryMergeTests`,
+   `InjuryManagerTests` and the functions' `firestoreRules.test.ts`. **The rule must be
+   deployed before an app build that saves injuries ships.** Not checked in the simulator.
 3. **Readiness projection** — function, backfill script, rules, STATS readiness card.
 4. **Injuries in STATS** — bands on the charts, the injury page.
 5. **Reminders: schedules and injuries** — once both exist to remind about.

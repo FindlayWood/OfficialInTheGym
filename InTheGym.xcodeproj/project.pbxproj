@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A1000000000000000000030 /* InjuryStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000010 /* InjuryStoreLocation.swift */; };
+		1A1000000000000000000031 /* FileManagerInjuryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000011 /* FileManagerInjuryWriter.swift */; };
+		1A1000000000000000000032 /* FileManagerInjuryFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000012 /* FileManagerInjuryFetcher.swift */; };
+		1A1000000000000000000033 /* SyncQueueInjuryUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000013 /* SyncQueueInjuryUploader.swift */; };
+		1A1000000000000000000034 /* InjurySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000014 /* InjurySaver.swift */; };
+		1A1000000000000000000035 /* InjurySyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000015 /* InjurySyncer.swift */; };
+		1A1000000000000000000036 /* InjurySyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000016 /* InjurySyncService.swift */; };
+		1A1000000000000000000037 /* FirestoreInjuryUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000017 /* FirestoreInjuryUploader.swift */; };
+		1A1000000000000000000038 /* FirestoreInjuryFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000018 /* FirestoreInjuryFetcher.swift */; };
 		0AF000000000000000000020 /* UserNotificationReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000010 /* UserNotificationReminderScheduler.swift */; };
 		0AF000000000000000000021 /* UserNotificationReminderPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000011 /* UserNotificationReminderPermission.swift */; };
 		0AF000000000000000000022 /* UserDefaultsReminderPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF000000000000000000012 /* UserDefaultsReminderPreferencesStore.swift */; };
@@ -1012,6 +1021,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A1000000000000000000010 /* InjuryStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryStoreLocation.swift; sourceTree = "<group>"; };
+		1A1000000000000000000011 /* FileManagerInjuryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInjuryWriter.swift; sourceTree = "<group>"; };
+		1A1000000000000000000012 /* FileManagerInjuryFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInjuryFetcher.swift; sourceTree = "<group>"; };
+		1A1000000000000000000013 /* SyncQueueInjuryUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueueInjuryUploader.swift; sourceTree = "<group>"; };
+		1A1000000000000000000014 /* InjurySaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjurySaver.swift; sourceTree = "<group>"; };
+		1A1000000000000000000015 /* InjurySyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjurySyncer.swift; sourceTree = "<group>"; };
+		1A1000000000000000000016 /* InjurySyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjurySyncService.swift; sourceTree = "<group>"; };
+		1A1000000000000000000017 /* FirestoreInjuryUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreInjuryUploader.swift; sourceTree = "<group>"; };
+		1A1000000000000000000018 /* FirestoreInjuryFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreInjuryFetcher.swift; sourceTree = "<group>"; };
 		0AF000000000000000000010 /* UserNotificationReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationReminderScheduler.swift; sourceTree = "<group>"; };
 		0AF000000000000000000011 /* UserNotificationReminderPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationReminderPermission.swift; sourceTree = "<group>"; };
 		0AF000000000000000000012 /* UserDefaultsReminderPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsReminderPreferencesStore.swift; sourceTree = "<group>"; };
@@ -4777,6 +4795,15 @@
 				5CED00000000000000000005 /* FileManagerScheduleFetcher.swift */,
 				5CED00000000000000000007 /* FirestoreScheduleUploader.swift */,
 				5CED00000000000000000009 /* FirestoreScheduleFetcher.swift */,
+				1A1000000000000000000010 /* InjuryStoreLocation.swift */,
+				1A1000000000000000000011 /* FileManagerInjuryWriter.swift */,
+				1A1000000000000000000012 /* FileManagerInjuryFetcher.swift */,
+				1A1000000000000000000013 /* SyncQueueInjuryUploader.swift */,
+				1A1000000000000000000014 /* InjurySaver.swift */,
+				1A1000000000000000000015 /* InjurySyncer.swift */,
+				1A1000000000000000000016 /* InjurySyncService.swift */,
+				1A1000000000000000000017 /* FirestoreInjuryUploader.swift */,
+				1A1000000000000000000018 /* FirestoreInjuryFetcher.swift */,
 				5CED0000000000000000000B /* ScheduleSaver.swift */,
 				5CED0000000000000000000D /* ScheduleSyncer.swift */,
 				5CED0000000000000000000F /* SyncQueueScheduleUploader.swift */,
@@ -4985,6 +5012,15 @@
 				5CED00000000000000000006 /* FileManagerScheduleFetcher.swift in Sources */,
 				5CED00000000000000000008 /* FirestoreScheduleUploader.swift in Sources */,
 				5CED0000000000000000000A /* FirestoreScheduleFetcher.swift in Sources */,
+				1A1000000000000000000030 /* InjuryStoreLocation.swift in Sources */,
+				1A1000000000000000000031 /* FileManagerInjuryWriter.swift in Sources */,
+				1A1000000000000000000032 /* FileManagerInjuryFetcher.swift in Sources */,
+				1A1000000000000000000033 /* SyncQueueInjuryUploader.swift in Sources */,
+				1A1000000000000000000034 /* InjurySaver.swift in Sources */,
+				1A1000000000000000000035 /* InjurySyncer.swift in Sources */,
+				1A1000000000000000000036 /* InjurySyncService.swift in Sources */,
+				1A1000000000000000000037 /* FirestoreInjuryUploader.swift in Sources */,
+				1A1000000000000000000038 /* FirestoreInjuryFetcher.swift in Sources */,
 				5CED0000000000000000000C /* ScheduleSaver.swift in Sources */,
 				5CED0000000000000000000E /* ScheduleSyncer.swift in Sources */,
 				5CED00000000000000000010 /* SyncQueueScheduleUploader.swift in Sources */,

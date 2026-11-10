@@ -36,6 +36,8 @@ public final class MyDayCoordinator {
     let customExercises: CustomExerciseDependencies?
     /// What the user has scheduled. `nil` leaves scheduling out.
     let scheduleManager: ScheduleManager?
+    /// The user's injuries, rated in the check-in step. `nil` leaves them out.
+    let injuryManager: InjuryManager?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -62,7 +64,8 @@ public final class MyDayCoordinator {
         proAccess: MyDayProAccess,
         welcome: MyDayWelcome? = nil,
         customExercises: CustomExerciseDependencies? = nil,
-        scheduleManager: ScheduleManager? = nil
+        scheduleManager: ScheduleManager? = nil,
+        injuryManager: InjuryManager? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -80,6 +83,7 @@ public final class MyDayCoordinator {
         self.welcome = welcome
         self.customExercises = customExercises
         self.scheduleManager = scheduleManager
+        self.injuryManager = injuryManager
     }
 
     // MARK: - Root
@@ -134,6 +138,7 @@ extension MyDayCoordinator {
                 }
             }
             display.welcome = welcome
+            display.injuries = injuryManager
             display.openGettingStarted = { [weak self] in
                 self?.presentSheet(.gettingStarted)
             }

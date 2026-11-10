@@ -34,6 +34,7 @@ class MyDayKitComposition {
     private var templateSyncService: WorkoutTemplateSyncService?
     private var customExerciseSyncService: CustomExerciseSyncService?
     private var scheduleSyncService: ScheduleSyncService?
+    private var injurySyncService: InjurySyncService?
     private var signOutObserver: NSObjectProtocol?
 
     deinit {
@@ -184,6 +185,26 @@ class MyDayKitComposition {
             remote: FirestoreScheduleFetcher(userId: userId)
         )
 
+        // Injuries — the schedules pipeline again, one remote path. Check-ins live on
+        // the injury, so this one pipeline carries both (`Injury.merged`).
+        let injuryQueue = SyncQueueInjuryUploader(userId: userId)
+        let remoteInjuryUploader: InjuryUploading = FirestoreInjuryUploader(userId: userId)
+        let injurySaver: InjuryUploading = InjurySaver(
+            local: FileManagerInjuryWriter(userId: userId),
+            remote: InjurySyncer(remote: remoteInjuryUploader, queue: injuryQueue)
+        )
+        let injurySyncService = InjurySyncService(
+            remote: remoteInjuryUploader,
+            syncQueue: injuryQueue
+        )
+        injurySyncService.start()
+        self.injurySyncService = injurySyncService
+        let injuryManager = InjuryManager(
+            saver: injurySaver,
+            local: FileManagerInjuryFetcher(userId: userId),
+            remote: FirestoreInjuryFetcher(userId: userId)
+        )
+
         // The form's lists, cached on disk so it works offline. The same two
         // readers StatsKit uses — one reader per collection.
         let customExercises = CustomExerciseDependencies(
@@ -261,7 +282,8 @@ class MyDayKitComposition {
                 signupDate: UserDefaults.currentUser.createdDate
             ),
             customExercises: customExercises,
-            scheduleManager: scheduleManager
+            scheduleManager: scheduleManager,
+            injuryManager: injuryManager
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         showToday = { [weak coordinator] in coordinator?.showToday() }
@@ -281,9 +303,11 @@ extension MyDayKitComposition {
         templateSyncService?.stop()
         customExerciseSyncService?.stop()
         scheduleSyncService?.stop()
+        injurySyncService?.stop()
         templateSyncService = nil
         customExerciseSyncService = nil
         scheduleSyncService = nil
+        injurySyncService = nil
     }
 }
 
