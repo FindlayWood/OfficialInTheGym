@@ -18,6 +18,9 @@ public struct HomeScreenContent: View {
     let onExerciseTapped: (ExerciseStats) -> Void
     let onBodyMetricsDetail: () -> Void
     let onTrainingBalanceTapped: () -> Void
+    /// Current and cleared injuries. Empty draws no card — see `InjuriesSummaryView`.
+    let injuries: [StatsInjury]
+    let onInjuryTapped: (StatsInjury) -> Void
 
     private var stats: HomeStats { HomeStats(totals: totals) }
     
@@ -40,7 +43,9 @@ public struct HomeScreenContent: View {
         onACWRDetail: @escaping (TrainingLoadMetric) -> Void,
         onExerciseTapped: @escaping (ExerciseStats) -> Void,
         onBodyMetricsDetail: @escaping () -> Void,
-        onTrainingBalanceTapped: @escaping () -> Void
+        onTrainingBalanceTapped: @escaping () -> Void,
+        injuries: [StatsInjury] = [],
+        onInjuryTapped: @escaping (StatsInjury) -> Void = { _ in }
     ) {
         self.totals = totals
         self.exercises = exercises
@@ -51,6 +56,8 @@ public struct HomeScreenContent: View {
         self.onExerciseTapped = onExerciseTapped
         self.onBodyMetricsDetail = onBodyMetricsDetail
         self.onTrainingBalanceTapped = onTrainingBalanceTapped
+        self.injuries = injuries
+        self.onInjuryTapped = onInjuryTapped
     }
 
     public var body: some View {
@@ -67,6 +74,11 @@ public struct HomeScreenContent: View {
             // Both metrics in one card — see `TrainingLoadMetric` for why they
             // stay two ratios rather than being merged into one number.
             TrainingLoadSummaryView(stats: stats, onDetail: onACWRDetail)
+
+            // Beside the load card on purpose: the injury pages read that same load.
+            if !injuries.isEmpty {
+                InjuriesSummaryView(injuries: injuries, onInjuryTapped: onInjuryTapped)
+            }
 
             TrainingBalanceSummaryView(balanceData: balanceData, muscleGroups: muscleGroups, onDetail: onTrainingBalanceTapped)
             

@@ -152,7 +152,12 @@ Injury                      Users/{uid}/Injuries/{id}
    `InjuryManagerTests` and the functions' `firestoreRules.test.ts`. **The rule must be
    deployed before an app build that saves injuries ships.** Not checked in the simulator.
 3. **Readiness projection** — function, backfill script, rules, STATS readiness card.
-4. **Injuries in STATS** — bands on the charts, the injury page.
+4. **Injuries in STATS — built 2026-11-10**, ahead of step 3 (it needs only the injuries and
+   the totals STATS already loads; the readiness line joins the page once step 3 exists).
+   `StatsKit/StatsKit/Injuries/`, `MyDayInjuryHistoryLoader` in the app; tests in
+   `InjuryLoadReportTests`, `InjuryChartBandsTests`. Limits, by construction: no "before" for an
+   injury that started more than ~64 days ago (STATS fetches 120 days), no "during" under a
+   week. Not checked in the simulator.
 5. **Reminders: schedules and injuries** — once both exist to remind about.
 
 ## Decisions — agreed 2026-11-09

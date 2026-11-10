@@ -21,7 +21,10 @@ class StatsKitDailyTotalsLoader: DailyTotalsProviding {
     /// oldest points with a chronic window that reaches outside the data, so
     /// chronic comes out too low and the ratio too high — the chart reads
     /// "high risk" the further left you look. 60 + 28 rounded up for headroom.
-    private static let daysToFetch = 120
+    ///
+    /// **Defined in StatsKit, as `StatsHistoryWindow.days`**, because the injury page needs it
+    /// too, to know whether the weeks before an injury were fetched at all.
+    private static let daysToFetch = StatsHistoryWindow.days
 
     func fetchDailyTotals() async throws -> [DailyTotal] {
         let userID = UserDefaults.currentUser.id

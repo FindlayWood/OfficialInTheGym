@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A2000000000000000000011 /* MyDayInjuryHistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2000000000000000000010 /* MyDayInjuryHistoryLoader.swift */; };
 		1A1000000000000000000030 /* InjuryStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000010 /* InjuryStoreLocation.swift */; };
 		1A1000000000000000000031 /* FileManagerInjuryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000011 /* FileManagerInjuryWriter.swift */; };
 		1A1000000000000000000032 /* FileManagerInjuryFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1000000000000000000012 /* FileManagerInjuryFetcher.swift */; };
@@ -1021,6 +1022,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A2000000000000000000010 /* MyDayInjuryHistoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDayInjuryHistoryLoader.swift; sourceTree = "<group>"; };
 		1A1000000000000000000010 /* InjuryStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjuryStoreLocation.swift; sourceTree = "<group>"; };
 		1A1000000000000000000011 /* FileManagerInjuryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInjuryWriter.swift; sourceTree = "<group>"; };
 		1A1000000000000000000012 /* FileManagerInjuryFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInjuryFetcher.swift; sourceTree = "<group>"; };
@@ -4745,6 +4747,7 @@
 			children = (
 				F0A11D2A2F6C644200CE1E9A /* StatsKitComposition.swift */,
 				F0F6DEFD2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift */,
+				1A2000000000000000000010 /* MyDayInjuryHistoryLoader.swift */,
 				F0F6DF422F70871400D02F93 /* RemoteStatsKitExerciseLoader.swift */,
 				F0F6DFB92F71EEF800D02F93 /* RemoteExerciseDailyStatsLoader.swift */,
 				F0F6E7CD2F81948B00D02F93 /* RemoteExerciseLoader.swift */,
@@ -5742,6 +5745,7 @@
 				9F89DD992A3E59560018E124 /* BaseFlow.swift in Sources */,
 				742FCD1328450B9E007ED1C6 /* ExerciseMaxHistoryViewController.swift in Sources */,
 				F0F6DEFE2F703B3800D02F93 /* StatsKitDailyTotalsLoader.swift in Sources */,
+				1A2000000000000000000011 /* MyDayInjuryHistoryLoader.swift in Sources */,
 				ACA000000000000000000014 /* UsernameModel.swift in Sources */,
 				ACA000000000000000000015 /* FirestoreUsernameAvailabilityChecker.swift in Sources */,
 				ACA000000000000000000016 /* FirestoreUsernameReserver.swift in Sources */,

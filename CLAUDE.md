@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation`
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1485,7 +1485,31 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 
 ### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests`,
+`InjuryLoadReportTests`, `InjuryChartBandsTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+
+### Injuries on STATS
+An **Injuries** card on the home, beside the load card (current first, at most five; not drawn
+when nothing is logged — an empty card asking for injuries would be a prompt to get hurt). Each
+opens `InjuryDetailScreen`: pain over the injury's life, the ratio from four weeks before it to
+its last day with the injury shaded, the load before it started, and training while it lasted.
+The ACWR progression chart shades injuries too.
+
+- **StatsKit has its own `StatsInjury`**, built by the app's `MyDayInjuryHistoryLoader` from
+  MyDay's local-first store through `Injury.merged`, so STATS and MyDay never disagree.
+  `StatsInjuryImpact` is a copy of `InjuryImpact`, mapped by raw value — keep in step.
+- **`InjuryLoadReport` states facts, never causes**: ratio on the start day, the peak in the 28
+  days before and how many days before, week-on-week load, then days trained / sets / volume per
+  week against the four weeks before, and the most-trained muscle groups. The page says it is
+  not the cause and not medical advice. **Every ratio is `ACWR.rolling`.**
+- **A number is only shown when its data was fetched.** STATS has `StatsHistoryWindow.days`
+  (120) of totals — now the one definition, read by `StatsKitDailyTotalsLoader` too. The peak
+  needs 56 days behind the start, so an injury older than ~64 days has no "before"; under a
+  week old it has no "during". Rates count rest days as zero.
+- **Injury days are local-calendar keys read as `StatsDay` keys** — a day apart around midnight
+  far from GMT, accepted.
+- A day with no rating draws no bar, never a zero. Pain colours are `InjuryPainColor`, a copy of
+  MyDayKit's `InjuryPainScale.color(for:)` — keep in step.
 
 ## DISCOVER Tab — `DiscoverKit`
 Exercises, public workouts and clips, with ratings, comments, likes, tags and moderation. Firestore
@@ -1945,8 +1969,8 @@ injury reminders are still to come.
 
 ## Injuries
 Something that hurts, rated each morning in MyDay's check-in step: pain 0–10 and how much it is
-changing training. Part 3 of `READINESS_PLAN.md`; steps 3 and 4 (charts, the injury page with
-load before and during) are still to come. **Free**, as all logging is.
+changing training. Part 3 of `READINESS_PLAN.md`. **Logging is free; reading them back on STATS is
+pro** (*Injuries on STATS* below). Step 3, the readiness chart, is still to come.
 
 - **A fixed list of regions with a side** (`InjuryRegion`, `InjurySide`), never free text and not
   `MuscleGroups` — a knee is not a muscle group, and "knee" / "Knee" would be two injuries.
@@ -2172,6 +2196,7 @@ in this codebase.**
 | `FileManagerScheduleWriter` date strategy | `FileManagerScheduleFetcher` and `SyncQueueScheduleUploader` | Schedules |
 | `FileManagerInjuryWriter` date strategy | `FileManagerInjuryFetcher` and `SyncQueueInjuryUploader` | Injuries |
 | `InjuryOptionsSheet` | `SportCardOptionsSheet` | Injuries |
+| MyDayKit's `InjuryImpact` / `InjuryPainScale.color(for:)` | StatsKit's `StatsInjuryImpact` / `InjuryPainColor` | Injuries on STATS |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |
