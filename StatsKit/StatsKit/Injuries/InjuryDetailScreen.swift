@@ -20,6 +20,7 @@ struct InjuryDetailScreen: View {
     let injury: StatsInjury
     let totals: [DailyTotal]
     let muscleGroups: [MuscleGroup]
+    var readiness: [ReadinessDay] = []
 
     @State private var metric: TrainingLoadMetric = .session
 
@@ -104,6 +105,7 @@ struct InjuryDetailScreen: View {
         let days = (0...span).reversed().map { StatsDay.date(daysAgo: $0, from: end) }
         let loads = totals.loadByDay(metric)
         let keys = days.map(StatsDay.key(for:))
+        let readinessSeries = ReadinessSeries(days: readiness, metric: .readiness, dayKeys: keys)
         return VStack(alignment: .leading, spacing: 10) {
             Picker("Metric", selection: $metric) {
                 ForEach(TrainingLoadMetric.allCases) { metric in
@@ -118,6 +120,16 @@ struct InjuryDetailScreen: View {
                 labels: keys.map(InjuryDayFormat.short),
                 injuryBands: InjuryChartBands.bands(for: [injury], over: keys)
             )
+
+            if readinessSeries.values.contains(where: { $0 != nil }) {
+                SectionContainer(title: "Readiness around it") {
+                    ReadinessChart(
+                        series: readinessSeries,
+                        injuryBands: InjuryChartBands.bands(for: [injury], over: keys)
+                    )
+                    .padding(16)
+                }
+            }
         }
     }
 

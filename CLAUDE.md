@@ -1486,7 +1486,25 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 ### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
 `DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests`,
-`InjuryLoadReportTests`, `InjuryChartBandsTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+`InjuryLoadReportTests`, `InjuryChartBandsTests`, `ReadinessSeriesTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+
+### Readiness on STATS
+The morning check-in charted over time: a **Readiness** card on the home (this week's average, the
+change on last week in points, four weeks of the chart) opening `ReadinessDetailScreen` — readiness
+or any one question over 4 or 12 weeks, each question's average, and the day RPEs. A readiness
+line also sits under the ACWR progression chart and on each injury page, on the same days.
+
+- **Read from `Users/{uid}/Readiness/{yyyy-MM-dd}`**, a projection the `readinessFromMyDay`
+  function writes from each MyDay day — the four scores, `readiness`, `dayRPE` — because the
+  day document holds every exercise and workout, and a 12-week chart would read 84 of them.
+  **Not on `DailyTotal`**: a `DailyTotal` makes a day count as trained. No client writes it.
+- **`readiness` is read, never recomputed.** `WellnessEntry.readinessScore` (MyDayKit),
+  `readinessFromDay` (the function) and `ReadinessBackfill.py` (scripts) must agree — keep in step.
+- **A missed check-in is a gap, never a zero**, unlike load. The line is a seven-day average of
+  the days checked in, drawn only with three or more (`ReadinessSeries`). Questions are plotted
+  on readiness's 0–1 scale (answer / 5) so switching never rescales.
+- **Change is in points and not colour-coded**, as the training chart's chip is not.
+- **Pro**, as STATS beyond this week is. The free screen does not show check-ins yet.
 
 ### Injuries on STATS
 An **Injuries** card on the home, beside the load card (current first, at most five; not drawn
@@ -1970,7 +1988,7 @@ injury reminders are still to come.
 ## Injuries
 Something that hurts, rated each morning in MyDay's check-in step: pain 0–10 and how much it is
 changing training. Part 3 of `READINESS_PLAN.md`. **Logging is free; reading them back on STATS is
-pro** (*Injuries on STATS* below). Step 3, the readiness chart, is still to come.
+pro** (*Injuries on STATS* below).
 
 - **A fixed list of regions with a side** (`InjuryRegion`, `InjurySide`), never free text and not
   `MuscleGroups` — a knee is not a muscle group, and "knee" / "Knee" would be two injuries.
@@ -2063,6 +2081,7 @@ appears on some screens and not others.
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
 | `Users/{uid}/Schedules/{id}` | Firestore | `FirestoreScheduleUploader` (a replace), read by `FirestoreScheduleFetcher`; no client delete |
+| `Users/{uid}/Readiness/{yyyy-MM-dd}` | Firestore | **Cloud Functions only** (`readinessFromMyDay`) — each day's check-in scores, readiness and day RPE, for STATS; owner reads |
 | `Users/{uid}/Injuries/{id}` | Firestore | `FirestoreInjuryUploader` (a replace, check-ins on the document), read by `FirestoreInjuryFetcher`; owner only, no client delete |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
 | `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
@@ -2197,6 +2216,7 @@ in this codebase.**
 | `FileManagerInjuryWriter` date strategy | `FileManagerInjuryFetcher` and `SyncQueueInjuryUploader` | Injuries |
 | `InjuryOptionsSheet` | `SportCardOptionsSheet` | Injuries |
 | MyDayKit's `InjuryImpact` / `InjuryPainScale.color(for:)` | StatsKit's `StatsInjuryImpact` / `InjuryPainColor` | Injuries on STATS |
+| `WellnessEntry.readinessScore` | `readinessFromDay` in the functions' `MyDay/Readiness/Readiness.ts`, and `ReadinessBackfill.py` | Readiness on STATS |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |

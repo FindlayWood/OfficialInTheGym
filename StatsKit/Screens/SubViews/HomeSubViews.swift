@@ -21,6 +21,9 @@ public struct HomeScreenContent: View {
     /// Current and cleared injuries. Empty draws no card — see `InjuriesSummaryView`.
     let injuries: [StatsInjury]
     let onInjuryTapped: (StatsInjury) -> Void
+    /// Check-ins over the fetched window. Empty draws no card — see `ReadinessSummaryView`.
+    let readiness: [ReadinessDay]
+    let onReadinessTapped: () -> Void
 
     private var stats: HomeStats { HomeStats(totals: totals) }
     
@@ -45,7 +48,9 @@ public struct HomeScreenContent: View {
         onBodyMetricsDetail: @escaping () -> Void,
         onTrainingBalanceTapped: @escaping () -> Void,
         injuries: [StatsInjury] = [],
-        onInjuryTapped: @escaping (StatsInjury) -> Void = { _ in }
+        onInjuryTapped: @escaping (StatsInjury) -> Void = { _ in },
+        readiness: [ReadinessDay] = [],
+        onReadinessTapped: @escaping () -> Void = {}
     ) {
         self.totals = totals
         self.exercises = exercises
@@ -58,6 +63,8 @@ public struct HomeScreenContent: View {
         self.onTrainingBalanceTapped = onTrainingBalanceTapped
         self.injuries = injuries
         self.onInjuryTapped = onInjuryTapped
+        self.readiness = readiness
+        self.onReadinessTapped = onReadinessTapped
     }
 
     public var body: some View {
@@ -74,6 +81,11 @@ public struct HomeScreenContent: View {
             // Both metrics in one card — see `TrainingLoadMetric` for why they
             // stay two ratios rather than being merged into one number.
             TrainingLoadSummaryView(stats: stats, onDetail: onACWRDetail)
+
+            // Load, how it felt, then what hurt — the three a coach would read together.
+            if readiness.contains(where: { $0.readiness != nil }) {
+                ReadinessSummaryView(days: readiness, injuries: injuries, onDetail: onReadinessTapped)
+            }
 
             // Beside the load card on purpose: the injury pages read that same load.
             if !injuries.isEmpty {

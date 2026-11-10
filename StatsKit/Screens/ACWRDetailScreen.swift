@@ -12,16 +12,18 @@ public struct ACWRDetailScreen: View {
     let totals: [DailyTotal]
     let metric: TrainingLoadMetric
     let injuries: [StatsInjury]
+    let readiness: [ReadinessDay]
     @State private var selectedRange: ACWRRange = .twoWeeks
 
     private var acwrData: ACWRDetailData {
         ACWRDetailData(totals: totals, range: selectedRange, metric: metric)
     }
 
-    public init(totals: [DailyTotal], metric: TrainingLoadMetric, injuries: [StatsInjury] = []) {
+    public init(totals: [DailyTotal], metric: TrainingLoadMetric, injuries: [StatsInjury] = [], readiness: [ReadinessDay] = []) {
         self.totals = totals
         self.metric = metric
         self.injuries = injuries
+        self.readiness = readiness
     }
 
     public var body: some View {
@@ -50,6 +52,19 @@ public struct ACWRDetailScreen: View {
                     labels: series.labels,
                     injuryBands: InjuryChartBands.bands(for: injuries, over: series.dayKeys)
                 )
+
+                // Under the ratio on the same days, so "load spiked, readiness fell" reads
+                // straight down the page.
+                let readinessSeries = ReadinessSeries(days: readiness, metric: .readiness, dayKeys: series.dayKeys)
+                if readinessSeries.values.contains(where: { $0 != nil }) {
+                    SectionContainer(title: "Readiness") {
+                        ReadinessChart(
+                            series: readinessSeries,
+                            injuryBands: InjuryChartBands.bands(for: injuries, over: series.dayKeys)
+                        )
+                        .padding(16)
+                    }
+                }
 
                 // Acute vs Chronic comparison
                 AcuteChronicComparisonChart(

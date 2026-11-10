@@ -68,7 +68,7 @@ into a small per-day document:
 
 ```
 Users/{uid}/Readiness/{yyyy-MM-dd}   <- Cloud Functions only
-  sleep, body, focus, mood (1–5), readiness (0–1), dayRPE (1–10)?, injuries: { id: pain }?
+  sleep, body, focus, mood (1–5), readiness (0–1), dayRPE (1–10)?
 ```
 
 - **Not on `DailyTotal`.** A `DailyTotal` document is what makes a day count as trained for the
@@ -151,7 +151,12 @@ Injury                      Users/{uid}/Injuries/{id}
    pipeline in `InTheGym/Launch/Composition/MyDay/`; tests in `InjuryTests`, `InjuryMergeTests`,
    `InjuryManagerTests` and the functions' `firestoreRules.test.ts`. **The rule must be
    deployed before an app build that saves injuries ships.** Not checked in the simulator.
-3. **Readiness projection** — function, backfill script, rules, STATS readiness card.
+3. **Readiness projection — built 2026-11-10** on `readiness` branches in the app, the functions
+   (`readinessFromMyDay`, the rule, tests) and the scripts (`ReadinessBackfill.py`). STATS has the
+   home card, `ReadinessDetailScreen`, and readiness under the ACWR chart and on injury pages.
+   **Changed from above:** the projection carries no injury pain — STATS reads injuries
+   directly. **Not done:** this week's check-ins on the free STATS screen. Deploy the function and
+   rule, then run the backfill (`--dry-run` first). Not checked in the simulator.
 4. **Injuries in STATS — built 2026-11-10**, ahead of step 3 (it needs only the injuries and
    the totals STATS already loads; the readiness line joins the page once step 3 exists).
    `StatsKit/StatsKit/Injuries/`, `MyDayInjuryHistoryLoader` in the app; tests in

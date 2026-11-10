@@ -26,7 +26,7 @@ struct StatsKitHomeScreen: View {
                         viewModel.onSeeAllExercises?()
                     },
                     onACWRDetail: { metric in
-                        viewModel.onACWRDetail?(viewModel.totals, metric, viewModel.injuries)
+                        viewModel.onACWRDetail?(viewModel.totals, metric, viewModel.injuries, viewModel.readiness)
                     },
                     onExerciseTapped: { exercise in
                         viewModel.onExerciseTapped?(exercise)
@@ -39,7 +39,11 @@ struct StatsKitHomeScreen: View {
                     },
                     injuries: viewModel.injuries,
                     onInjuryTapped: { injury in
-                        viewModel.onInjuryTapped?(injury, viewModel.totals, viewModel.muscleGroups)
+                        viewModel.onInjuryTapped?(injury, viewModel.totals, viewModel.muscleGroups, viewModel.readiness)
+                    },
+                    readiness: viewModel.readiness,
+                    onReadinessTapped: {
+                        viewModel.onReadinessTapped?(viewModel.readiness, viewModel.injuries)
                     }
                 )
                 .padding()
@@ -102,6 +106,7 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
     @Published var muscleGroups: [MuscleGroup] = []
     @Published var movementTypes: [MovementPattern] = []
     @Published var injuries: [StatsInjury] = []
+    @Published var readiness: [ReadinessDay] = []
     
     let loader: DailyTotalsProviding
     let exerciseStatsLoader: StatsKitExerciseLoader
@@ -112,12 +117,14 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
     
     let exerciseDailyStatsLoader: ExerciseDailyStatsProviding
     let injuryLoader: InjuryHistoryLoading
+    let readinessLoader: ReadinessProviding
     
     var onSeeAllExercises: (() -> ())?
-    var onACWRDetail: (([DailyTotal], TrainingLoadMetric, [StatsInjury]) -> ())?
+    var onACWRDetail: (([DailyTotal], TrainingLoadMetric, [StatsInjury], [ReadinessDay]) -> ())?
     var onExerciseTapped: ((ExerciseStats) -> ())?
     var onTrainingBalanceTapped: (([DailyTotal], [MuscleGroup], [MovementPattern]) -> ())?
-    var onInjuryTapped: ((StatsInjury, [DailyTotal], [MuscleGroup]) -> ())?
+    var onInjuryTapped: ((StatsInjury, [DailyTotal], [MuscleGroup], [ReadinessDay]) -> ())?
+    var onReadinessTapped: (([ReadinessDay], [StatsInjury]) -> ())?
     
     init(
         loader: DailyTotalsProviding,
@@ -127,8 +134,9 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
         movementTypeLoader: MovementTypesLoader,
         exerciseDailyStatsLoader: ExerciseDailyStatsProviding,
         injuryLoader: InjuryHistoryLoading = EmptyInjuryHistoryLoader(),
+        readinessLoader: ReadinessProviding = EmptyReadinessProvider(),
         onSeeAllExercises: (() -> ())? = nil,
-        onACWRDetail: (([DailyTotal], TrainingLoadMetric, [StatsInjury]) -> ())? = nil,
+        onACWRDetail: (([DailyTotal], TrainingLoadMetric, [StatsInjury], [ReadinessDay]) -> ())? = nil,
         onExerciseTapped: ((ExerciseStats) -> ())? = nil,
         onTrainingBalanceTapped: (([DailyTotal], [MuscleGroup], [MovementPattern]) -> ())? = nil
     ) {
@@ -139,6 +147,7 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
         self.movementTypeLoader = movementTypeLoader
         self.exerciseDailyStatsLoader = exerciseDailyStatsLoader
         self.injuryLoader = injuryLoader
+        self.readinessLoader = readinessLoader
         self.onSeeAllExercises = onSeeAllExercises
         self.onACWRDetail = onACWRDetail
         self.onExerciseTapped = onExerciseTapped
@@ -154,6 +163,11 @@ final class StatsKitHomeScreenViewModel: ObservableObject {
             injuries = try await injuryLoader.loadInjuries()
         } catch {
             print("❌ Couldn't load injuries: \(error)")
+        }
+        do {
+            readiness = try await readinessLoader.fetchReadiness()
+        } catch {
+            print("❌ Couldn't load readiness: \(error)")
         }
         do {
             totals = try await loader.fetchDailyTotals()
