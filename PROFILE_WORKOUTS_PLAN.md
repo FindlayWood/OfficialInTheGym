@@ -110,7 +110,11 @@ day. The workout would land on that day, and `MyDayFileManagerSaver` names its f
 - **Tests** (`MyDayKitTests`): adding while a past day is selected writes today and leaves the past day
   untouched; adding while today is selected updates `selectedDay`.
 
-## Step 2 — A public way into MyDay's workout screens (App, MyDayKit)
+## Step 2 — A public way into MyDay's workout screens (App, MyDayKit) — built 2026-11-11
+
+`MyDayKit/MyDayKit/WorkoutLibrary/MyDayWorkoutLibraryRouter.swift`, built by
+`MyDayKitComposition.makeWorkoutLibraryRouter`, with `MyDayWorkoutLibraryRouterTests`. If MyDay's
+library has not loaded yet, `showTemplate(id:)` loads it and waits, opening the page once.
 
 `MyDayWorkoutCoordinator` is internal and starts at the library. Add a **public
 `MyDayWorkoutLibraryRouter`**, built like `MyDayDemoWorkoutRouter`: it pushes onto any navigation

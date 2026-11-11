@@ -15,6 +15,11 @@ class MyDayKitComposition {
     /// MyDay's workout library, for DISCOVER's "Save to Library" — the same
     /// saver and manager MyDay itself uses. Set by `composeCombination`.
     private(set) var workoutLibrary: MyDayWorkoutLibrary?
+    /// Builds MyDay's workout page router on another tab's navigation stack, for PROFILE's
+    /// workouts (`PROFILE_WORKOUTS_PLAN.md` step 2). **It closes over the managers MyDay itself
+    /// holds**, so Add to Today and Schedule from there land where MyDay reads them. Set by
+    /// `composeCombination`.
+    private(set) var makeWorkoutLibraryRouter: ((UINavigationController) -> MyDayWorkoutLibraryRouter)?
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
@@ -260,6 +265,14 @@ class MyDayKitComposition {
         )
 
         workoutLibrary = MyDayWorkoutLibrary(saver: saver, manager: workoutLibraryManager, local: localTemplates)
+        makeWorkoutLibraryRouter = { [workoutLibraryManager, dayManager, scheduleManager] navigationController in
+            MyDayWorkoutLibraryRouter(
+                navigationController: navigationController,
+                libraryManager: workoutLibraryManager,
+                dayManager: dayManager,
+                scheduleManager: scheduleManager
+            )
+        }
         
         let coordinator = MyDayCoordinator(
             navigationController: navigationController,
