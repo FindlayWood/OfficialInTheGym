@@ -264,7 +264,7 @@ public class MyDayManager: ObservableObject {
         }
     }
 
-    private func recordMarkers(for day: MyDayFullDayModel?) {
+    func recordMarkers(for day: MyDayFullDayModel?) {
         guard let day else { return }
         let key = Calendar.current.startOfDay(for: day.date)
         let markers = MyDayDayMarkers(day: day)

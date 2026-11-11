@@ -105,7 +105,7 @@ extension MyDayWorkoutCoordinator {
                 rootView: MyDayWorkoutTemplateDetailScreen(
                     template: template,
                     scheduleManager: scheduleManager,
-                    onAddToTodayTapped: dayManager.addWorkoutToDay,
+                    onAddToTodayTapped: dayManager.addWorkoutToToday,
                     onReadyToDismiss: { [weak self] in
                         self?.onWorkoutAddedToDay?()
                     },
