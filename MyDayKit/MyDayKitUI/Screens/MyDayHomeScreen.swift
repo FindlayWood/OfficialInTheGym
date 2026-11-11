@@ -46,6 +46,8 @@ struct MyDayHomeScreen: View {
     var logScheduledSport: ((SportSessionEntry) -> ())?
     /// Who signed up and when; `nil` draws no welcome at all.
     var welcome: MyDayWelcome?
+    /// Rated in today's check-in step (`MyDayInjurySection`). `nil` leaves injuries out.
+    var injuries: InjuryManager?
     var openGettingStarted: (() -> ())?
 
     private var isToday: Bool { dayManager.isTodaySelected() }
@@ -441,8 +443,18 @@ struct MyDayHomeScreen: View {
         return available ? .pending : .unavailable
     }
 
-    @ViewBuilder
+    /// The wellness check-in, and on today the injuries under it — see `MyDayInjurySection`.
     private func checkInStep(for day: MyDayFullDayModel) -> some View {
+        VStack(spacing: 10) {
+            wellnessCheckIn(for: day)
+            if isToday, let injuries {
+                MyDayInjurySection(manager: injuries, today: ScheduleDay(day.date))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func wellnessCheckIn(for day: MyDayFullDayModel) -> some View {
         if day.wellnessEntry == nil && !isToday {
             MyDayTimelineMissingRow(title: "Check-in", showsDivider: false)
         } else {

@@ -13,8 +13,18 @@ public class MyDayManager: ObservableObject {
     @Published var loadedDays: [MyDayFullDayModel] = []
     
     @Published var selectedDay: MyDayFullDayModel? {
-        didSet { recordMarkers(for: selectedDay) }
+        didSet {
+            recordMarkers(for: selectedDay)
+            if let selectedDay { onDayChanged?(selectedDay) }
+        }
     }
+
+    /// Every day this manager loads or saves, as it lands. **Every save on MyDay goes through
+    /// `selectedDay`** — exercises, workouts, sports, check-in, rating — so this is the one place
+    /// that sees all of them. The composition hands it to `ReminderManager.dayChanged`, which
+    /// ignores any day but today, so a check-in cancels that morning's reminder however it was
+    /// saved.
+    public var onDayChanged: ((MyDayFullDayModel) -> Void)?
 
     /// The date strip's markers, keyed by the start of each day in the device calendar — the
     /// calendar day files are named in. Filled once from `rangeLoader`, then kept current from

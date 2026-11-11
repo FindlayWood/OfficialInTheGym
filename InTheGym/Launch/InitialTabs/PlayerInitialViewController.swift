@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MyDayKit
+import ProfileKit
 
 class PlayerInitialViewController: UITabBarController {
 
@@ -16,6 +18,7 @@ class PlayerInitialViewController: UITabBarController {
     /// sync services, which retry writes queued offline and would otherwise be
     /// freed as soon as `viewDidLoad` returned.
     private let myDayKit = MyDayKitComposition()
+    private var openReminderObserver: NSObjectProtocol?
     
     init(subscriptionManager: PurchaseManager) {
         self.subscriptionManager = subscriptionManager
@@ -65,13 +68,32 @@ class PlayerInitialViewController: UITabBarController {
         let myProfileNavigationController = UINavigationController()
         // Settings' Getting Started is MyDay's: switch to the MYDAY tab, then open it there.
         let showGettingStarted = myDayKit.showGettingStarted
+        // Settings → Reminders edits MyDay's reminders.
+        let reminderSettings = myDayKit.reminders.map(MyDayReminderSettingsService.init(manager:))
         profileKit.composeCombination(myProfileNavigationController, purchaseManager: subscriptionManager, openGettingStarted: { [weak self] in
             self?.selectedIndex = 0
             showGettingStarted?()
-        })
+        }, reminderSettings: reminderSettings)
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [myDayNavigationController, discoverNavigationController, performanceNavigationController, statsKitNavigationController, myProfileNavigationController]
+
+        // A tapped reminder opens today on MyDay, whichever tab was showing.
+        let showToday = myDayKit.showToday
+        openReminderObserver = NotificationCenter.default.addObserver(
+            forName: Notification.openReminder,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.selectedIndex = 0
+            showToday?()
+        }
+    }
+
+    deinit {
+        if let openReminderObserver {
+            NotificationCenter.default.removeObserver(openReminderObserver)
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

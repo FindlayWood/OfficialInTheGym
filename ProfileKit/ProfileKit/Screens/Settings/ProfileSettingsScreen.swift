@@ -28,6 +28,9 @@ struct ProfileSettingsScreen: View {
             VStack(spacing: 24) {
                 subscriptionSection
                 accountSection
+                if viewModel.onOpenReminders != nil {
+                    notificationsSection
+                }
                 aboutSection
                 signOutSection
             }
@@ -153,6 +156,16 @@ struct ProfileSettingsScreen: View {
         case .working: .progress
         case .succeeded: .detail("Email sent")
         case .failed: .detail("Failed, try again")
+        }
+    }
+
+    // MARK: - Notifications
+
+    private var notificationsSection: some View {
+        ProfileSettingsSection(title: "Notifications") {
+            ProfileSettingsRow(icon: "bell", title: "Reminders", showsDivider: false) {
+                viewModel.onOpenReminders?()
+            }
         }
     }
 

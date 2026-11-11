@@ -36,6 +36,8 @@ public final class MyDayCoordinator {
     let customExercises: CustomExerciseDependencies?
     /// What the user has scheduled. `nil` leaves scheduling out.
     let scheduleManager: ScheduleManager?
+    /// The user's injuries, rated in the check-in step. `nil` leaves them out.
+    let injuryManager: InjuryManager?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -62,7 +64,8 @@ public final class MyDayCoordinator {
         proAccess: MyDayProAccess,
         welcome: MyDayWelcome? = nil,
         customExercises: CustomExerciseDependencies? = nil,
-        scheduleManager: ScheduleManager? = nil
+        scheduleManager: ScheduleManager? = nil,
+        injuryManager: InjuryManager? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -80,6 +83,7 @@ public final class MyDayCoordinator {
         self.welcome = welcome
         self.customExercises = customExercises
         self.scheduleManager = scheduleManager
+        self.injuryManager = injuryManager
     }
 
     // MARK: - Root
@@ -134,6 +138,7 @@ extension MyDayCoordinator {
                 }
             }
             display.welcome = welcome
+            display.injuries = injuryManager
             display.openGettingStarted = { [weak self] in
                 self?.presentSheet(.gettingStarted)
             }
@@ -419,6 +424,22 @@ extension MyDayCoordinator {
             navigationController.popToViewController(rootViewController, animated: false)
         }
         presentSheet(.gettingStarted)
+    }
+
+    /// Opens today's MyDay from outside it — a tapped reminder, through the app. Lands on the
+    /// root with today selected, where the check-in and the rating step both sit, rather than
+    /// opening either for the user: the timeline shows what is left, and a sheet thrown up over
+    /// whatever they were doing would be a surprise.
+    public func showToday() {
+        if navigationController.presentedViewController != nil {
+            navigationController.dismiss(animated: false)
+        }
+        if let rootViewController {
+            navigationController.popToViewController(rootViewController, animated: false)
+        }
+        if !dayManager.isTodaySelected() {
+            dayManager.changeSelectedDay(to: .now)
+        }
     }
 
     private func dismissThen(_ action: @escaping (MyDayCoordinator) -> Void) {

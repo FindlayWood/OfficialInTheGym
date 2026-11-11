@@ -9,8 +9,9 @@ import Foundation
 
 /// The one definition of where the sync queues live:
 /// `Documents/PendingSync/workoutTemplates_{userId}.json`,
-/// `Documents/PendingSync/customExercises_{userId}.json` and
-/// `Documents/PendingSync/schedules_{userId}.json`, used by their
+/// `Documents/PendingSync/customExercises_{userId}.json`,
+/// `Documents/PendingSync/schedules_{userId}.json` and
+/// `Documents/PendingSync/injuries_{userId}.json`, used by their
 /// `SyncQueue…Uploader`s and by account deletion's local erase.
 enum PendingSyncStoreLocation {
 
@@ -29,5 +30,9 @@ enum PendingSyncStoreLocation {
 
     static func schedulesFile(for userId: String) -> URL {
         root.appendingPathComponent("schedules_\(userId).json")
+    }
+
+    static func injuriesFile(for userId: String) -> URL {
+        root.appendingPathComponent("injuries_\(userId).json")
     }
 }

@@ -8,10 +8,10 @@
 import Foundation
 
 /// Deletes this device's copies of one user's data: day files, saved
-/// templates, custom exercises, schedules and their sync queues, each at the
+/// templates, custom exercises, schedules, injuries and their sync queues, each at the
 /// location its one definition gives (`MyDayStoreLocation`,
 /// `WorkoutTemplateStoreLocation`, `CustomExerciseStoreLocation`,
-/// `ScheduleStoreLocation`, `PendingSyncStoreLocation`).
+/// `ScheduleStoreLocation`, `InjuryStoreLocation`, `PendingSyncStoreLocation`).
 ///
 /// **Only for account deletion.** Signing out deliberately keeps these: they
 /// are scoped by user id, so a template that has not synced is still there when
@@ -30,9 +30,11 @@ struct LocalUserDataEraser {
             WorkoutTemplateStoreLocation.directory(for: userId),
             CustomExerciseStoreLocation.directory(for: userId),
             ScheduleStoreLocation.directory(for: userId),
+            InjuryStoreLocation.directory(for: userId),
             PendingSyncStoreLocation.workoutTemplatesFile(for: userId),
             PendingSyncStoreLocation.customExercisesFile(for: userId),
-            PendingSyncStoreLocation.schedulesFile(for: userId)
+            PendingSyncStoreLocation.schedulesFile(for: userId),
+            PendingSyncStoreLocation.injuriesFile(for: userId)
         ] where fileManager.fileExists(atPath: url.path) {
             do {
                 try fileManager.removeItem(at: url)

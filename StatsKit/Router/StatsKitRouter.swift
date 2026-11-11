@@ -29,6 +29,8 @@ public final class StatsKitRouter {
     let muscleGroupLoader: MuscleGroupsLoader
     let movementTypeLoader: MovementTypesLoader
     let proAccess: StatsProAccess
+    let injuryLoader: InjuryHistoryLoading
+    let readinessLoader: ReadinessProviding
 
     // MARK: - Properties
 
@@ -45,7 +47,9 @@ public final class StatsKitRouter {
         exerciseLoader: ExerciseLoader,
         muscleGroupLoader: MuscleGroupsLoader,
         movementTypeLoader: MovementTypesLoader,
-        proAccess: StatsProAccess
+        proAccess: StatsProAccess,
+        injuryLoader: InjuryHistoryLoading = EmptyInjuryHistoryLoader(),
+        readinessLoader: ReadinessProviding = EmptyReadinessProvider()
     ) {
         self.navigationController = navigationController
         self.dailyTotalLoader = dailyTotalLoader
@@ -56,6 +60,8 @@ public final class StatsKitRouter {
         self.muscleGroupLoader = muscleGroupLoader
         self.movementTypeLoader = movementTypeLoader
         self.proAccess = proAccess
+        self.injuryLoader = injuryLoader
+        self.readinessLoader = readinessLoader
     }
 
     // MARK: - Root
@@ -78,11 +84,13 @@ public final class StatsKitRouter {
                 muscleGroupLoader: muscleGroupLoader,
                 movementTypeLoader: movementTypeLoader,
                 exerciseDailyStatsLoader: exerciseDailyStatsLoader,
+                injuryLoader: injuryLoader,
+                readinessLoader: readinessLoader,
                 onSeeAllExercises: { [weak self] in
                     self?.navigate(to: .allExercises)
                 },
-                onACWRDetail: { [weak self] totals, metric in
-                    self?.navigate(to: .acwrDetail(totals: totals, metric: metric))
+                onACWRDetail: { [weak self] totals, metric, injuries, readiness in
+                    self?.navigate(to: .acwrDetail(totals: totals, metric: metric, injuries: injuries, readiness: readiness))
                 },
                 onExerciseTapped: { [weak self] exercise in
                     self?.navigate(to: .exerciseDetail(exercise: exercise))
@@ -91,6 +99,12 @@ public final class StatsKitRouter {
                     self?.navigate(to: .trainingBalance(totals, groups, types))
                 }
             )
+            viewModel.onInjuryTapped = { [weak self] injury, totals, groups, readiness in
+                self?.navigate(to: .injuryDetail(injury, totals: totals, muscleGroups: groups, readiness: readiness))
+            }
+            viewModel.onReadinessTapped = { [weak self] readiness, injuries in
+                self?.navigate(to: .readinessDetail(readiness, injuries: injuries))
+            }
             let gate = StatsGateViewModel(proAccess: proAccess)
             gate.onShowPaywall = { [weak self] in self?.onShowPaywall?() }
             let free = StatsFreeViewModel(
@@ -125,9 +139,23 @@ public final class StatsKitRouter {
                 rootView: ExerciseDetailScreen(viewModel: viewModel)
             )
             return vc
-        case let .acwrDetail(totals, metric):
+        case let .acwrDetail(totals, metric, injuries, readiness):
             let vc = UIHostingController(
-                rootView: ACWRDetailScreen(totals: totals, metric: metric)
+                rootView: ACWRDetailScreen(totals: totals, metric: metric, injuries: injuries, readiness: readiness)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case let .injuryDetail(injury, totals, groups, readiness):
+            let vc = UIHostingController(
+                rootView: InjuryDetailScreen(injury: injury, totals: totals, muscleGroups: groups, readiness: readiness)
+            )
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case let .readinessDetail(readiness, injuries):
+            let vc = UIHostingController(
+                rootView: ReadinessDetailScreen(days: readiness, injuries: injuries)
             )
             vc.hidesBottomBarWhenPushed = true
             return vc

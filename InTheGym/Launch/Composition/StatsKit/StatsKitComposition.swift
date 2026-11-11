@@ -41,7 +41,10 @@ class StatsKitComposition {
             exerciseLoader: exerciseLoader,
             muscleGroupLoader: muscleGroupLoader,
             movementTypeLoader: movementTypeLoader,
-            proAccess: proAccess
+            proAccess: proAccess,
+            // MyDay's injuries, local first, so one rated offline is already here.
+            injuryLoader: MyDayInjuryHistoryLoader(userId: UserDefaults.currentUser.uid),
+            readinessLoader: FirestoreReadinessLoader(userId: UserDefaults.currentUser.uid)
         )
         router.onShowPaywall = { [weak navigationController] in
             navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)

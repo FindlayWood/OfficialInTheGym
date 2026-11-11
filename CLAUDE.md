@@ -223,10 +223,11 @@ still had the soft-lock bug the first had fixed. **Do not fork it again.**
   screen then states the trial's end date and whether a reminder is set. `StartedTrial` is the one
   definition of the end date and reminder date.
 - **The app never asks for notifications at launch.** It used to, before signup, when nobody had a
-  reason to say yes — and iOS shows that prompt once. This screen is the app's one ask. **Do not add
-  a notification promise for something that does not send one**: today only the trial reminder
-  exists. When comments, likes and replies send pushes, a non-subscriber version of the screen asks
-  for those.
+  reason to say yes — and iOS shows that prompt once. It is asked in context only: here, and when
+  someone first turns on a MyDay reminder (see *Reminders*). **Do not add a notification promise
+  for something that does not send one**: today the trial reminder and MyDay's reminders exist.
+  When comments, likes and replies send pushes, a non-subscriber version of the screen asks for
+  those.
 - **A paywall must always be dismissible.** The close button is never hidden, delayed or disabled.
   The old onboarding paywall once lost its "Not Now" behind a stuck `isLoading`.
 - **Required by App Review 3.1.2:** price and renewal terms beside the button (`termsText`), Restore,
@@ -646,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation`
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -890,6 +891,8 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - Custom session nav bar (system bar hidden) + cancel-workout flow (`cancelSession()` full reset)
 - Sport sessions on MyDay and in STATS' session load (see *Sport Sessions*)
 - Workouts and sports scheduled ahead, waiting on MyDay on the day (see *Schedules*)
+- Reminders to check in and rate the day (see *Reminders*)
+- Injuries rated day by day in the check-in (see *Injuries*)
 
 ## MYDAY Workout Flow
 - **Library → Template Detail → Add to Today**: `MyDayWorkoutCoordinator` handles navigation;
@@ -1482,7 +1485,49 @@ separate ACWRs exist for. A mock that only produces happy data is not useful her
 
 ### On the CI test plan
 `StatsKitTests` — `ACWRTests`, `TrainingLoadMetricTests`, `HomeStatsStreakTests`,
-`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+`DailyTotalDecodingTests`, `TrainingWeekTests`, `StatsFreeSummaryTests`, `StatsTopLiftTests`,
+`InjuryLoadReportTests`, `InjuryChartBandsTests`, `ReadinessSeriesTests` — is in `CI_iOS_TestPlan.xctestplan`. See *Testing → CI*.
+
+### Readiness on STATS
+The morning check-in charted over time: a **Readiness** card on the home (this week's average, the
+change on last week in points, four weeks of the chart) opening `ReadinessDetailScreen` — readiness
+or any one question over 4 or 12 weeks, each question's average, and the day RPEs. A readiness
+line also sits under the ACWR progression chart and on each injury page, on the same days.
+
+- **Read from `Users/{uid}/Readiness/{yyyy-MM-dd}`**, a projection the `readinessFromMyDay`
+  function writes from each MyDay day — the four scores, `readiness`, `dayRPE` — because the
+  day document holds every exercise and workout, and a 12-week chart would read 84 of them.
+  **Not on `DailyTotal`**: a `DailyTotal` makes a day count as trained. No client writes it.
+- **`readiness` is read, never recomputed.** `WellnessEntry.readinessScore` (MyDayKit),
+  `readinessFromDay` (the function) and `ReadinessBackfill.py` (scripts) must agree — keep in step.
+- **A missed check-in is a gap, never a zero**, unlike load. The line is a seven-day average of
+  the days checked in, drawn only with three or more (`ReadinessSeries`). Questions are plotted
+  on readiness's 0–1 scale (answer / 5) so switching never rescales.
+- **Change is in points and not colour-coded**, as the training chart's chip is not.
+- **Pro**, as STATS beyond this week is. The free screen does not show check-ins yet.
+
+### Injuries on STATS
+An **Injuries** card on the home, beside the load card (current first, at most five; not drawn
+when nothing is logged — an empty card asking for injuries would be a prompt to get hurt). Each
+opens `InjuryDetailScreen`: pain over the injury's life, the ratio from four weeks before it to
+its last day with the injury shaded, the load before it started, and training while it lasted.
+The ACWR progression chart shades injuries too.
+
+- **StatsKit has its own `StatsInjury`**, built by the app's `MyDayInjuryHistoryLoader` from
+  MyDay's local-first store through `Injury.merged`, so STATS and MyDay never disagree.
+  `StatsInjuryImpact` is a copy of `InjuryImpact`, mapped by raw value — keep in step.
+- **`InjuryLoadReport` states facts, never causes**: ratio on the start day, the peak in the 28
+  days before and how many days before, week-on-week load, then days trained / sets / volume per
+  week against the four weeks before, and the most-trained muscle groups. The page says it is
+  not the cause and not medical advice. **Every ratio is `ACWR.rolling`.**
+- **A number is only shown when its data was fetched.** STATS has `StatsHistoryWindow.days`
+  (120) of totals — now the one definition, read by `StatsKitDailyTotalsLoader` too. The peak
+  needs 56 days behind the start, so an injury older than ~64 days has no "before"; under a
+  week old it has no "during". Rates count rest days as zero.
+- **Injury days are local-calendar keys read as `StatsDay` keys** — a day apart around midnight
+  far from GMT, accepted.
+- A day with no rating draws no bar, never a zero. Pain colours are `InjuryPainColor`, a copy of
+  MyDayKit's `InjuryPainScale.color(for:)` — keep in step.
 
 ## DISCOVER Tab — `DiscoverKit`
 Exercises, public workouts and clips, with ratings, comments, likes, tags and moderation. Firestore
@@ -1908,6 +1953,69 @@ The steps, and what is still open, are in `SCHEDULES_PLAN.md`.
   read that someone with nothing due should not pay for opening MyDay.
 - Free, as all logging is.
 
+## Reminders
+Local notifications that bring people back to check in and rate the day, set in Settings →
+**Reminders** (ProfileKit) and planned by MyDayKit. Part 1 of `READINESS_PLAN.md`; schedule and
+injury reminders are still to come.
+
+- **Everything is off until the user turns it on**, and permission is asked at that moment
+  (`ReminderSettingsViewModel.setOn`), never at launch. Refused, the switch stays off and a banner
+  sends the user to Settings.
+- **`ReminderPlanner` is the one definition of what is pending.** A local notification cannot
+  look at anything when it fires, so the planner writes **one-off requests per day, 14 days
+  ahead**, never a repeating trigger, and every return to the app, every save on today and every
+  settings change plans again. Saving a check-in removes that morning's request; that is the
+  whole of "skip it once I've checked in".
+- **Rating reminders are today only, once training is recorded** — MyDay's rating step does not
+  open before then (`MyDayDayMarkers.hasExercise`). A later day's is planned by the save that
+  logs on it.
+- **`MyDayManager.onDayChanged` sees every save**, because every save lands on `selectedDay`.
+  `ReminderManager.dayChanged` ignores any day but today and any change its markers do not show.
+- **Replacements run one after another** (`ReminderManager.scheduling`); two at once can
+  interleave and bring back a cancelled request.
+- **The scheduler only touches `reminder.` identifiers.** The trial reminder shares the
+  notification centre. Ids are `reminder.{kind}.{yyyy-MM-dd}`, derived, so a re-plan replaces.
+- **Times are an hour and a minute, never a `Date`** (`ReminderTime`), applied to each day in the
+  phone's zone, so 08:00 stays 08:00 across a clock change or a flight.
+- **Settings are on the device, per user** (`UserDefaultsReminderPreferencesStore`,
+  `reminderPreferences_{uid}`), by decision: a notification only fires on the phone that planned
+  it. Signing out removes every pending reminder (and delivered ones). Free, as all logging is.
+- **A tapped reminder opens today on MyDay** (`AppDelegate` → `Notification.openReminder` →
+  `MyDayCoordinator.showToday()`), and opens no step for the user.
+- ProfileKit edits `ProfileReminderSettings`; `MyDayReminderSettingsService` in the composition
+  root maps it to MyDayKit's `ReminderPreferences`. The coach tab bar has no Reminders row.
+
+## Injuries
+Something that hurts, rated each morning in MyDay's check-in step: pain 0–10 and how much it is
+changing training. Part 3 of `READINESS_PLAN.md`. **Logging is free; reading them back on STATS is
+pro** (*Injuries on STATS* below).
+
+- **A fixed list of regions with a side** (`InjuryRegion`, `InjurySide`), never free text and not
+  `MuscleGroups` — a knee is not a muscle group, and "knee" / "Knee" would be two injuries.
+  Raw values are stored: add cases, never rename.
+- **Impact is three steps** (`InjuryImpact`: as normal / around it / not training). A yes / no
+  would make most niggle days a lie.
+- **It ends when the user says so** (`resolvedOn`), never when pain reaches 0. **Removing is for
+  mistakes** (`removedAt`) and never deletes — the rules refuse a delete, for the reason
+  schedules have none.
+- **Check-ins live on the injury**, `checkIns` keyed by `ScheduleDay.key`, one per day; a second
+  save that day corrects it. Days are `ScheduleDay`s, judged in `Calendar.current`, **not
+  `StatsDay`'s UTC**.
+- **One document per injury, replaced on every save — so two devices can each upload a copy
+  missing the other's day.** `Injury.merged` unions check-ins day by day (later `updatedAt` per
+  check-in, local wins a tie), and **`InjuryManager.load` writes the merge back** whenever it
+  differs from the remote copy. Do not soften the uploader to a merge: it could never clear
+  `resolvedOn`.
+- **The pipeline is the schedules one**, file for file (`FileManagerInjuryWriter` → … →
+  `InjurySyncService`), held by `MyDayKitComposition` and stopped on sign-out.
+- **On MyDay: today only**, inside the check-in step (`MyDayInjurySection`), not a timeline step
+  of its own and not dependent on the wellness questions. A row pre-fills from the last check-in,
+  so an unchanged day is one tap, and stores nothing until Save. Past days are read-only.
+- **Private, always.** Owner-only rule (`Users/{uid}/Injuries/{id}`, tested in
+  `firestoreRules.test.ts`); taken by `deleteAccount`'s `recursiveDelete` of `Users/{uid}` and by
+  `LocalUserDataEraser`. **Deploy the rule before an app build that saves injuries ships**, or
+  every upload is refused.
+
 ## Coach-Assigned Workouts — designed, not built
 The data model is prepared for coach assignment; **none of the assignment feature exists yet.** What
 is in the code today is provenance: `DailyWorkoutEntry.assignedBy` / `.assignmentId` and the same
@@ -1973,6 +2081,8 @@ appears on some screens and not others.
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
 | `Users/{uid}/Schedules/{id}` | Firestore | `FirestoreScheduleUploader` (a replace), read by `FirestoreScheduleFetcher`; no client delete |
+| `Users/{uid}/Readiness/{yyyy-MM-dd}` | Firestore | **Cloud Functions only** (`readinessFromMyDay`) — each day's check-in scores, readiness and day RPE, for STATS; owner reads |
+| `Users/{uid}/Injuries/{id}` | Firestore | `FirestoreInjuryUploader` (a replace, check-ins on the document), read by `FirestoreInjuryFetcher`; owner only, no client delete |
 | `Users/{uid}/JumpTests/{id}` | Firestore | `FirestoreJumpTestSessionWriter` — one document per jump-test session, every test told apart by `kind` |
 | `Users/{uid}/BalanceTests/{id}` | Firestore | `FirestoreBalanceSessionWriter` — one document per balance session |
 | `VerticalJump/{uid}/Results/{id}` | Firestore | **read-only now** (`LegacyVerticalJumpSessionsLoader`): Vertical Jump's pre-engine history |
@@ -2009,6 +2119,8 @@ appears on some screens and not others.
 | `Documents/PendingSync/customExercises_{uid}.json` | disk | `SyncQueueCustomExerciseUploader` |
 | `Documents/Schedules/{uid}/{id}.json` | disk | `FileManagerScheduleWriter` — `ScheduleStoreLocation` |
 | `Documents/PendingSync/schedules_{uid}.json` | disk | `SyncQueueScheduleUploader` |
+| `Documents/Injuries/{uid}/{id}.json` | disk | `FileManagerInjuryWriter` — `InjuryStoreLocation` |
+| `Documents/PendingSync/injuries_{uid}.json` | disk | `SyncQueueInjuryUploader` |
 | `Documents/ExerciseBody/{muscleGroups,movementPatterns}.json` | disk | the muscle group / pattern list cache — `ExerciseBodyListStoreLocation`, not user-scoped |
 
 **The path lives on the model, never at the call site.** `FirebaseInstance` requires
@@ -2101,6 +2213,10 @@ in this codebase.**
 | `SportSessionEntry.sessionLoad` | `sportSessionLoad` in the functions' `MyDay/DailyStats/SportSessionLoad.ts` | Sport Sessions |
 | `ScheduledSportCard` | `DailySportCard`'s chrome, and the RPE bars on `SportSessionDetailView` | Schedules |
 | `FileManagerScheduleWriter` date strategy | `FileManagerScheduleFetcher` and `SyncQueueScheduleUploader` | Schedules |
+| `FileManagerInjuryWriter` date strategy | `FileManagerInjuryFetcher` and `SyncQueueInjuryUploader` | Injuries |
+| `InjuryOptionsSheet` | `SportCardOptionsSheet` | Injuries |
+| MyDayKit's `InjuryImpact` / `InjuryPainScale.color(for:)` | StatsKit's `StatsInjuryImpact` / `InjuryPainColor` | Injuries on STATS |
+| `WellnessEntry.readinessScore` | `readinessFromDay` in the functions' `MyDay/Readiness/Readiness.ts`, and `ReadinessBackfill.py` | Readiness on STATS |
 | `SessionSetPillValue.values(for:record:)` | `SessionSetPillValue.values(for: ExerciseCompletions)` | MYDAY Workout Flow |
 | `SessionSetInput.target(for:)` | `SessionSetDetailOverlay.resetInputsToTarget()` | MYDAY Workout Flow |
 | `SessionSetPill` | `SessionSetPillPlaceholder` | MYDAY Workout Flow |
@@ -2130,6 +2246,7 @@ in this codebase.**
 | `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
 | `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
+| ProfileKit's `ReminderWeekdayPicker` / `ProfileWeekday` raw values | MyDayKit's `ScheduleWeekdayPicker` / `ScheduleWeekday` | Reminders |
 
 ## Analysis artefacts — `.results/`, gitignored
 A generated structural analysis can be produced into `.results/`: `1-techstack.md`,

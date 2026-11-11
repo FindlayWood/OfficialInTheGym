@@ -16,7 +16,7 @@ class ProfileKitComposition {
     /// `MyProfileCoordinator` until the coach/player split is removed. See
     /// `PROFILE_PLAN.md`.
     @MainActor
-    func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager, openGettingStarted: (() -> Void)? = nil) {
+    func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager, openGettingStarted: (() -> Void)? = nil, reminderSettings: ReminderSettingsService? = nil) {
 
         let router = makeRouter(navigationController, purchaseManager: purchaseManager)
 
@@ -28,6 +28,7 @@ class ProfileKitComposition {
         router.onManageSubscription = { appRoutes.showManageSubscription() }
         router.onOpenAbout = { appRoutes.showAbout() }
         router.onOpenGettingStarted = openGettingStarted
+        router.reminderSettings = reminderSettings
 
         router.start()
     }

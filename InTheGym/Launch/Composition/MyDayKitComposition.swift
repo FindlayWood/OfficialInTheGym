@@ -18,6 +18,12 @@ class MyDayKitComposition {
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
+    /// Opens today on MyDay, for a tapped reminder. Holds the coordinator weakly, as above.
+    private(set) var showToday: (() -> Void)?
+    /// MyDay's reminders, for the session — see `ReminderManager`. Settings on the PROFILE tab
+    /// edits them through `MyDayReminderSettingsService`.
+    private(set) var reminders: ReminderManager?
+    private var becameActiveObserver: NSObjectProtocol?
     /// **The sync services live here, for the signed-in session.** They used
     /// to be locals in `composeCombination`, and this composition a local in
     /// `PlayerInitialViewController.viewDidLoad`, so nothing held them once
@@ -28,12 +34,16 @@ class MyDayKitComposition {
     private var templateSyncService: WorkoutTemplateSyncService?
     private var customExerciseSyncService: CustomExerciseSyncService?
     private var scheduleSyncService: ScheduleSyncService?
+    private var injurySyncService: InjurySyncService?
     private var signOutObserver: NSObjectProtocol?
 
     deinit {
         stopSyncServices()
         if let signOutObserver {
             NotificationCenter.default.removeObserver(signOutObserver)
+        }
+        if let becameActiveObserver {
+            NotificationCenter.default.removeObserver(becameActiveObserver)
         }
     }
     
@@ -175,6 +185,26 @@ class MyDayKitComposition {
             remote: FirestoreScheduleFetcher(userId: userId)
         )
 
+        // Injuries — the schedules pipeline again, one remote path. Check-ins live on
+        // the injury, so this one pipeline carries both (`Injury.merged`).
+        let injuryQueue = SyncQueueInjuryUploader(userId: userId)
+        let remoteInjuryUploader: InjuryUploading = FirestoreInjuryUploader(userId: userId)
+        let injurySaver: InjuryUploading = InjurySaver(
+            local: FileManagerInjuryWriter(userId: userId),
+            remote: InjurySyncer(remote: remoteInjuryUploader, queue: injuryQueue)
+        )
+        let injurySyncService = InjurySyncService(
+            remote: remoteInjuryUploader,
+            syncQueue: injuryQueue
+        )
+        injurySyncService.start()
+        self.injurySyncService = injurySyncService
+        let injuryManager = InjuryManager(
+            saver: injurySaver,
+            local: FileManagerInjuryFetcher(userId: userId),
+            remote: FirestoreInjuryFetcher(userId: userId)
+        )
+
         // The form's lists, cached on disk so it works offline. The same two
         // readers StatsKit uses — one reader per collection.
         let customExercises = CustomExerciseDependencies(
@@ -185,12 +215,39 @@ class MyDayKitComposition {
             userId: userId
         )
 
+        // Reminders — planned from today's day, read through the same local-first loader
+        // MyDay uses. Every save on MyDay lands on `selectedDay`, which hands it on here, so
+        // a check-in cancels that morning's reminder however it was saved.
+        let reminders = ReminderManager(
+            store: UserDefaultsReminderPreferencesStore(userId: userId),
+            scheduler: UserNotificationReminderScheduler(),
+            permission: UserNotificationReminderPermission(),
+            todayLoader: policyLoader
+        )
+        self.reminders = reminders
+        dayManager.onDayChanged = { [weak reminders] day in
+            Task { @MainActor in reminders?.dayChanged(day) }
+        }
+        // Plans on launch and on every return to the app: the day may have rolled over, or
+        // been logged on another device, while it was away.
+        becameActiveObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak reminders] _ in
+            Task { @MainActor in await reminders?.refresh() }
+        }
+        Task { @MainActor in await reminders.refresh() }
+
+        // Holds `reminders` strongly: signing out tears the tab bar down, and with it this
+        // composition, but the next person to use the phone must not get this user's nudges.
         signOutObserver = NotificationCenter.default.addObserver(
             forName: Notification.signOut,
             object: nil,
             queue: nil
-        ) { [weak self] _ in
+        ) { [weak self, reminders] _ in
             self?.stopSyncServices()
+            Task { @MainActor in await reminders.stop() }
         }
         
         // Local-first, mirroring the write path: `WorkoutTemplateSaver` writes
@@ -225,9 +282,11 @@ class MyDayKitComposition {
                 signupDate: UserDefaults.currentUser.createdDate
             ),
             customExercises: customExercises,
-            scheduleManager: scheduleManager
+            scheduleManager: scheduleManager,
+            injuryManager: injuryManager
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
+        showToday = { [weak coordinator] in coordinator?.showToday() }
         coordinator.onShowPaywall = { [weak navigationController] in
             navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)
         }
@@ -244,9 +303,11 @@ extension MyDayKitComposition {
         templateSyncService?.stop()
         customExerciseSyncService?.stop()
         scheduleSyncService?.stop()
+        injurySyncService?.stop()
         templateSyncService = nil
         customExerciseSyncService = nil
         scheduleSyncService = nil
+        injurySyncService = nil
     }
 }
 

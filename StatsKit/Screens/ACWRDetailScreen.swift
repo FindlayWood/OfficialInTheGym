@@ -11,15 +11,19 @@ import SwiftUI
 public struct ACWRDetailScreen: View {
     let totals: [DailyTotal]
     let metric: TrainingLoadMetric
+    let injuries: [StatsInjury]
+    let readiness: [ReadinessDay]
     @State private var selectedRange: ACWRRange = .twoWeeks
 
     private var acwrData: ACWRDetailData {
         ACWRDetailData(totals: totals, range: selectedRange, metric: metric)
     }
 
-    public init(totals: [DailyTotal], metric: TrainingLoadMetric) {
+    public init(totals: [DailyTotal], metric: TrainingLoadMetric, injuries: [StatsInjury] = [], readiness: [ReadinessDay] = []) {
         self.totals = totals
         self.metric = metric
+        self.injuries = injuries
+        self.readiness = readiness
     }
 
     public var body: some View {
@@ -45,8 +49,22 @@ public struct ACWRDetailScreen: View {
                 ACWRProgressionChart(
                     title: "ACWR Progression",
                     values: series.acwr,
-                    labels: series.labels
+                    labels: series.labels,
+                    injuryBands: InjuryChartBands.bands(for: injuries, over: series.dayKeys)
                 )
+
+                // Under the ratio on the same days, so "load spiked, readiness fell" reads
+                // straight down the page.
+                let readinessSeries = ReadinessSeries(days: readiness, metric: .readiness, dayKeys: series.dayKeys)
+                if readinessSeries.values.contains(where: { $0 != nil }) {
+                    SectionContainer(title: "Readiness") {
+                        ReadinessChart(
+                            series: readinessSeries,
+                            injuryBands: InjuryChartBands.bands(for: injuries, over: series.dayKeys)
+                        )
+                        .padding(16)
+                    }
+                }
 
                 // Acute vs Chronic comparison
                 AcuteChronicComparisonChart(
@@ -115,6 +133,7 @@ enum ACWRRange: String, CaseIterable, Identifiable {
 /// the ratio together — asking for them separately walked the same 28-day
 /// window three times per day on screen.
 struct ACWRSeries {
+    let dayKeys: [String]
     let labels: [String]
     let acwr: [Double?]
     let acute: [Double]
@@ -147,6 +166,7 @@ struct ACWRDetailData {
 
     var series: ACWRSeries {
         let loads = totals.loadByDay(metric)
+        var dayKeys: [String] = []
         var labels: [String] = []
         var acwr: [Double?] = []
         var acute: [Double] = []
@@ -155,6 +175,7 @@ struct ACWRDetailData {
 
         for day in days {
             let rolling = ACWR.rolling(loadByDay: loads, endingOn: day)
+            dayKeys.append(StatsDay.key(for: day))
             labels.append(Self.labelFormatter.string(from: day))
             acwr.append(rolling.ratio)
             acute.append(rolling.acute)
@@ -163,7 +184,7 @@ struct ACWRDetailData {
         }
 
         return ACWRSeries(
-            labels: labels, acwr: acwr, acute: acute, chronic: chronic, load: load
+            dayKeys: dayKeys, labels: labels, acwr: acwr, acute: acute, chronic: chronic, load: load
         )
     }
 
@@ -325,6 +346,9 @@ struct ACWRProgressionChart: View {
     let title: String
     let values: [Double?]
     let labels: [String]
+    /// Index ranges to shade as injuries (`InjuryChartBands`), behind the zones and the line, so
+    /// a spike before an injury and the injury itself are on one axis.
+    var injuryBands: [ClosedRange<Int>] = []
     
     private let yMin: Double = 0.0
     private let yMax: Double = 2.0
@@ -341,6 +365,8 @@ struct ACWRProgressionChart: View {
                 let h = geo.size.height
                 
                 ZStack(alignment: .bottomLeading) {
+                    injuryShading(width: w, height: h)
+
                     // Zone background bands
                     zoneBackgrounds(width: w, height: h)
                     
@@ -359,7 +385,35 @@ struct ACWRProgressionChart: View {
             .padding(.horizontal, 16)
             .padding(.top, 14)
             .padding(.bottom, 20)
+
+            if !injuryBands.isEmpty {
+                HStack(spacing: 6) {
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(Color.matteRed.opacity(0.18))
+                        .frame(width: 14, height: 8)
+                    Text("Injured")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
+            }
         }
+        }
+    }
+
+    /// Each band spans from half a slot before its first day to half a slot after its last, so
+    /// a one-day injury is still a visible strip rather than a hairline.
+    @ViewBuilder
+    private func injuryShading(width: CGFloat, height: CGFloat) -> some View {
+        let slot = values.count > 1 ? width / CGFloat(values.count - 1) : width
+        ForEach(Array(injuryBands.enumerated()), id: \.offset) { _, band in
+            let start = max(0, xPos(index: band.lowerBound, width: width) - slot / 2)
+            let end = min(width, xPos(index: band.upperBound, width: width) + slot / 2)
+            Rectangle()
+                .fill(Color.matteRed.opacity(0.18))
+                .frame(width: max(2, end - start), height: height)
+                .offset(x: start)
         }
     }
     
