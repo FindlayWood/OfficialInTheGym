@@ -130,7 +130,10 @@ schedule manager) and hands out a factory beside `workoutLibrary`. A second day 
 workout MyDay does not see until relaunch, and a second schedule manager would hold schedules MyDay's
 due cards never read.
 
-## Step 3 — A public way into DISCOVER's workout page (App, DiscoverKit)
+## Step 3 — A public way into DISCOVER's workout page (App, DiscoverKit) — built 2026-11-11
+
+`DiscoverKitRouter.showWorkout(_:)`, with a `DiscoverKitRoutesTests` case pinning the workout page
+as free.
 
 Add `DiscoverKitRouter.showWorkout(_ card: DiscoverWorkoutCard)` beside `showClip(_:)`, pushing
 `.workoutDetail`. Nothing else in DiscoverKit changes.
