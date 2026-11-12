@@ -111,6 +111,8 @@ class ProfileKitComposition {
 
         let clipsLoader: ProfileClipsLoader = FirestoreProfileClipsLoader()
 
+        let workoutsLoader: ProfileWorkoutsLoader = FirestoreProfileWorkoutsLoader()
+
         let highlightCandidatesLoader: HighlightCandidatesLoader = FirestoreHighlightCandidatesLoader(userId: userId)
 
         let pinnedHighlightsWriter: PinnedHighlightsWriter = FirestorePinnedHighlightsWriter(userId: userId)
@@ -173,6 +175,7 @@ class ProfileKitComposition {
             publicProfileLoader: publicProfileLoader,
             highlightsLoader: highlightsLoader,
             clipsLoader: clipsLoader,
+            workoutsLoader: workoutsLoader,
             highlightCandidatesLoader: highlightCandidatesLoader,
             pinnedHighlightsWriter: pinnedHighlightsWriter,
             reporter: reporter,

@@ -16,6 +16,7 @@ import SwiftUI
 struct UserProfileScreen: View {
 
     @ObservedObject var viewModel: UserProfileViewModel
+    @ObservedObject var opener: ProfileWorkoutOpener
     @State private var confirmingUnfollow = false
     @State private var confirmingBlock = false
     @State private var isReporting = false
@@ -52,6 +53,13 @@ struct UserProfileScreen: View {
                         }
                     }
                     ProfileHighlightsSection(highlights: viewModel.highlights)
+                    ProfileWorkoutsSection(
+                        workouts: viewModel.workouts,
+                        isOwnProfile: viewModel.isOwnProfile,
+                        onOpenWorkout: { opener.open($0, from: .publicCards) },
+                        onSeeAll: viewModel.onSeeAllWorkouts,
+                        onOpenAllWorkouts: viewModel.onOpenAllWorkouts
+                    )
                     ProfileClipsSection(
                         clips: viewModel.clips,
                         clipCount: profile.clipCount,
@@ -67,6 +75,7 @@ struct UserProfileScreen: View {
         .navigationTitle(viewModel.profile.map { "@\($0.header.username)" } ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+        .profileWorkoutChoice(opener)
         .toolbar {
             if !viewModel.isOwnProfile, viewModel.profile != nil {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -229,10 +238,12 @@ struct UserProfileScreen: View {
                 unfollower: PreviewFollowServices(),
                 highlightsLoader: PreviewContentServices(),
                 clipsLoader: PreviewContentServices(),
+                workoutsLoader: PreviewWorkoutServices(),
                 reporter: PreviewModerationServices(),
                 blocker: PreviewModerationServices(),
                 blockStatusLoader: PreviewModerationServices()
-            )
+            ),
+            opener: ProfileWorkoutOpener(currentUserId: "me", openWorkout: nil, openDiscover: { _ in })
         )
     }
 }

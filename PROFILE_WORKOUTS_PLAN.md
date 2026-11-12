@@ -138,7 +138,19 @@ as free.
 Add `DiscoverKitRouter.showWorkout(_ card: DiscoverWorkoutCard)` beside `showClip(_:)`, pushing
 `.workoutDetail`. Nothing else in DiscoverKit changes.
 
-## Step 4 — ProfileKit: the model, the section, the library screen (App, ProfileKit)
+## Step 4 — ProfileKit: the model, the section, the library screen (App, ProfileKit) — built 2026-11-12
+
+Built as below, with two changes:
+- **One list screen serves both** the section's See all and All workouts
+  (`ProfileWorkoutListScreen`, `ProfileWorkoutListKind`). A tap goes through
+  `ProfileWorkoutOpener`, one per screen, which holds the choice card's state.
+- **`FirestoreProfileWorkoutsLoader` came forward from step 5**, because the router takes the
+  public workouts loader in its `init`, and the app would not build without one. To compute the
+  average, `RatingSummary.average` and `DiscoverWorkoutCard.ratingSummary` are now `public` in
+  DiscoverKit. `ProfileMetaPill` is a copy of `DiscoverMetaPill`; keep the two in step.
+
+Tests: `ProfileWorkoutDestinationTests`, `ProfileWorkoutOpenerTests`,
+`ProfileWorkoutListViewModelTests`, plus workout cases in the two profile view model suites.
 
 - **`ProfileWorkout`**: `id`, `title`, `exerciseCount`, `createdAt`, `isPublic`, and optional
   `ratingCount` / `ratingSum` / `commentCount` / `tags` (present on public cards, absent on library
@@ -180,8 +192,7 @@ Add `DiscoverKitRouter.showWorkout(_ card: DiscoverWorkoutCard)` beside `showCli
 
 New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
 
-- `FirestoreProfileWorkoutsLoader`: `DiscoverWorkouts` where `createdBy == uid`, `isPublic == true`,
-  `status == "visible"`, ordered by `createdAt` desc, the shape of `FirestoreProfileClipsLoader`.
+- ~~`FirestoreProfileWorkoutsLoader`~~: built in step 4.
 - `MyDayLibraryProfileWorkoutsLoader`: reads `MyDayWorkoutLibrary.manager` (local-first, unsynced
   workouts included) and maps `WorkoutTemplateModel` → `ProfileWorkout`.
 - `DiscoverWorkoutOpener`: like `DiscoverClipOpener`, it **builds the DiscoverKit router lazily on
@@ -228,4 +239,4 @@ New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
 - [ ] Someone else's profile shows their public workouts; the page opens in DISCOVER with Save to Library
 - [ ] A hidden (moderated) workout is absent from the section
 - [ ] Dark mode on the section, row and All workouts screen
-- [ ] `CLAUDE.md`: PROFILE section, Keep in step index (`ProfileWorkoutRow` ↔ `DiscoverWorkoutRow`), `PROFILE_PLAN.md` decisions table
+- [ ] `CLAUDE.md`: PROFILE section, Keep in step index (`ProfileWorkoutRow` ↔ `DiscoverWorkoutRow`, `ProfileMetaPill` ↔ `DiscoverMetaPill`), `PROFILE_PLAN.md` decisions table

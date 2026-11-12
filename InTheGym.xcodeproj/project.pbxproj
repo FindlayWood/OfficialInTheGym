@@ -67,6 +67,7 @@
 		BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */; };
 		BF1A000000000000000000E3 /* FirestorePinnedHighlightsWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */; };
 		BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */; };
+		BF1B0000000000000000A002 /* FirestoreProfileWorkoutsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B0000000000000000A001 /* FirestoreProfileWorkoutsLoader.swift */; };
 		BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000D5 /* DiscoverClipOpener.swift */; };
 		BF1A000000000000000000C0 /* FirestorePublicProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */; };
 		BF1A000000000000000000C8 /* ProfileKitUserProfileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */; };
@@ -1083,6 +1084,7 @@
 		BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreHighlightCandidatesLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePinnedHighlightsWriter.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileClipsLoader.swift; sourceTree = "<group>"; };
+		BF1B0000000000000000A001 /* FirestoreProfileWorkoutsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProfileWorkoutsLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000D5 /* DiscoverClipOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverClipOpener.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B0 /* FirestorePublicProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePublicProfileLoader.swift; sourceTree = "<group>"; };
 		BF1A000000000000000000B8 /* ProfileKitUserProfileOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKitUserProfileOpener.swift; sourceTree = "<group>"; };
@@ -4676,6 +4678,7 @@
 				BF1A000000000000000000D2 /* FirestoreHighlightCandidatesLoader.swift */,
 				BF1A000000000000000000D3 /* FirestorePinnedHighlightsWriter.swift */,
 				BF1A000000000000000000D4 /* FirestoreProfileClipsLoader.swift */,
+				BF1B0000000000000000A001 /* FirestoreProfileWorkoutsLoader.swift */,
 				BF1A000000000000000000D5 /* DiscoverClipOpener.swift */,
 				BF1A000000000000000000F0 /* FirestoreProfileReporter.swift */,
 				BF1A000000000000000000F1 /* BlockedUsersProfileBlocker.swift */,
@@ -5114,6 +5117,7 @@
 				BF1A000000000000000000E2 /* FirestoreHighlightCandidatesLoader.swift in Sources */,
 				BF1A000000000000000000E3 /* FirestorePinnedHighlightsWriter.swift in Sources */,
 				BF1A000000000000000000E4 /* FirestoreProfileClipsLoader.swift in Sources */,
+				BF1B0000000000000000A002 /* FirestoreProfileWorkoutsLoader.swift in Sources */,
 				BF1A000000000000000000E5 /* DiscoverClipOpener.swift in Sources */,
 				BF1A00000000000000000100 /* FirestoreProfileReporter.swift in Sources */,
 				BF1A00000000000000000101 /* BlockedUsersProfileBlocker.swift in Sources */,

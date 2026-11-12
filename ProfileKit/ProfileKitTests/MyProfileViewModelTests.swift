@@ -225,6 +225,52 @@ final class MyProfileViewModelTests: XCTestCase {
         XCTAssertEqual(sut.viewModel.pendingRequestCount, 0)
     }
 
+    // MARK: - Workouts
+
+    // One more than the section shows, so it knows whether to offer See all.
+    func test_load_asksForOneMoreWorkoutThanTheSectionShows() async {
+        let sut = makeSUT(results: [.success(.make(userId: "me"))])
+        sut.workouts.publicResults = [.success([.make(id: "a")])]
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.workouts.receivedMessages, [.publicWorkouts("me", limit: ProfileWorkoutsSection.previewCount + 1)])
+        XCTAssertEqual(sut.viewModel.workouts.map(\.workoutId), ["a"])
+    }
+
+    // A failed section leaves only itself empty.
+    func test_load_keepsTheClipsWhenWorkoutsFail() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.workouts.publicResults = [.failure(anyError)]
+        sut.content.clipsResult = .success([clip("c1")])
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.viewModel.workouts, [])
+        XCTAssertEqual(sut.viewModel.clips.map(\.clipId), ["c1"])
+    }
+
+    // A workout made public in MyDay, or rated meanwhile, shows when the tab comes back.
+    func test_refreshCounts_reloadsTheWorkouts() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.workouts.publicResults = [.success([]), .success([.make(id: "new")])]
+        await sut.viewModel.load()
+
+        await sut.viewModel.refreshCounts()
+
+        XCTAssertEqual(sut.viewModel.workouts.map(\.workoutId), ["new"])
+    }
+
+    func test_refreshCounts_keepsTheShownWorkoutsWhenTheReadFails() async {
+        let sut = makeSUT(results: [.success(.make())])
+        sut.workouts.publicResults = [.success([.make(id: "a")]), .failure(anyError)]
+        await sut.viewModel.load()
+
+        await sut.viewModel.refreshCounts()
+
+        XCTAssertEqual(sut.viewModel.workouts.map(\.workoutId), ["a"])
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(
@@ -238,7 +284,8 @@ final class MyProfileViewModelTests: XCTestCase {
         photoLoader: ProfilePhotoLoaderSpy,
         profiles: PublicProfileServicesSpy,
         privacy: PrivacyServicesSpy,
-        content: ContentServicesSpy
+        content: ContentServicesSpy,
+        workouts: WorkoutServicesSpy
     ) {
         let loader = MyProfileLoaderSpy(results: results)
         let photoLoader = ProfilePhotoLoaderSpy(result: photoResult)
@@ -246,6 +293,7 @@ final class MyProfileViewModelTests: XCTestCase {
         profiles.profileResults = [publicProfile]
         let privacy = PrivacyServicesSpy()
         let content = ContentServicesSpy()
+        let workouts = WorkoutServicesSpy()
         let viewModel = MyProfileViewModel(
             profileLoader: loader,
             photoLoader: photoLoader,
@@ -253,9 +301,10 @@ final class MyProfileViewModelTests: XCTestCase {
             requestCountLoader: privacy,
             highlightsLoader: content,
             clipsLoader: content,
+            workoutsLoader: workouts,
             subscription: ProfileSubscriptionServiceSpy(hasUnlockedPro: hasUnlockedPro)
         )
-        return (viewModel, loader, photoLoader, profiles, privacy, content)
+        return (viewModel, loader, photoLoader, profiles, privacy, content, workouts)
     }
 
     private func publicProfile(followers: Int) -> PublicProfile {
