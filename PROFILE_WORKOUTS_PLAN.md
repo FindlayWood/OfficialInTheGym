@@ -188,7 +188,13 @@ Tests: `ProfileWorkoutDestinationTests`, `ProfileWorkoutOpenerTests`,
   DISCOVER, All workouts public or private → workout), plus "no library closure → never the choice". `makeSUT` tracks leaks,
   per *Testing*.
 
-## Step 5 — The adapters and wiring (App, composition root)
+## Step 5 — The adapters and wiring (App, composition root) — built 2026-11-12
+
+Built as below. `MyDayLibraryProfileWorkoutsLoader` loads MyDay's library if it has not loaded
+yet, and returns its first settled state, which is the device's copy. `makeRouter`'s
+`workoutLibrary` defaults to `nil`, so the legacy `UserProfileCoordinator` is unchanged.
+DISCOVER's profile router now passes its library on, so Save to Library also works on a workout
+reached through an author's profile. **Not yet tried in the simulator.**
 
 New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
 
