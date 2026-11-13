@@ -19,6 +19,7 @@ import SwiftUI
 struct MyProfileScreen: View {
 
     @ObservedObject var viewModel: MyProfileViewModel
+    @ObservedObject var opener: ProfileWorkoutOpener
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,6 +39,13 @@ struct MyProfileScreen: View {
                         ProfileHighlightsSection(highlights: viewModel.highlights) {
                             viewModel.editHighlights()
                         }
+                        ProfileWorkoutsSection(
+                            workouts: viewModel.workouts,
+                            isOwnProfile: true,
+                            onOpenWorkout: { opener.open($0, from: .publicCards) },
+                            onSeeAll: viewModel.onSeeAllWorkouts,
+                            onOpenAllWorkouts: viewModel.onOpenAllWorkouts
+                        )
                         ProfileClipsSection(
                             clips: viewModel.clips,
                             clipCount: viewModel.publicProfile?.clipCount,
@@ -52,6 +60,7 @@ struct MyProfileScreen: View {
         }
         .background(Color(.systemBackground).ignoresSafeArea())
         .task { await viewModel.load() }
+        .profileWorkoutChoice(opener)
     }
 
     // MARK: - Top bar
@@ -137,7 +146,9 @@ struct MyProfileScreen: View {
             requestCountLoader: PreviewPrivacyServices(),
             highlightsLoader: PreviewContentServices(),
             clipsLoader: PreviewContentServices(),
+            workoutsLoader: PreviewWorkoutServices(),
             subscription: PreviewProfileSubscriptionService(hasUnlockedPro: true)
-        )
+        ),
+        opener: ProfileWorkoutOpener(currentUserId: "preview", openWorkout: { _ in }, openDiscover: { _ in })
     )
 }

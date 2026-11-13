@@ -70,10 +70,19 @@ class PlayerInitialViewController: UITabBarController {
         let showGettingStarted = myDayKit.showGettingStarted
         // Settings → Reminders edits MyDay's reminders.
         let reminderSettings = myDayKit.reminders.map(MyDayReminderSettingsService.init(manager:))
-        profileKit.composeCombination(myProfileNavigationController, purchaseManager: subscriptionManager, openGettingStarted: { [weak self] in
-            self?.selectedIndex = 0
-            showGettingStarted?()
-        }, reminderSettings: reminderSettings)
+        // Workouts on the profile read MyDay's own library and open MyDay's own workout page on
+        // this tab's stack, so Profile is composed after MyDay (`PROFILE_WORKOUTS_PLAN.md`).
+        profileKit.composeCombination(
+            myProfileNavigationController,
+            purchaseManager: subscriptionManager,
+            openGettingStarted: { [weak self] in
+                self?.selectedIndex = 0
+                showGettingStarted?()
+            },
+            reminderSettings: reminderSettings,
+            workoutLibrary: myDayKit.workoutLibrary,
+            makeWorkoutLibraryRouter: myDayKit.makeWorkoutLibraryRouter
+        )
         myProfileNavigationController.tabBarItem = UITabBarItem(title: "MYPROFILE", image: UIImage(systemName: "person.fill"), tag: 4)
         
         viewControllers = [myDayNavigationController, discoverNavigationController, performanceNavigationController, statsKitNavigationController, myProfileNavigationController]

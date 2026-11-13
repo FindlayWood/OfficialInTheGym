@@ -145,6 +145,39 @@ final class UserProfileViewModelTests: XCTestCase {
         XCTAssertEqual(sut.viewModel.profile?.isHidden, true)
     }
 
+    // MARK: - Workouts
+
+    // Public workouts stay visible on a private account, as its public clips do: they are on
+    // DISCOVER for anyone anyway, so hiding them here would hide nothing.
+    func test_load_deliversAPrivateAccountsPublicWorkoutsToANonFollower() async {
+        let sut = makeSUT(profile: profile(isPrivate: true), status: .notFollowing)
+        sut.workouts.publicResults = [.success([.make(id: "a", createdBy: "alex")])]
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.workouts.receivedMessages, [.publicWorkouts("alex", limit: ProfileWorkoutsSection.previewCount + 1)])
+        XCTAssertEqual(sut.viewModel.workouts.map(\.workoutId), ["a"])
+    }
+
+    func test_load_readsNoWorkoutsForSomeoneYouBlocked() async {
+        let sut = makeSUT(profile: profile(), status: .notFollowing, blocked: true)
+
+        await sut.viewModel.load()
+
+        XCTAssertEqual(sut.workouts.receivedMessages, [])
+        XCTAssertEqual(sut.viewModel.workouts, [])
+    }
+
+    func test_setBlocked_clearsTheWorkouts() async {
+        let sut = makeSUT(profile: profile(), status: .notFollowing)
+        sut.workouts.publicResults = [.success([.make(id: "a", createdBy: "alex")])]
+        await sut.viewModel.load()
+
+        await sut.viewModel.setBlocked(true)
+
+        XCTAssertEqual(sut.viewModel.workouts, [])
+    }
+
     func test_load_showsNoActivityForSomeoneYouBlocked() async {
         let sut = makeSUT(profile: profile(isPrivate: false), status: .notFollowing, blocked: true)
 
@@ -259,7 +292,8 @@ final class UserProfileViewModelTests: XCTestCase {
         profiles: PublicProfileServicesSpy,
         follows: FollowServicesSpy,
         content: ContentServicesSpy,
-        moderation: ModerationServicesSpy
+        moderation: ModerationServicesSpy,
+        workouts: WorkoutServicesSpy
     ) {
         let profiles = PublicProfileServicesSpy()
         profiles.profileResults = [profileResult ?? .success(profile ?? self.profile())]
@@ -268,6 +302,7 @@ final class UserProfileViewModelTests: XCTestCase {
         let content = ContentServicesSpy()
         let moderation = ModerationServicesSpy()
         moderation.hasBlockedResult = blocked
+        let workouts = WorkoutServicesSpy()
         let viewModel = UserProfileViewModel(
             userId: userId,
             currentUserId: "me",
@@ -278,11 +313,12 @@ final class UserProfileViewModelTests: XCTestCase {
             unfollower: follows,
             highlightsLoader: content,
             clipsLoader: content,
+            workoutsLoader: workouts,
             reporter: moderation,
             blocker: moderation,
             blockStatusLoader: moderation
         )
-        return (viewModel, profiles, follows, content, moderation)
+        return (viewModel, profiles, follows, content, moderation, workouts)
     }
 
     private func profile(

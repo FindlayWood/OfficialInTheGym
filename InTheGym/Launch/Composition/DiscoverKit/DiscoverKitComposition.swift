@@ -133,7 +133,7 @@ class DiscoverKitComposition {
         // A ProfileKit router on DISCOVER's own stack, so an author's profile
         // opens inside this tab. Built without start(); it only pushes.
         let profileOpener: UserProfileOpener = ProfileKitUserProfileOpener(
-            router: ProfileKitComposition().makeRouter(navigationController, purchaseManager: purchaseManager)
+            router: ProfileKitComposition().makeRouter(navigationController, workoutLibrary: workoutLibrary, purchaseManager: purchaseManager)
         )
 
         // MARK: - Router

@@ -197,6 +197,15 @@ public final class DiscoverKitRouter {
     public func showClip(_ card: DiscoverClipCard) {
         navigate(to: .clipPlayer(card))
     }
+
+    /// Pushes a public workout's page (ratings, comments, tags, report) onto this router's
+    /// navigation controller, for a router built on **another** tab's stack, as `showClip` is.
+    /// The PROFILE tab's Workouts section opens workouts this way (`PROFILE_WORKOUTS_PLAN.md`
+    /// step 3). Save to Library is offered only when the router was given a workout library.
+    @MainActor
+    public func showWorkout(_ card: DiscoverWorkoutCard) {
+        navigate(to: .workoutDetail(card))
+    }
 }
 
 extension DiscoverKitRouter {

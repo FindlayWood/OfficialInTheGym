@@ -52,6 +52,8 @@ final class UserProfileViewModel: ObservableObject {
     @Published private(set) var errorMessage: String?
     @Published private(set) var highlights: ProfileHighlights?
     @Published private(set) var clips: [ProfileClip] = []
+    /// Their public workouts, one more than the section shows, so it knows whether to offer See all.
+    @Published private(set) var workouts: [ProfileWorkout] = []
     /// Whether the signed-in user has blocked this person. `nil` until read.
     @Published private(set) var isBlocked: Bool?
     @Published private(set) var isUpdatingBlock = false
@@ -65,12 +67,16 @@ final class UserProfileViewModel: ObservableObject {
     private let unfollower: Unfollower
     private let highlightsLoader: ProfileHighlightsLoader
     private let clipsLoader: ProfileClipsLoader
+    private let workoutsLoader: ProfileWorkoutsLoader
     private let reporter: ProfileReporter
     private let blocker: ProfileBlocker
     private let blockStatusLoader: ProfileBlockStatusLoader
 
     var onOpenFollowList: ((FollowListKind) -> Void)?
     var onOpenClip: ((ProfileClip) -> Void)?
+    var onSeeAllWorkouts: (() -> Void)?
+    /// Only ever set on your own profile, and only by a router with MyDay to open a workout in.
+    var onOpenAllWorkouts: (() -> Void)?
 
     init(
         userId: String,
@@ -82,6 +88,7 @@ final class UserProfileViewModel: ObservableObject {
         unfollower: Unfollower,
         highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
+        workoutsLoader: ProfileWorkoutsLoader,
         reporter: ProfileReporter,
         blocker: ProfileBlocker,
         blockStatusLoader: ProfileBlockStatusLoader
@@ -95,6 +102,7 @@ final class UserProfileViewModel: ObservableObject {
         self.unfollower = unfollower
         self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
+        self.workoutsLoader = workoutsLoader
         self.reporter = reporter
         self.blocker = blocker
         self.blockStatusLoader = blockStatusLoader
@@ -141,6 +149,7 @@ final class UserProfileViewModel: ObservableObject {
             async let block: Void = loadBlockStatus()
             _ = await (photo, status, block)
             await loadClips()
+            await loadWorkouts()
             // Highlights wait for the follow status: a private account's are
             // only readable by followers, and asking otherwise is a denied read.
             await loadHighlights()
@@ -179,6 +188,20 @@ final class UserProfileViewModel: ObservableObject {
             clips = try await clipsLoader.clips(of: userId, limit: MyProfileViewModel.clipLimit)
         } catch {
             print("❌ User clips failed: \(error)")
+        }
+    }
+
+    /// **Public workouts stay visible on a private account**, as its public clips do: they are on
+    /// DISCOVER for anyone anyway. Hidden only once you have blocked them, as clips are.
+    private func loadWorkouts() async {
+        guard isBlocked != true else {
+            workouts = []
+            return
+        }
+        do {
+            workouts = try await workoutsLoader.publicWorkouts(of: userId, limit: ProfileWorkoutsSection.previewCount + 1)
+        } catch {
+            print("❌ User workouts failed: \(error)")
         }
     }
 
@@ -229,9 +252,11 @@ final class UserProfileViewModel: ObservableObject {
                 if let status = followStatus { apply(.notFollowing, from: status) }
                 highlights = nil
                 clips = []
+                workouts = []
             } else {
                 await loadHighlights()
                 await loadClips()
+                await loadWorkouts()
             }
         } catch {
             print("❌ Block failed: \(error)")
