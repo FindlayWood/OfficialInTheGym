@@ -268,14 +268,16 @@ workout once it was saved. Visibility and tags were set once, in the builder.
 
 ## Rollout checklist
 
-- [ ] Step 6 deployed (index built in the console, rules test green)
-- [ ] All workouts lists a workout saved offline (local-first read)
-- [ ] Add to Today from Profile while MyDay is on a past day: lands on today, past day unchanged, today's file intact
-- [ ] Workout built in MyDay appears in All workouts on the next visit, without relaunch
-- [ ] Own workout in the section → choice card; both rows open the right page; dim and Cancel dismiss
-- [ ] Any row in All workouts → workout page directly; someone else's in the section → DISCOVER directly
-- [ ] Someone else's profile shows their public workouts; the page opens in DISCOVER with Save to Library
-- [ ] A hidden (moderated) workout is absent from the section
-- [ ] Dark mode on the section, row and All workouts screen
-- [ ] Workout page `⋯`: own workout only (not a DISCOVER copy); private → gone from DISCOVER and your profile's section, ratings back when public again; tags show on DISCOVER
-- [ ] `CLAUDE.md`: PROFILE section, Keep in step index (`ProfileWorkoutRow` ↔ `DiscoverWorkoutRow`, `ProfileMetaPill` ↔ `DiscoverMetaPill`), `PROFILE_PLAN.md` decisions table
+Tested and deployed 2026-11-13.
+
+- [x] Step 6 deployed (index built in the console, rules test green)
+- [x] All workouts lists a workout saved offline (local-first read)
+- [x] Add to Today from Profile while MyDay is on a past day: lands on today, past day unchanged, today's file intact
+- [x] Workout built in MyDay appears in All workouts on the next visit, without relaunch
+- [x] Own workout in the section → choice card; both rows open the right page; dim and Cancel dismiss
+- [x] Any row in All workouts → workout page directly; someone else's in the section → DISCOVER directly
+- [x] Someone else's profile shows their public workouts; the page opens in DISCOVER with Save to Library
+- [x] A hidden (moderated) workout is absent from the section
+- [x] Dark mode on the section, row and All workouts screen
+- [x] Workout page `⋯`: own workout only (not a DISCOVER copy); private → gone from DISCOVER and your profile's section, ratings back when public again; tags show on DISCOVER
+- [x] `CLAUDE.md`: PROFILE section, Keep in step index (`ProfileWorkoutRow` ↔ `DiscoverWorkoutRow`, `ProfileMetaPill` ↔ `DiscoverMetaPill`), `PROFILE_PLAN.md` decisions table

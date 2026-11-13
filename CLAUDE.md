@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands`
+`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1702,6 +1702,30 @@ deletion went live with them.
   The legacy RTDB `users/{uid}` copy of name and bio follows by `onEditAccount`, never by a second
   client write.
 
+### Workouts on the profile
+A **Workouts** section between highlights and clips, on every profile, and on your own an **All
+workouts** button: the whole library, private ones locked. Built and rolled out 2026-11-13 — see
+`PROFILE_WORKOUTS_PLAN.md`.
+
+- **ProfileKit has its own `ProfileWorkout`** and imports nothing. Two sources, both answered in
+  the composition root: the section reads `DiscoverWorkouts` cards (`FirestoreProfileWorkoutsLoader`,
+  public and visible only, so moderation applies), and All workouts reads **MyDay's own library
+  manager** (`MyDayLibraryProfileWorkoutsLoader`), device first, so an unsynced workout is listed.
+- **Where a tap goes** is `ProfileWorkoutDestination`: someone else's workout opens DISCOVER's page
+  (`DiscoverWorkoutOpener`, built lazily like `DiscoverClipOpener`); every row in All workouts opens
+  MyDay's page (`MyDayProfileWorkoutOpener` → `MyDayWorkoutLibraryRouter`); your own in the public
+  section asks first, with `ProfileWorkoutChoiceCard` (Open workout / View on DISCOVER).
+- **Building stays in MyDay.** The profile opens workouts; it never creates them.
+- **`MyDayWorkoutLibraryRouter` must be handed MyDay's own managers** (`makeWorkoutLibraryRouter`),
+  never new ones, or Add to Today and Schedule land where MyDay does not read.
+- **Add to Today always adds to today** (`MyDayManager.addingWorkoutToToday`), whatever day MyDay
+  has open — the phone's day file is named by today's date, so saving another day overwrote today.
+- **Visibility and tags are changed on the workout page** (`⋯`, `WorkoutTemplateSettingsSheet`),
+  only on a workout the user built — never a DISCOVER copy (`WorkoutTemplateModel.isEditable(by:)`,
+  decided once in `MyDayWorkoutTemplatePage`). The sheet saves on close through the builder's saver,
+  then `addTemplate`, the later `updatedAt` winning. Private keeps the card (`isPublic: false`), so
+  ratings and comments come back when it is public again. Delete and editing exercises are not built.
+
 ### Decisions worth not relitigating
 - Your own profile is what others see, so the clips grid is public clips only, even for you.
 - Highlights are automatic (top 3 by `setCount`) until pinned. Premium never shows on someone else's
@@ -2244,6 +2268,7 @@ in this codebase.**
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
 | `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
+| ProfileKit's `ProfileWorkoutRow` / `ProfileMetaPill` | DiscoverKit's `DiscoverWorkoutRow` / `DiscoverMetaPill` | Workouts on the profile |
 | `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |
 | ProfileKit's `ReminderWeekdayPicker` / `ProfileWeekday` raw values | MyDayKit's `ScheduleWeekdayPicker` / `ScheduleWeekday` | Reminders |
