@@ -30,6 +30,8 @@ class MyDayWorkoutCoordinator {
     let customExercises: CustomExerciseDependencies?
     /// `nil` leaves Schedule off the workout page.
     let scheduleManager: ScheduleManager?
+    /// `nil` leaves the workout page's `⋯` off.
+    let templateSettings: WorkoutTemplateSettingsDependencies?
     
     // MARK: - Callbacks
 
@@ -55,7 +57,8 @@ class MyDayWorkoutCoordinator {
         workoutManager: WorkoutBuilderManager,
         libraryManager: WorkoutLibraryManager,
         customExercises: CustomExerciseDependencies? = nil,
-        scheduleManager: ScheduleManager? = nil
+        scheduleManager: ScheduleManager? = nil,
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -68,6 +71,7 @@ class MyDayWorkoutCoordinator {
         self.libraryManager = libraryManager
         self.customExercises = customExercises
         self.scheduleManager = scheduleManager
+        self.templateSettings = templateSettings
     }
 
     // MARK: - Root
@@ -100,10 +104,12 @@ extension MyDayWorkoutCoordinator {
         case .templateDetail(let template):
             // Hosted with the nav bar hidden so the set detail overlay can dim
             // over the whole screen; the screen draws `MyDayWorkoutNavBar`
-            // itself and pops through `onBack`.
-            let vc = NavBarHidingHostingController(
-                rootView: MyDayWorkoutTemplateDetailScreen(
+            // itself and pops through `onBack`. Routes are built on the main thread, from taps.
+            let vc = MainActor.assumeIsolated { NavBarHidingHostingController(
+                rootView: MyDayWorkoutTemplatePage(
                     template: template,
+                    settings: templateSettings,
+                    libraryManager: libraryManager,
                     scheduleManager: scheduleManager,
                     onAddToTodayTapped: dayManager.addWorkoutToToday,
                     onReadyToDismiss: { [weak self] in
@@ -113,7 +119,7 @@ extension MyDayWorkoutCoordinator {
                         self?.popBack()
                     }
                 )
-            )
+            ) }
             return vc
         case .creation:
             workoutManager.onUploadSuccess = libraryManager.addTemplate

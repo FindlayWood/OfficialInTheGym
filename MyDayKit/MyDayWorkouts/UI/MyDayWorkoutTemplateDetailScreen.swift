@@ -17,6 +17,13 @@ struct MyDayWorkoutTemplateDetailScreen: View {
     var onReadyToDismiss: (() -> Void)?
     var onBack: (() -> Void)?
 
+    /// Opens the workout's settings (visibility and tags). `nil` leaves the `⋯` off, as for a copy
+    /// saved from DISCOVER, which is not the user's to publish. `MyDayEditableWorkoutTemplateScreen`
+    /// sets it; this screen only raises intent.
+    var onSettingsTapped: (() -> Void)?
+    /// A line under the bar when the last settings change could not be saved.
+    var settingsNotice: String?
+
     @State private var showDim = false
     @State private var showCard = false
     @State private var selectedSet: SessionSetDetail?
@@ -32,8 +39,20 @@ struct MyDayWorkoutTemplateDetailScreen: View {
         VStack(spacing: 0) {
             MyDayWorkoutNavBar(
                 title: template.title,
-                onBack: { onBack?() }
+                showsOptions: onSettingsTapped != nil,
+                onBack: { onBack?() },
+                onOptions: { onSettingsTapped?() }
             )
+
+            if let settingsNotice {
+                Text(settingsNotice)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Color.matteRed)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 8)
+                    .background(Color.matteRed.opacity(0.1))
+            }
 
             metricsStrip
 
@@ -184,6 +203,12 @@ struct MyDayWorkoutTemplateDetailScreen: View {
 
             Spacer()
 
+            // Only where the visibility can be changed, so the chip and the switch that moves it
+            // come together. On a copy it would always say Private and offer nothing.
+            if onSettingsTapped != nil {
+                visibilityChip
+            }
+
             if let difficulty = template.difficulty {
                 Text(difficulty.rawValue.capitalized)
                     .font(.system(size: 13, weight: .semibold))
@@ -198,6 +223,26 @@ struct MyDayWorkoutTemplateDetailScreen: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)
+    }
+
+    private var visibilityChip: some View {
+        Button {
+            onSettingsTapped?()
+        } label: {
+            HStack(spacing: 5) {
+                Image(systemName: template.isPublic ? "globe" : "lock.fill")
+                    .font(.system(size: 11, weight: .semibold))
+                Text(template.isPublic ? "Public" : "Private")
+                    .font(.system(size: 13, weight: .semibold))
+            }
+            .foregroundStyle(Color.darkColor)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(
+                Capsule().fill(Color(UIColor.tertiarySystemFill))
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Bottom Bar

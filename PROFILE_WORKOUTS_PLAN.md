@@ -221,6 +221,39 @@ New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
 - Deploy from the `InTheGym-CloudFunctions` root:
   `firebase deploy --only firestore:indexes,firestore:rules`. **Before** the app build ships.
 
+**Built** (2026-11-12, `profile-workouts` in InTheGym-CloudFunctions). The index sits beside the
+clips' `createdBy` one. The rules were unchanged, and the test "a profile's workouts are listed by
+their public cards only" pins three things: a stranger's query with `isPublic` is allowed, one
+without is refused, and the owner's is allowed either way. All 64 rules tests pass. **Not deployed.**
+
+---
+
+## Step 7 — Workout settings on the workout page (App, MyDayKit) — built 2026-11-13
+
+Found when trying All workouts: the page had Add to Today and Schedule, and nothing could change a
+workout once it was saved. Visibility and tags were set once, in the builder.
+
+- **A `⋯` on the workout page opens `WorkoutTemplateSettingsSheet`**: Visibility (with a line saying
+  where a public workout shows) and Tags. A Public / Private chip beside the exercise count shows the
+  current setting and opens the same sheet. On both ways in: MyDay's library and PROFILE.
+- **Only on a workout the user built** (`WorkoutTemplateModel.isEditable(by:)`): never someone
+  else's, and never a copy saved from DISCOVER, which is filed under the saver and would otherwise
+  let them publish another person's workout. `MyDayWorkoutTemplatePage` makes that call for both
+  entry points.
+- **The sheet edits a draft and saves when it closes** (Done or swipe), and only if something
+  changed (`WorkoutTemplateSettingsEditor`). It saves through the builder's `WorkoutTemplateSaver`
+  (device, then Firestore or the sync queue, all replacing by id), then `addTemplate` on MyDay's
+  library manager, where the later `updatedAt` wins. `updatedAt` is stamped in whole seconds to
+  match the device JSON. A failed device write puts the draft back and shows a line under the bar.
+- **No server change.** `discoverWorkoutCard` and `discoverWorkoutTags` already follow template
+  writes. A workout made private keeps its card with `isPublic: false`, so it leaves DISCOVER and
+  profiles, its ratings and comments are kept, and making it public again brings them back.
+  Copies people saved are separate templates and do not change.
+- The builder's sheet now shares `WorkoutSettingsCard` and `WorkoutTagsField` with it, and both
+  add tags through `WorkoutTag.appending`.
+- Tests: `WorkoutTemplateSettingsTests` (16). **Not tried in the simulator.**
+- Still not here, by decision: delete, and changing exercises or sets.
+
 ---
 
 ## Open questions
@@ -229,8 +262,7 @@ New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
    because they are public on DISCOVER anyway. Alternative: gate them like highlights.
 2. **A workout count in the header**, beside clips. Not in this plan. It needs a recount on `Profiles`
    (`profileWorkoutCount`) in the functions.
-3. **Making a workout public or private from All workouts.** Not in this plan. Today visibility is set
-   only in the builder's settings sheet.
+3. ~~**Making a workout public or private from All workouts.**~~ Done in step 7, on the workout page.
 
 ---
 
@@ -245,4 +277,5 @@ New files in `InTheGym/Launch/Composition/ProfileKit/`, one per file:
 - [ ] Someone else's profile shows their public workouts; the page opens in DISCOVER with Save to Library
 - [ ] A hidden (moderated) workout is absent from the section
 - [ ] Dark mode on the section, row and All workouts screen
+- [ ] Workout page `⋯`: own workout only (not a DISCOVER copy); private → gone from DISCOVER and your profile's section, ratings back when public again; tags show on DISCOVER
 - [ ] `CLAUDE.md`: PROFILE section, Keep in step index (`ProfileWorkoutRow` ↔ `DiscoverWorkoutRow`, `ProfileMetaPill` ↔ `DiscoverMetaPill`), `PROFILE_PLAN.md` decisions table

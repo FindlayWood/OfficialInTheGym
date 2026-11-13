@@ -32,6 +32,8 @@ public final class MyDayWorkoutLibraryRouter {
     private let dayManager: MyDayManager
     /// `nil` leaves Schedule off the workout page.
     private let scheduleManager: ScheduleManager?
+    /// `nil` leaves the workout page's `⋯` off.
+    private let templateSettings: WorkoutTemplateSettingsDependencies?
 
     // MARK: - Properties
 
@@ -45,12 +47,14 @@ public final class MyDayWorkoutLibraryRouter {
         navigationController: UINavigationController,
         libraryManager: WorkoutLibraryManager,
         dayManager: MyDayManager,
-        scheduleManager: ScheduleManager? = nil
+        scheduleManager: ScheduleManager? = nil,
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil
     ) {
         self.navigationController = navigationController
         self.libraryManager = libraryManager
         self.dayManager = dayManager
         self.scheduleManager = scheduleManager
+        self.templateSettings = templateSettings
     }
 
     // MARK: - Root
@@ -99,12 +103,21 @@ public final class MyDayWorkoutLibraryRouter {
 
 extension MyDayWorkoutLibraryRouter {
 
+    /// Always on the main thread: called from a tap, or from the library manager's `$state`, which
+    /// publishes on main.
     private func push(_ template: WorkoutTemplateModel) {
+        MainActor.assumeIsolated { pushOnMain(template) }
+    }
+
+    @MainActor
+    private func pushOnMain(_ template: WorkoutTemplateModel) {
         guard let navigationController else { return }
         weak var origin = navigationController.topViewController
 
-        let screen = MyDayWorkoutTemplateDetailScreen(
+        let screen = MyDayWorkoutTemplatePage(
             template: template,
+            settings: templateSettings,
+            libraryManager: libraryManager,
             scheduleManager: scheduleManager,
             onAddToTodayTapped: { [weak dayManager] in dayManager?.addWorkoutToToday($0) },
             onReadyToDismiss: { [weak navigationController] in
