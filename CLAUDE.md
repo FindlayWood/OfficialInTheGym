@@ -893,6 +893,7 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - Workouts and sports scheduled ahead, waiting on MyDay on the day (see *Schedules*)
 - Reminders to check in and rate the day (see *Reminders*)
 - Per-workout history on the workout page — times done, average time and RPE (see *Workout history*)
+- How a workout goes for everyone, on DISCOVER (see *Workout community stats*)
 - Injuries rated day by day in the check-in (see *Injuries*)
 
 ## MYDAY Workout Flow
@@ -1906,10 +1907,8 @@ build `MyDayWorkoutTemplatePage`. Built 2026-11-18.
 - **Personal only.** `WorkoutHistoryLoader` reads the user's own `Users/{uid}/WorkoutSessions`
   where `templateId` matches (`FirestoreWorkoutHistoryLoader`; one equality filter, so no
   composite index, and the owner read rule already allows it). How a public workout goes for
-  everyone is the **community** half: worked out on the server onto the `DiscoverWorkouts` card,
-  shown on DISCOVER's workout page, counting copies through `copiedFrom`, and drawn only once at
-  least 3 people have done it. **Not built yet.** Never compute it on the client from other
-  people's sessions.
+  everyone is the **community** half, DISCOVER's "How it goes" (*Workout community stats* below).
+  Never compute it on the client from other people's sessions.
 - A DISCOVER copy has its own id, so its history is the user's copy alone.
 - **`WorkoutHistorySummary` averages each measure over the sessions that carry it**, never
   counting a missing RPE or duration as 0, and leaves out anything with `deletedAt`. Duration is
@@ -1917,6 +1916,32 @@ build `MyDayWorkoutTemplatePage`. Built 2026-11-18.
 - Three cells, never a chart, and the card keeps its height while loading, empty or failed, so the
   exercises under it do not jump. A failed read is one quiet line, and keeps numbers already shown.
 - The demo workout passes no loader and shows no card.
+
+### Workout community stats — DISCOVER's "How it goes"
+How many people have done a workout, its average time and RPE, on DISCOVER's workout page under
+the header (`DiscoverWorkoutCommunitySection`). The community half of *Workout history*, built
+2026-11-18. **Free.**
+
+- **Worked out on the server, never the client**: `discoverWorkoutCommunity` (in
+  `InTheGym-CloudFunctions`, `Discover/Community/`) triggers on the top-level
+  `WorkoutSessions/{sessionId}` and writes `community` onto `DiscoverWorkouts/{id}`. The app only
+  reads it: off the card it was opened from, then fresh (`WorkoutCommunityLoader`), since a page
+  opened from a profile has a card built from a profile row, which carries none.
+- **A copy counts toward the workout it came from.** The function reads `copiedFrom` off the
+  session's template, so people who saved it and the author count together. Copies cannot be made
+  public, so there are no chains.
+- **Nothing is written until 3 people have done it** (`MIN_PEOPLE`, and
+  `DiscoverWorkoutCommunity.minimumPeople` checks again). The card is readable by everyone, and an
+  average over one or two people is their own sessions. Below that the section is **not drawn at
+  all** — an empty card on most workouts would only say nobody has.
+- **Every number is a recount** over two server-only ledgers, `WorkoutCommunitySessions/{sessionId}`
+  and `WorkoutCommunityPeople/{workoutId}_{uid}` (no client reads or writes them). Averages skip a
+  session missing that measure, the same rule as `WorkoutHistorySummary`. Firestore counts only the
+  documents holding **every** field in one aggregation query, so each figure is its own query.
+- **Account deletion takes a user out** as it deletes their sessions (`deleteUserData`), not left
+  to the trigger. `rebuildDiscoverCards` with kind `workout-community` is the backfill.
+- Private workouts are counted too, so one made public later has its numbers at once; the card's
+  `isPublic` keeps them unread until then.
 
 ## Sport Sessions
 A basketball training session, a game, a round of golf: logged from MyDay's Add flow and counted in
@@ -2147,6 +2172,7 @@ appears on some screens and not others.
 | `Users/{uid}/ExerciseStats/{exerciseID}/RawLogs/{logID}` | Firestore | both logging paths, per set |
 | `Users/{uid}/WorkoutSessions/{id}` | Firestore | `FirestoreCompletedWorkoutSessionSaver` (batched) |
 | `WorkoutSessions/{sessionId}` | Firestore | same batch — analytics copy, the only one to gain `deletedAt` |
+| `WorkoutCommunitySessions/{sessionId}`, `WorkoutCommunityPeople/{workoutId}_{uid}` | Firestore | **Cloud Functions only** (`discoverWorkoutCommunity`) — the ledgers behind a workout card's `community`; no client access |
 | `Users/{uid}/WorkoutTemplates/{id}` | Firestore | `FirestoreWorkoutTemplateUploader` — the author's library, what `FirestoreWorkoutTemplateFetcher` reads |
 | `WorkoutTemplates/{id}` | Firestore | `FirestoreTopLevelWorkoutTemplateUploader` — every template, top level; both composed by `UserAndTopLevelWorkoutTemplateUploader` |
 | `Exercises/{id}` | Firestore | **scripts and the two dashboards only** — the catalogue; every write also creates a `DiscoverExercises` card and (`seedExerciseTags`) its starting tags |
@@ -2302,6 +2328,8 @@ in this codebase.**
 | `DiscoverCommentsViewModel.maxLength` (500) | the comment rules' `text.size()` limit | DISCOVER Tab |
 | `DiscoverReportReason` raw values | ProfileKit's `ProfileReportReason`, and the rules' accepted `reason` list | DISCOVER Tab, PROFILE_PLAN.md step 9 |
 | `StatsSamplePreviewBanner` | PerformanceKit's `PerformanceSamplePreviewBanner` | Welcome screen |
+| `DiscoverWorkoutCommunity.minimumPeople` | `MIN_PEOPLE` in the functions' `Discover/Community/WorkoutCommunityStats.ts` | Workout community stats |
+| `DiscoverWorkoutCommunitySection.formatDuration` | MyDayKit's `WorkoutHistoryCard.formatDuration` | Workout community stats |
 | ProfileKit's `ProfileWorkoutRow` / `ProfileMetaPill` | DiscoverKit's `DiscoverWorkoutRow` / `DiscoverMetaPill` | Workouts on the profile |
 | `MyDayWorkoutNavBar` / `NavBarHidingHostingController` | the Stats and Performance sample-preview copies | Welcome screen |
 | `FirestoreProfileReporter` (`profile`, `Profiles/{uid}`) | `reportTarget`'s `profile` kind in `Discover/Moderation/ReportTarget.ts` | PROFILE_PLAN.md step 9 |

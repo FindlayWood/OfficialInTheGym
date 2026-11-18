@@ -100,7 +100,8 @@ struct WorkoutHistoryCard: View {
     // MARK: - Formatting
 
     /// Whole minutes, since a workout is timed in minutes: "48 min", "1h 05m". Under a minute reads
-    /// "1 min" rather than "0 min", which would look like nothing was recorded.
+    /// "1 min" rather than "0 min", which would look like nothing was recorded. **Keep in step with
+    /// DiscoverKit's `DiscoverWorkoutCommunitySection.formatDuration`**, the community half.
     static func formatDuration(_ seconds: Int) -> String {
         let minutes = max(1, Int((Double(seconds) / 60).rounded()))
         guard minutes >= 60 else { return "\(minutes) min" }

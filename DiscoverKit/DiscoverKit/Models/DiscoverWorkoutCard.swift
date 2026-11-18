@@ -33,6 +33,8 @@ public struct DiscoverWorkoutCard: Decodable, Identifiable, Hashable, Sendable {
     public let visibleTags: [String]?
     /// Vote counts for the subject's most-voted tags, visible or not.
     public let tagCounts: [String: Int]?
+    /// How it goes for everyone who has done it, absent until three people have.
+    public let community: DiscoverWorkoutCommunity?
 
     public var id: String { templateId }
 
@@ -47,7 +49,8 @@ public struct DiscoverWorkoutCard: Decodable, Identifiable, Hashable, Sendable {
         ratingSum: Int? = nil,
         commentCount: Int? = nil,
         visibleTags: [String]? = nil,
-        tagCounts: [String: Int]? = nil
+        tagCounts: [String: Int]? = nil,
+        community: DiscoverWorkoutCommunity? = nil
     ) {
         self.templateId = templateId
         self.title = title
@@ -60,5 +63,6 @@ public struct DiscoverWorkoutCard: Decodable, Identifiable, Hashable, Sendable {
         self.commentCount = commentCount
         self.visibleTags = visibleTags
         self.tagCounts = tagCounts
+        self.community = community
     }
 }

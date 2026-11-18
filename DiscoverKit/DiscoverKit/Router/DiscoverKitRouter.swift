@@ -75,6 +75,8 @@ public final class DiscoverKitRouter {
     let profileOpener: UserProfileOpener?
     let proAccess: DiscoverProAccess
     let currentUserId: String
+    /// `nil` leaves "How it goes" off the workout page.
+    let workoutCommunityLoader: WorkoutCommunityLoader?
 
     // MARK: - Properties
 
@@ -137,7 +139,8 @@ public final class DiscoverKitRouter {
         savedWorkoutCopyChecker: SavedWorkoutCopyChecker?,
         profileOpener: UserProfileOpener?,
         proAccess: DiscoverProAccess,
-        currentUserId: String
+        currentUserId: String,
+        workoutCommunityLoader: WorkoutCommunityLoader? = nil
     ) {
         self.navigationController = navigationController
         self.clipLoader = clipLoader
@@ -178,6 +181,7 @@ public final class DiscoverKitRouter {
         self.profileOpener = profileOpener
         self.proAccess = proAccess
         self.currentUserId = currentUserId
+        self.workoutCommunityLoader = workoutCommunityLoader
     }
 
     // MARK: - Root
@@ -328,6 +332,9 @@ extension DiscoverKitRouter {
                 rootView: DiscoverWorkoutDetailScreen(
                     card: card,
                     detailViewModel: makeWorkoutDetailViewModel(card),
+                    communityViewModel: workoutCommunityLoader.map {
+                        DiscoverWorkoutCommunityViewModel(templateId: card.templateId, initial: card.community, loader: $0)
+                    },
                     ratingViewModel: ratingViewModel,
                     taggingViewModel: makeTaggingViewModel(
                         subject: .workout(id: card.templateId),
