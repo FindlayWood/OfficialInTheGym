@@ -116,6 +116,7 @@
 		D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */; };
 		D1CA00000000000000000025 /* DiscoverSubject+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */; };
 		D1CA00000000000000000026 /* FirestoreRatingSummaryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */; };
+		B7A5C0DE0000000000000004 /* FirestoreWorkoutCommunityLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A5C0DE0000000000000003 /* FirestoreWorkoutCommunityLoader.swift */; };
 		D1CA00000000000000000027 /* FirestoreMyRatingLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */; };
 		D1CA00000000000000000028 /* FirestoreRatingWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000018 /* FirestoreRatingWriter.swift */; };
 		D1CA00000000000000000200 /* DiscoverLikeTarget+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA00000000000000000100 /* DiscoverLikeTarget+Firestore.swift */; };
@@ -1130,6 +1131,7 @@
 		D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDiscoverExerciseCardLoader.swift; sourceTree = "<group>"; };
 		D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverSubject+Firestore.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreRatingSummaryLoader.swift"; sourceTree = "<group>"; };
+		B7A5C0DE0000000000000003 /* FirestoreWorkoutCommunityLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreWorkoutCommunityLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreMyRatingLoader.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000018 /* FirestoreRatingWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreRatingWriter.swift"; sourceTree = "<group>"; };
 		D1CA00000000000000000100 /* DiscoverLikeTarget+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiscoverLikeTarget+Firestore.swift"; sourceTree = "<group>"; };
@@ -4697,6 +4699,7 @@
 				D1CA00000000000000000014 /* FirestoreDiscoverExerciseCardLoader.swift */,
 				D1CA00000000000000000015 /* DiscoverSubject+Firestore.swift */,
 				D1CA00000000000000000016 /* FirestoreRatingSummaryLoader.swift */,
+				B7A5C0DE0000000000000003 /* FirestoreWorkoutCommunityLoader.swift */,
 				D1CA00000000000000000017 /* FirestoreMyRatingLoader.swift */,
 				D1CA00000000000000000018 /* FirestoreRatingWriter.swift */,
 				D1CA00000000000000000100 /* DiscoverLikeTarget+Firestore.swift */,
@@ -5134,6 +5137,7 @@
 				D1CA00000000000000000024 /* FirestoreDiscoverExerciseCardLoader.swift in Sources */,
 				D1CA00000000000000000025 /* DiscoverSubject+Firestore.swift in Sources */,
 				D1CA00000000000000000026 /* FirestoreRatingSummaryLoader.swift in Sources */,
+				B7A5C0DE0000000000000004 /* FirestoreWorkoutCommunityLoader.swift in Sources */,
 				D1CA00000000000000000027 /* FirestoreMyRatingLoader.swift in Sources */,
 				D1CA00000000000000000028 /* FirestoreRatingWriter.swift in Sources */,
 				D1CA00000000000000000200 /* DiscoverLikeTarget+Firestore.swift in Sources */,

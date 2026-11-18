@@ -38,6 +38,7 @@ class DiscoverKitComposition {
         let userId = UserDefaults.currentUser.uid
 
         let ratingSummaryLoader: RatingSummaryLoader = FirestoreRatingSummaryLoader()
+        let workoutCommunityLoader: WorkoutCommunityLoader = FirestoreWorkoutCommunityLoader()
 
         let myRatingLoader: MyRatingLoader = FirestoreMyRatingLoader(userId: userId)
 
@@ -178,7 +179,8 @@ class DiscoverKitComposition {
             profileOpener: profileOpener,
             // Watching a clip is pro; everything else on DISCOVER is free.
             proAccess: PurchaseManagerProAccess(purchaseManager: purchaseManager),
-            currentUserId: userId
+            currentUserId: userId,
+            workoutCommunityLoader: workoutCommunityLoader
         )
         router.onShowPaywall = { [weak navigationController] in
             navigationController?.present(ProPaywallViewController.modal(purchaseManager: purchaseManager), animated: true)

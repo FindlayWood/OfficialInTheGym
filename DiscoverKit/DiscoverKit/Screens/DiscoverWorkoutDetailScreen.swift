@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-/// A workout's DISCOVER page: who made it, what is in it, saving a copy to the
-/// user's library, then its rating, tags and the way into its comments.
+/// A workout's DISCOVER page: who made it, how it goes for the people who have
+/// done it, what is in it, saving a copy to the user's library, then its
+/// rating, tags and the way into its comments.
 ///
 /// The one action is **Save to Library**, never "Add to Today" — putting a
 /// workout on a day is MyDay's job, from the library, where the date strip is.
@@ -16,6 +17,8 @@ struct DiscoverWorkoutDetailScreen: View {
 
     let card: DiscoverWorkoutCard
     @ObservedObject var detailViewModel: DiscoverWorkoutDetailViewModel
+    /// `nil` leaves "How it goes" off.
+    var communityViewModel: DiscoverWorkoutCommunityViewModel?
     @ObservedObject var ratingViewModel: DiscoverRatingViewModel
     @ObservedObject var taggingViewModel: DiscoverTaggingViewModel
     @ObservedObject var moderation: DiscoverModerationStore
@@ -78,6 +81,10 @@ struct DiscoverWorkoutDetailScreen: View {
                     }
                 }
 
+                if let communityViewModel {
+                    DiscoverWorkoutCommunitySection(viewModel: communityViewModel)
+                }
+
                 if detailViewModel.saveState != .unavailable {
                     DiscoverSaveToLibraryButton(state: detailViewModel.saveState) {
                         Task { await detailViewModel.save() }
@@ -106,7 +113,8 @@ struct DiscoverWorkoutDetailScreen: View {
             async let rating: Void = ratingViewModel.load()
             async let tags: Void = taggingViewModel.load()
             async let moderationState: Void = moderation.loadIfNeeded()
-            _ = await (detail, rating, tags, moderationState)
+            async let community: Void = loadCommunity()
+            _ = await (detail, rating, tags, moderationState, community)
         }
         .toolbar {
             if canReport {
@@ -125,6 +133,10 @@ struct DiscoverWorkoutDetailScreen: View {
             DiscoverReportSheet(target: request.target, moderation: moderation, onFinished: onReported)
                 .presentationDetents([.medium])
         }
+    }
+
+    private func loadCommunity() async {
+        await communityViewModel?.load()
     }
 
     private var subtitle: String {
@@ -149,6 +161,11 @@ struct DiscoverWorkoutDetailScreen: View {
                 profileLoader: PreviewUserProfileLoader(),
                 copySaver: PreviewWorkoutLoaders(),
                 copyChecker: PreviewWorkoutLoaders()
+            ),
+            communityViewModel: DiscoverWorkoutCommunityViewModel(
+                templateId: card.templateId,
+                initial: nil,
+                loader: PreviewWorkoutCommunityLoader()
             ),
             ratingViewModel: DiscoverRatingViewModel(
                 subject: .workout(id: card.templateId),
