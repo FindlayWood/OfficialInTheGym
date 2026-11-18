@@ -12,12 +12,17 @@ import UIKit
 /// your own, read from `Profiles/{uid}`, with a Follow button in place of Edit
 /// Profile.
 ///
-/// **A private account shows its header and counts to everyone, and its lists
-/// and highlights only to approved followers** (`canSeeActivity`). The counts
-/// stay visible but stop being buttons, and a card says why. The rules enforce
-/// the same line server-side, for the follow lists and for
-/// `ProfileHighlights/{uid}`. Its public clips still show, as they do in
-/// DISCOVER (decided in step 8: a clip marked public stays public).
+/// **A private account shows its header and counts to everyone, and its follow
+/// lists only to approved followers** (`canSeeActivity`). The counts stay
+/// visible but stop being buttons, and a card says why. The rules enforce the
+/// same line server-side. Its public clips and workouts still show, as they do
+/// in DISCOVER (decided in step 8: a clip marked public stays public).
+///
+/// The PB highlights ("Top Lifts") that used to sit under the header were
+/// removed on 2026-11-18: ranked by how many sets were logged, they named the
+/// most-trained exercises rather than anything the person was proud of, and
+/// the Workouts section says more about someone. `ProfileHighlights/{uid}` is
+/// left on the server for now.
 ///
 /// **Follow and unfollow show at once, counts included.** The server's recount
 /// lags by a few seconds. Bumping the follower count locally when the status
@@ -50,7 +55,6 @@ final class UserProfileViewModel: ObservableObject {
     @Published private(set) var followStatus: FollowStatus?
     @Published private(set) var isUpdatingFollow = false
     @Published private(set) var errorMessage: String?
-    @Published private(set) var highlights: ProfileHighlights?
     @Published private(set) var clips: [ProfileClip] = []
     /// Their public workouts, one more than the section shows, so it knows whether to offer See all.
     @Published private(set) var workouts: [ProfileWorkout] = []
@@ -65,7 +69,6 @@ final class UserProfileViewModel: ObservableObject {
     private let statusLoader: FollowStatusLoader
     private let followWriter: FollowWriter
     private let unfollower: Unfollower
-    private let highlightsLoader: ProfileHighlightsLoader
     private let clipsLoader: ProfileClipsLoader
     private let workoutsLoader: ProfileWorkoutsLoader
     private let reporter: ProfileReporter
@@ -86,7 +89,6 @@ final class UserProfileViewModel: ObservableObject {
         statusLoader: FollowStatusLoader,
         followWriter: FollowWriter,
         unfollower: Unfollower,
-        highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
         workoutsLoader: ProfileWorkoutsLoader,
         reporter: ProfileReporter,
@@ -100,7 +102,6 @@ final class UserProfileViewModel: ObservableObject {
         self.statusLoader = statusLoader
         self.followWriter = followWriter
         self.unfollower = unfollower
-        self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
         self.workoutsLoader = workoutsLoader
         self.reporter = reporter
@@ -150,9 +151,6 @@ final class UserProfileViewModel: ObservableObject {
             _ = await (photo, status, block)
             await loadClips()
             await loadWorkouts()
-            // Highlights wait for the follow status: a private account's are
-            // only readable by followers, and asking otherwise is a denied read.
-            await loadHighlights()
         } catch {
             print("❌ User profile failed: \(error)")
             if profile == nil { state = .failed }
@@ -164,18 +162,6 @@ final class UserProfileViewModel: ObservableObject {
             photo = try await photoLoader.photo(for: userId)
         } catch {
             print("❌ User profile photo failed: \(error)")
-        }
-    }
-
-    private func loadHighlights() async {
-        guard canSeeActivity else {
-            highlights = nil
-            return
-        }
-        do {
-            highlights = try await highlightsLoader.highlights(for: userId)
-        } catch {
-            print("❌ User highlights failed: \(error)")
         }
     }
 
@@ -250,11 +236,9 @@ final class UserProfileViewModel: ObservableObject {
                 // The server removes both follows. Reflect it now, count
                 // included, rather than showing "Following" on someone blocked.
                 if let status = followStatus { apply(.notFollowing, from: status) }
-                highlights = nil
                 clips = []
                 workouts = []
             } else {
-                await loadHighlights()
                 await loadClips()
                 await loadWorkouts()
             }
@@ -281,7 +265,6 @@ final class UserProfileViewModel: ObservableObject {
             do {
                 let result = try await followWriter.follow(userId)
                 apply(result, from: .following)
-                await loadHighlights()
             } catch {
                 print("❌ Follow failed: \(error)")
                 apply(current, from: .following)
@@ -291,7 +274,6 @@ final class UserProfileViewModel: ObservableObject {
             apply(.notFollowing, from: current)
             do {
                 try await unfollower.unfollow(userId)
-                await loadHighlights()
             } catch {
                 print("❌ Unfollow failed: \(error)")
                 apply(current, from: .notFollowing)

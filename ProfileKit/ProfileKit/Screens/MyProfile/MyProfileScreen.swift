@@ -36,9 +36,6 @@ struct MyProfileScreen: View {
                         }
                     }
                     if case .loaded = viewModel.header {
-                        ProfileHighlightsSection(highlights: viewModel.highlights) {
-                            viewModel.editHighlights()
-                        }
                         ProfileWorkoutsSection(
                             workouts: viewModel.workouts,
                             isOwnProfile: true,
@@ -144,7 +141,6 @@ struct MyProfileScreen: View {
             photoLoader: PreviewProfilePhotoLoader(),
             publicProfileLoader: PreviewPublicProfileServices(),
             requestCountLoader: PreviewPrivacyServices(),
-            highlightsLoader: PreviewContentServices(),
             clipsLoader: PreviewContentServices(),
             workoutsLoader: PreviewWorkoutServices(),
             subscription: PreviewProfileSubscriptionService(hasUnlockedPro: true)

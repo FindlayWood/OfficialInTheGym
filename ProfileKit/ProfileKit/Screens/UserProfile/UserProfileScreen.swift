@@ -52,7 +52,6 @@ struct UserProfileScreen: View {
                             privateCard
                         }
                     }
-                    ProfileHighlightsSection(highlights: viewModel.highlights)
                     ProfileWorkoutsSection(
                         workouts: viewModel.workouts,
                         isOwnProfile: viewModel.isOwnProfile,
@@ -236,7 +235,6 @@ struct UserProfileScreen: View {
                 statusLoader: PreviewFollowServices(),
                 followWriter: PreviewFollowServices(),
                 unfollower: PreviewFollowServices(),
-                highlightsLoader: PreviewContentServices(),
                 clipsLoader: PreviewContentServices(),
                 workoutsLoader: PreviewWorkoutServices(),
                 reporter: PreviewModerationServices(),

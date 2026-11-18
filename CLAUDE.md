@@ -1642,7 +1642,7 @@ functions build every card and count from it, so build the functions on the curr
 Run the app with **InTheGym-EM** and sign in as `demo@inthegym.test`.
 
 ## PROFILE Tab — `ProfileKit`
-Your own profile, other people's, follows, private accounts, highlights, settings and account
+Your own profile, other people's, follows, private accounts, workouts, settings and account
 deletion. Firestore only for everything new. The step-by-step build, every rule and index, and the
 **rollout checklist** are in `PROFILE_PLAN.md`; this section is the shape and the reasons.
 **Rolled out 2026-10-25**, all ten steps together, with DISCOVER and search, before any real
@@ -1663,10 +1663,18 @@ deletion went live with them.
   trust signal). `ProfileJoinedMonth` is the one formatter, and it reads the date **in UTC**:
   in the device's zone, anyone west of GMT would see the month before. It is optional on
   `ProfileHeader`, and the line is left out until `rebuildProfiles` has run.
-- **`ProfileHighlights/{uid}`** is separate again, so a private account's PBs can be read-gated by
-  the same "public, or an approved follower" check as its follow lists.
 - Your own header still comes from the cached `currentUser` (fresher after an edit); counts,
-  highlights and clips come from the projections.
+  workouts and clips come from the projections.
+
+### Highlights ("Top Lifts") — removed from the app, 2026-11-18
+The three PB tiles under the header, and their Edit sheet, are gone from ProfileKit along with
+their loaders, writer and app adapters. Ranked by `setCount`, they named the most-trained
+exercises rather than anything to be proud of, and the Workouts section says more about someone.
+**The server side is left for now**: `ProfileHighlights/{uid}` and its function, its rule, the
+`pinnedHighlights` key in the `Users` update rule and its deletion step. Retiring them is a
+separate change in `InTheGym-CloudFunctions`, and narrows what a client may write to `Users`.
+Do not bring the tiles back as they were — if a "best lifts" line returns, build it on real
+strength numbers (an estimated 1RM), not on set counts.
 
 ### Follows
 **One `Follows/{followerId}_{followeeId}` document per relationship**, `active` or `pending`.
@@ -1694,16 +1702,17 @@ deletion went live with them.
   - the profile's Block wraps DISCOVER's `BlockedUsersWriter`;
   - `removeFollowsOnBlock` cuts follows for a block made anywhere.
 - **Writes the client makes to `Users/{uid}` are exactly** `displayName`, `bio`,
-  `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`, each through
-  `updateData` of its own keys. The `Users` update rule's `hasOnly` is that list. **Adding a client
+  `heightCentimetres`, `heightUnit`, `dateOfBirth` and `isPrivate`, each through `updateData` of its
+  own keys. The `Users` update rule's `hasOnly` is that list, plus `pinnedHighlights`, which no
+  client writes since highlights were removed and which goes when the server side is retired. **Adding a client
   write to `Users` means widening that rule**, which is all that stops a client setting
   `verifiedAccount`.
-- Derived fields are the server's: `weightKilograms` (`syncLatestWeight`), counts and highlights.
+- Derived fields are the server's: `weightKilograms` (`syncLatestWeight`), counts.
   The legacy RTDB `users/{uid}` copy of name and bio follows by `onEditAccount`, never by a second
   client write.
 
 ### Workouts on the profile
-A **Workouts** section between highlights and clips, on every profile, and on your own an **All
+A **Workouts** section above the clips, on every profile, and on your own an **All
 workouts** button: the whole library, private ones locked. Built and rolled out 2026-11-13 — see
 `PROFILE_WORKOUTS_PLAN.md`.
 
@@ -1728,9 +1737,8 @@ workouts** button: the whole library, private ones locked. Built and rolled out 
 
 ### Decisions worth not relitigating
 - Your own profile is what others see, so the clips grid is public clips only, even for you.
-- Highlights are automatic (top 3 by `setCount`) until pinned. Premium never shows on someone else's
-  profile; only your own device knows it.
-- A private account hides its lists and highlights from non-followers, but **its public clips stay
+- Premium never shows on someone else's profile; only your own device knows it.
+- A private account hides its follow lists from non-followers, but **its public clips stay
   public**, in DISCOVER and on the profile.
 - Body measurements live on their own private screen, not on Edit Profile, which edits what others
   see.
@@ -2100,7 +2108,7 @@ appears on some screens and not others.
 | `Users/{uid}` | Firestore | `createAccount` Cloud Function |
 | `Profiles/{uid}` | Firestore | **Cloud Functions only** (`syncProfile`) — the public projection of `Users`; others read this, never `Users` |
 | `Users/{uid}/WeightTracking/{yyyy-MM-dd}` | Firestore | `createAccount` (signup weight), ProfileKit's `FirestoreWeightEntryWriter`; newest copied to `Users.weightKilograms` by `syncLatestWeight` |
-| `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists |
+| `ProfileHighlights/{uid}` | Firestore | **Cloud Functions only**: a profile's PB tiles, from `ExerciseStats` + `Users.pinnedHighlights`; read-gated like a private account's lists. **No longer read by the app** (2026-11-18) — to be retired |
 | `Follows/{followerId}_{followeeId}` | Firestore | follower creates (`FirestoreFollowWriter`), either deletes; `mirrorLegacyFollow` bridges legacy RTDB follows in. Counts on `Profiles` by `profileFollowCounts` |
 | `Users/{uid}/MyDay/{yyyy-MM-dd}` | Firestore | `MyDayFirestoreSaver` — whole day, `setData(merge: true)` |
 | `Users/{uid}/SportSessions/{id}` | Firestore | `FirestoreSportSessionSaver` / `Deleter`, beside the day through `MyDayThenSportSessionSaver`; load added to `DailyTotals` by `dailyStatsFromSportSessionWrite` |
@@ -2171,7 +2179,7 @@ edit is overwritten by the next deploy.
   composite indexes, so a missing one only fails in production.
 - **Every rule change gets a test** in `functions/test/Rules/firestoreRules.test.ts`.
 - **`Users/{uid}` is readable only by its owner**, and the client may change only `displayName`,
-  `bio`, `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights`.
+  `bio`, `heightCentimetres`, `heightUnit`, `dateOfBirth`, `isPrivate` and `pinnedHighlights` (no longer written by the app — see *Highlights* under PROFILE).
 
 ## Analytics — derived on the server; the app writes one field
 Usage analytics (who was active, checked in, trained, retention) is **derived by Cloud Functions**

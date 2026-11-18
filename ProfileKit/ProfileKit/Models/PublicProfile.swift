@@ -13,8 +13,8 @@ import Foundation
 ///
 /// A private account's header and counts are public, as on every social app,
 /// so someone deciding whether to request a follow can see who they are
-/// asking. What a private account hides from non-followers is its lists (and,
-/// from step 8, its highlights and clips).
+/// asking. What a private account hides from non-followers is its follow
+/// lists.
 public struct PublicProfile: Equatable, Sendable {
     public let header: ProfileHeader
     public let isPrivate: Bool
