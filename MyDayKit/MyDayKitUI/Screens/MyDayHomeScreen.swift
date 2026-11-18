@@ -371,6 +371,11 @@ struct MyDayHomeScreen: View {
                         rateStep(for: day, canRate: markers.hasExercise)
                     }
                     .id(MyDayScrollTarget.rating.rowId)
+
+                    // Room under the last step, so it is not pinned to the tab bar and
+                    // the cards near the bottom can still be scrolled to the middle.
+                    Color.clear
+                        .frame(height: 160)
                 }
                 .padding(.leading, 12)
                 .padding(.trailing, 16)
