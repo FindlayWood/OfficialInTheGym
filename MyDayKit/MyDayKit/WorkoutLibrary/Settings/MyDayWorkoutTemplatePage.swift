@@ -14,11 +14,16 @@ import SwiftUI
 ///
 /// A workout is editable when settings were provided and the user built it themselves
 /// (`WorkoutTemplateModel.isEditable(by:)`).
+///
+/// It also builds the history card's view model, here rather than in each caller, for the same
+/// reason: both ways in show the same card. Built once, in `init`, since the page is the root view
+/// of its hosting controller.
 struct MyDayWorkoutTemplatePage: View {
 
     let template: WorkoutTemplateModel
     let editor: WorkoutTemplateSettingsEditor?
     var scheduleManager: ScheduleManager?
+    let history: WorkoutHistoryViewModel?
     var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
     var onReadyToDismiss: (() -> Void)?
     var onBack: (() -> Void)?
@@ -29,6 +34,7 @@ struct MyDayWorkoutTemplatePage: View {
         settings: WorkoutTemplateSettingsDependencies?,
         libraryManager: WorkoutLibraryManager,
         scheduleManager: ScheduleManager?,
+        historyLoader: WorkoutHistoryLoader? = nil,
         onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?,
         onReadyToDismiss: (() -> Void)?,
         onBack: (() -> Void)?
@@ -44,6 +50,7 @@ struct MyDayWorkoutTemplatePage: View {
             editor = nil
         }
         self.scheduleManager = scheduleManager
+        history = historyLoader.map { WorkoutHistoryViewModel(templateId: template.id, loader: $0) }
         self.onAddToTodayTapped = onAddToTodayTapped
         self.onReadyToDismiss = onReadyToDismiss
         self.onBack = onBack
@@ -54,6 +61,7 @@ struct MyDayWorkoutTemplatePage: View {
             MyDayEditableWorkoutTemplateScreen(
                 editor: editor,
                 scheduleManager: scheduleManager,
+                history: history,
                 onAddToTodayTapped: onAddToTodayTapped,
                 onReadyToDismiss: onReadyToDismiss,
                 onBack: onBack
@@ -64,7 +72,8 @@ struct MyDayWorkoutTemplatePage: View {
                 scheduleManager: scheduleManager,
                 onAddToTodayTapped: onAddToTodayTapped,
                 onReadyToDismiss: onReadyToDismiss,
-                onBack: onBack
+                onBack: onBack,
+                history: history
             )
         }
     }

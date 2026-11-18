@@ -34,6 +34,8 @@ public final class MyDayWorkoutLibraryRouter {
     private let scheduleManager: ScheduleManager?
     /// `nil` leaves the workout page's `⋯` off.
     private let templateSettings: WorkoutTemplateSettingsDependencies?
+    /// `nil` leaves the workout page's history card off.
+    private let workoutHistory: WorkoutHistoryLoader?
 
     // MARK: - Properties
 
@@ -48,13 +50,15 @@ public final class MyDayWorkoutLibraryRouter {
         libraryManager: WorkoutLibraryManager,
         dayManager: MyDayManager,
         scheduleManager: ScheduleManager? = nil,
-        templateSettings: WorkoutTemplateSettingsDependencies? = nil
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil,
+        workoutHistory: WorkoutHistoryLoader? = nil
     ) {
         self.navigationController = navigationController
         self.libraryManager = libraryManager
         self.dayManager = dayManager
         self.scheduleManager = scheduleManager
         self.templateSettings = templateSettings
+        self.workoutHistory = workoutHistory
     }
 
     // MARK: - Root
@@ -119,6 +123,7 @@ extension MyDayWorkoutLibraryRouter {
             settings: templateSettings,
             libraryManager: libraryManager,
             scheduleManager: scheduleManager,
+            historyLoader: workoutHistory,
             onAddToTodayTapped: { [weak dayManager] in dayManager?.addWorkoutToToday($0) },
             onReadyToDismiss: { [weak navigationController] in
                 guard let navigationController else { return }

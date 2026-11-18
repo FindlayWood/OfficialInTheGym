@@ -41,6 +41,8 @@ public final class MyDayCoordinator {
     /// What the workout page needs to change a workout's visibility and tags. `nil` leaves the
     /// page's `⋯` off.
     let templateSettings: WorkoutTemplateSettingsDependencies?
+    /// The user's own sessions, for the workout page's history card. `nil` leaves the card off.
+    let workoutHistory: WorkoutHistoryLoader?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -69,7 +71,8 @@ public final class MyDayCoordinator {
         customExercises: CustomExerciseDependencies? = nil,
         scheduleManager: ScheduleManager? = nil,
         injuryManager: InjuryManager? = nil,
-        templateSettings: WorkoutTemplateSettingsDependencies? = nil
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil,
+        workoutHistory: WorkoutHistoryLoader? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -89,6 +92,7 @@ public final class MyDayCoordinator {
         self.scheduleManager = scheduleManager
         self.injuryManager = injuryManager
         self.templateSettings = templateSettings
+        self.workoutHistory = workoutHistory
     }
 
     // MARK: - Root
@@ -281,7 +285,8 @@ extension MyDayCoordinator {
                 libraryManager: workoutLibraryManager,
                 customExercises: customExercises,
                 scheduleManager: scheduleManager,
-                templateSettings: templateSettings
+                templateSettings: templateSettings,
+                workoutHistory: workoutHistory
             )
             sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub

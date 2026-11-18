@@ -269,13 +269,17 @@ class MyDayKitComposition {
         // A workout's visibility and tags, changed from its page, go through the builder's own
         // saver: device first, then Firestore or the sync queue.
         let templateSettings = WorkoutTemplateSettingsDependencies(saver: saver, userId: userId)
+
+        // The workout page's history card: the user's own finished sessions of that workout.
+        let workoutHistory: WorkoutHistoryLoader = FirestoreWorkoutHistoryLoader(userId: userId)
         makeWorkoutLibraryRouter = { [workoutLibraryManager, dayManager, scheduleManager] navigationController in
             MyDayWorkoutLibraryRouter(
                 navigationController: navigationController,
                 libraryManager: workoutLibraryManager,
                 dayManager: dayManager,
                 scheduleManager: scheduleManager,
-                templateSettings: templateSettings
+                templateSettings: templateSettings,
+                workoutHistory: workoutHistory
             )
         }
         
@@ -302,7 +306,8 @@ class MyDayKitComposition {
             customExercises: customExercises,
             scheduleManager: scheduleManager,
             injuryManager: injuryManager,
-            templateSettings: templateSettings
+            templateSettings: templateSettings,
+            workoutHistory: workoutHistory
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         showToday = { [weak coordinator] in coordinator?.showToday() }

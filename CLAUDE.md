@@ -892,6 +892,7 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - Sport sessions on MyDay and in STATS' session load (see *Sport Sessions*)
 - Workouts and sports scheduled ahead, waiting on MyDay on the day (see *Schedules*)
 - Reminders to check in and rate the day (see *Reminders*)
+- Per-workout history on the workout page — times done, average time and RPE (see *Workout history*)
 - Injuries rated day by day in the check-in (see *Injuries*)
 
 ## MYDAY Workout Flow
@@ -1878,19 +1879,44 @@ Unlike templates (`WorkoutTemplateSaver` → `WorkoutTemplateSyncer` → `SyncQu
 the session documents and the exercise raw logs have **no local copy and no retry**. A failed write is
 simply lost.
 
-Accepted deliberately, because the data is not: every completed session is still in the day file at
-`Documents/MyDays/{uid}/{date}.json` as `workouts[].sessionRecord`, and **nothing yet reads these
-collections** — the history screen does not exist and analytics is external. A missing document
-therefore costs nothing today and can be backfilled from local day files at any point. Firestore's own
-disk-backed mutation queue covers ordinary offline writes.
+Accepted deliberately, because the data is not lost: every completed session is still in its day
+document, `Users/{uid}/MyDay/{date}`, as `workouts[].sessionRecord`. **Not in the day files on the
+device** — `MyDayFileManagerLoader.deleteOldDays()` prunes `Documents/MyDays` to the last week, so
+they cannot backfill anything older (this section used to say they could). A backfill reads the
+Firestore day documents, from a script in `InTheGym-Scripts`. Firestore's own disk-backed mutation
+queue covers ordinary offline writes.
 
-**Revisit when the workout history screen is built** — that is when a missing document first becomes
-visible to a user, and when it will be clear whether a sync queue or a one-off backfill is the answer.
-Two caveats that survive until then: permission-denied is a **hard** failure the SDK never retries
-(a rule mistake loses the write outright), and `#if EMULATOR` sets
-`isPersistenceEnabled = false` (`AppDelegate.swift:41`), so emulator builds have no offline queue at
-all. The exercise raw logs have had this same gap since long before the workout ones — fix both
-together or neither.
+**`Users/{uid}/WorkoutSessions` is now read** — by the workout page's history card (*Workout
+history* below), so a missing document is visible to the user as a workout done fewer times than
+it was. The sessions from before 2026-10-25 (refused by the rules) are the known gap, and the
+backfill above is the fix for those. Whether lost writes after that need a sync queue is still
+open: watch for "done N times" disagreeing with what people remember. Two caveats: permission-denied
+is a **hard** failure the SDK never retries (a rule mistake loses the write outright), and
+`#if EMULATOR` sets `isPersistenceEnabled = false` (`AppDelegate.swift:41`), so emulator builds
+have no offline queue at all. The exercise raw logs have had this same gap since long before the
+workout ones — fix both together or neither.
+
+### Workout history — the workout page's "Your history" card
+Times done, average time, average RPE and when it was last done, at the top of MyDay's workout page
+(`WorkoutHistoryCard`), from MyDay's library and from PROFILE's All workouts alike, since both
+build `MyDayWorkoutTemplatePage`. Built 2026-11-18.
+
+- **Free**, by decision: how often and how long you did your own workout is history, not the
+  analysis STATS sells.
+- **Personal only.** `WorkoutHistoryLoader` reads the user's own `Users/{uid}/WorkoutSessions`
+  where `templateId` matches (`FirestoreWorkoutHistoryLoader`; one equality filter, so no
+  composite index, and the owner read rule already allows it). How a public workout goes for
+  everyone is the **community** half: worked out on the server onto the `DiscoverWorkouts` card,
+  shown on DISCOVER's workout page, counting copies through `copiedFrom`, and drawn only once at
+  least 3 people have done it. **Not built yet.** Never compute it on the client from other
+  people's sessions.
+- A DISCOVER copy has its own id, so its history is the user's copy alone.
+- **`WorkoutHistorySummary` averages each measure over the sessions that carry it**, never
+  counting a missing RPE or duration as 0, and leaves out anything with `deletedAt`. Duration is
+  the stored `durationSeconds`, else end − start, else none.
+- Three cells, never a chart, and the card keeps its height while loading, empty or failed, so the
+  exercises under it do not jump. A failed read is one quiet line, and keeps numbers already shown.
+- The demo workout passes no loader and shows no card.
 
 ## Sport Sessions
 A basketball training session, a game, a round of golf: logged from MyDay's Add flow and counted in
