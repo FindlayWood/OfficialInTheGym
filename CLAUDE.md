@@ -949,6 +949,9 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   and a save appends to the instance the previous day already held. Nothing scrolls on load, on
   a removal, or on moving to another day. A focus made while the logging flow covers the screen
   is applied when the screen is back.
+- **Set rows end in `SetRowTrailingSpace`** (MyDay's exercise cards and the session's), sized
+  off the row's width so the last pill can scroll to the middle. Without it the set just logged,
+  usually the last, stopped short of the centre.
 - **Check-in is `matteGreen`, RPE `matteAmber`** — the cards, their score scales and the markers.
   They were system `.orange` / `.purple` over system red/orange/yellow/blue/green scales, which
   read as another app beside `darkColor`. MyDayKit's matte set is a copy of StatsKit's — keep in

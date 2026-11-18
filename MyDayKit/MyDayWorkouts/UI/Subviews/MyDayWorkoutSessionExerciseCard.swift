@@ -122,6 +122,9 @@ struct MyDayWorkoutSessionExerciseCard: View {
                             .id(set.id)
                         }
                     }
+
+                    // So the last set can be scrolled to the middle when it is the one next.
+                    SetRowTrailingSpace()
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)

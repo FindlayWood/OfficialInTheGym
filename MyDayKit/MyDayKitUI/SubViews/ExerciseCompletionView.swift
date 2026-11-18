@@ -149,6 +149,9 @@ struct ExerciseCompletionView: View {
                                 }
                             )
                         }
+
+                        // So the set just added, which sits at the end, can reach the middle.
+                        SetRowTrailingSpace()
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
