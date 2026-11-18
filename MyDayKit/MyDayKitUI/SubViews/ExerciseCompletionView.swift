@@ -33,6 +33,9 @@ struct ExerciseCompletionView: View {
     var repeatSet: ((ExerciseCompletions) -> ())?
     var onTap: ((ExerciseCompletions) -> ())?
     var clipSelected: ((MyDayClipModel, UIImage, CGRect) -> ())?
+    /// What the home screen is focusing. When it is one of this card's sets, that set is centred
+    /// in the row, so a set just added or edited is in the middle both ways.
+    var focus: MyDayHomeFocus? = nil
 
     /// The reps of every logged set, as the session card summarises its own.
     private var completedRepsText: String {
@@ -102,51 +105,68 @@ struct ExerciseCompletionView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
         } else {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(Array(model.completions.enumerated()), id: \.element.id) { index, completion in
-                        if let selected, selected.id == completion.id {
-                            PlaceholderSetView(index: index, model: completion)
-                        } else {
-                            CompletedSetView(
-                                index: index,
-                                model: completion,
-                                animation: animation
-                            )
-                            .onTapGesture {
-                                onTap?(completion)
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Array(model.completions.enumerated()), id: \.element.id) { index, completion in
+                            if let selected, selected.id == completion.id {
+                                PlaceholderSetView(index: index, model: completion)
+                            } else {
+                                CompletedSetView(
+                                    index: index,
+                                    model: completion,
+                                    animation: animation
+                                )
+                                .onTapGesture {
+                                    onTap?(completion)
+                                }
+                                .id(completion.id)
                             }
                         }
-                    }
 
-                    if !model.completions.isEmpty && !disabled {
-                        RepeatSetView(
-                            lastReps: model.completions.last?.reps,
-                            lastWeight: model.completions.last?.weight,
-                            lastWeightUnit: model.completions.last?.weightUnit,
-                            action: {
-                                guard let last = model.completions.last else { return }
-                                let newCompletion = ExerciseCompletions(
-                                    id: UUID().uuidString,
-                                    exercise: model.exercise,
-                                    reps: last.reps,
-                                    weight: last.weight,
-                                    weightUnit: last.weightUnit,
-                                    dateCompleted: .now,
-                                    distance: last.distance,
-                                    distanceUnits: last.distanceUnits,
-                                    time: last.time,
-                                    tempo: last.tempo,
-                                    note: last.note,
-                                    eachSide: last.eachSide
-                                )
-                                repeatSet?(newCompletion)
-                            }
-                        )
+                        if !model.completions.isEmpty && !disabled {
+                            RepeatSetView(
+                                lastReps: model.completions.last?.reps,
+                                lastWeight: model.completions.last?.weight,
+                                lastWeightUnit: model.completions.last?.weightUnit,
+                                action: {
+                                    guard let last = model.completions.last else { return }
+                                    let newCompletion = ExerciseCompletions(
+                                        id: UUID().uuidString,
+                                        exercise: model.exercise,
+                                        reps: last.reps,
+                                        weight: last.weight,
+                                        weightUnit: last.weightUnit,
+                                        dateCompleted: .now,
+                                        distance: last.distance,
+                                        distanceUnits: last.distanceUnits,
+                                        time: last.time,
+                                        tempo: last.tempo,
+                                        note: last.note,
+                                        eachSide: last.eachSide
+                                    )
+                                    repeatSet?(newCompletion)
+                                }
+                            )
+                        }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
+                .onChange(of: focus) { _, _ in centreFocusedSet(with: proxy) }
+                .onAppear { centreFocusedSet(with: proxy) }
+            }
+        }
+    }
+
+    /// Centres the focused set in the row when it is one of this card's.
+    private func centreFocusedSet(with proxy: ScrollViewProxy) {
+        guard let setId = focus?.target.setId,
+              model.completions.contains(where: { $0.id == setId }) else { return }
+        Task {
+            try? await Task.sleep(nanoseconds: 150_000_000)
+            withAnimation(.easeInOut(duration: 0.35)) {
+                proxy.scrollTo(setId, anchor: .center)
             }
         }
     }

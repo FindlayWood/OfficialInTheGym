@@ -941,6 +941,14 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   **Rating opens once anything is recorded, workouts included** (`MyDayDayMarkers.hasExercise`);
   it used to need a standalone exercise, so a workout-only day could never be rated. Before that
   the step is drawn dimmed ("Opens once you've trained") so the user knows it is coming.
+- **Whatever was just added or filled in comes to the middle of the screen** — a new exercise,
+  a new or edited set (also centred in its card's row), a workout or sport added, the check-in
+  or rating given. **Worked out by comparing the day before and after each save**
+  (`MyDayScrollTarget.after`), never by each action saying where it went, so every way of adding
+  gets it. The before is a `MyDayDaySnapshot`, **a value copy**: `MyDayExerciseModel` is a class
+  and a save appends to the instance the previous day already held. Nothing scrolls on load, on
+  a removal, or on moving to another day. A focus made while the logging flow covers the screen
+  is applied when the screen is back.
 - **Check-in is `matteGreen`, RPE `matteAmber`** — the cards, their score scales and the markers.
   They were system `.orange` / `.purple` over system red/orange/yellow/blue/green scales, which
   read as another app beside `darkColor`. MyDayKit's matte set is a copy of StatsKit's — keep in

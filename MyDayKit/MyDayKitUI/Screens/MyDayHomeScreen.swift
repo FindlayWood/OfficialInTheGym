@@ -17,6 +17,16 @@ struct MyDayHomeScreen: View {
     @State private var selectedSet: ExerciseCompletions?
     @State private var selectedClip: MyDayClipModel?
     @State private var selectedActivity: MyDayActivity = .exercises
+    /// The day as it was after the last save, to compare the next one with
+    /// (`MyDayScrollTarget.after`). A value copy: see `MyDayDaySnapshot`.
+    @State private var lastSnapshot: MyDayDaySnapshot?
+    /// Whatever was just added or filled in, brought to the middle of the screen.
+    @State private var focus: MyDayHomeFocus?
+    /// A focus that arrived while this screen was under the logging flow, applied once it is back
+    /// on screen — a scroll view off screen may not move.
+    @State private var focusOnAppear: MyDayHomeFocus?
+    /// Whether the screen is showing, so a focus made in view is not replayed on the next return.
+    @State private var isOnScreen = false
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -96,6 +106,18 @@ struct MyDayHomeScreen: View {
             if let selectedSet {
                 setDetailOverlay(for: selectedSet)
             }
+        }
+        .onAppear { isOnScreen = true }
+        .onDisappear { isOnScreen = false }
+        .onReceive(dayManager.$selectedDay) { day in
+            guard let day else { lastSnapshot = nil; return }
+            let snapshot = MyDayDaySnapshot(day)
+            if let target = MyDayScrollTarget.after(lastSnapshot, snapshot) {
+                let next = MyDayHomeFocus(target: target)
+                focus = next
+                focusOnAppear = isOnScreen ? nil : next
+            }
+            lastSnapshot = snapshot
         }
     }
     
@@ -316,43 +338,69 @@ struct MyDayHomeScreen: View {
     }
 
     private func activeTimeline(for day: MyDayFullDayModel, markers: MyDayDayMarkers) -> some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                welcomeHeader(for: day, hasTrained: markers.hasExercise)
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    welcomeHeader(for: day, hasTrained: markers.hasExercise)
 
-                MyDayTimelineStep(
-                    kind: .checkIn,
-                    state: nodeState(done: markers.hasCheckIn, available: true),
-                    isFirst: true
-                ) {
-                    checkInStep(for: day)
+                    MyDayTimelineStep(
+                        kind: .checkIn,
+                        state: nodeState(done: markers.hasCheckIn, available: true),
+                        isFirst: true
+                    ) {
+                        checkInStep(for: day)
+                    }
+                    .id(MyDayScrollTarget.checkIn.rowId)
+
+                    MyDayTimelineStep(
+                        kind: .exercise,
+                        state: nodeState(
+                            done: markers.hasExercise,
+                            available: true,
+                            hasContent: hasTraining(day)
+                        )
+                    ) {
+                        trainStep(for: day)
+                    }
+
+                    MyDayTimelineStep(
+                        kind: .rpe,
+                        state: nodeState(done: markers.hasRPE, available: markers.hasExercise),
+                        isLast: true
+                    ) {
+                        rateStep(for: day, canRate: markers.hasExercise)
+                    }
+                    .id(MyDayScrollTarget.rating.rowId)
                 }
-
-                MyDayTimelineStep(
-                    kind: .exercise,
-                    state: nodeState(
-                        done: markers.hasExercise,
-                        available: true,
-                        hasContent: hasTraining(day)
-                    )
-                ) {
-                    trainStep(for: day)
-                }
-
-                MyDayTimelineStep(
-                    kind: .rpe,
-                    state: nodeState(done: markers.hasRPE, available: markers.hasExercise),
-                    isLast: true
-                ) {
-                    rateStep(for: day, canRate: markers.hasExercise)
+                .padding(.leading, 12)
+                .padding(.trailing, 16)
+                .padding(.vertical, 12)
+            }
+            .task {
+                await scheduled.loadIfNeeded()
+            }
+            // Whatever was just added or filled in comes to the middle of the screen; a set is
+            // also centred in its card's row (`ExerciseCompletionView`).
+            .onChange(of: focus) { _, focus in
+                guard let focus else { return }
+                Task {
+                    // After the new card has been laid out, or there is nothing to scroll to.
+                    try? await Task.sleep(nanoseconds: 150_000_000)
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        proxy.scrollTo(focus.target.rowId, anchor: .center)
+                    }
                 }
             }
-            .padding(.leading, 12)
-            .padding(.trailing, 16)
-            .padding(.vertical, 12)
-        }
-        .task {
-            await scheduled.loadIfNeeded()
+            .onAppear {
+                guard let pending = focusOnAppear else { return }
+                focusOnAppear = nil
+                Task {
+                    try? await Task.sleep(nanoseconds: 300_000_000)
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        proxy.scrollTo(pending.target.rowId, anchor: .center)
+                    }
+                }
+            }
         }
     }
 
@@ -537,6 +585,7 @@ struct MyDayHomeScreen: View {
                             insertion: .opacity,
                             removal: .opacity.combined(with: .scale(scale: 0.94))
                         ))
+                        .id(MyDayScrollTarget.workout(id: entry.id).rowId)
                     }
                 }
      
@@ -566,6 +615,7 @@ struct MyDayHomeScreen: View {
                             insertion: .opacity,
                             removal: .opacity.combined(with: .scale(scale: 0.94))
                         ))
+                        .id(MyDayScrollTarget.sport(id: session.id).rowId)
                     }
 
                     ForEach(dueSports) { item in
@@ -623,8 +673,10 @@ struct MyDayHomeScreen: View {
                                 selectedSet = model
                             }
                         },
-                        clipSelected: clipSelected
+                        clipSelected: clipSelected,
+                        focus: focus?.target.setId == nil ? nil : focus
                     )
+                    .id(MyDayScrollTarget.exercise(id: exercise.id).rowId)
                 }
             }
         }
