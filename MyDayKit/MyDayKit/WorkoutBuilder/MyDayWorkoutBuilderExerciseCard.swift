@@ -11,34 +11,21 @@ import SwiftUI
 /// name over its set count, then its set pills (`MyDayTemplateSetPill`, from the same
 /// `setModel(orderIndex:id:)` the saved template uses). Building and reading a workout look alike.
 ///
-/// It replaced a plain list row. **A card in a superset loses the rounded corners it shares with
-/// its partner** (`joinsPrevious` / `joinsNext`), so a superset reads as one card cut by a seam,
-/// with `MyDayWorkoutBuilderLinkJoint` on the seam. Removing is the `xmark`, since cards in a
-/// stack have no swipe-to-delete.
+/// It replaced a plain list row. Cards in a superset keep their own shape; what joins them is
+/// `MyDayWorkoutBuilderLinkJoint` closing the gap between them. Squaring off the corners they
+/// share was tried first and read as the cards being cut off. Removing is the `xmark`, since
+/// cards in a stack have no swipe-to-delete. The pills draw no completion circle: nothing can be
+/// done to a set that is still being written.
 struct MyDayWorkoutBuilderExerciseCard: View {
 
     @ObservedObject var exercise: WorkoutExerciseBuilderManager
     /// "1a" once the workout has a superset; `nil` draws the dumbbell tile.
     let supersetEntry: WorkoutSupersetLayout.Entry?
-    let joinsPrevious: Bool
-    let joinsNext: Bool
     let animation: Namespace.ID
     let onRemove: () -> Void
 
-    private static let radius: CGFloat = 16
-
     private var sets: [WorkoutSetModel] {
         exercise.sets.enumerated().map { index, set in set.setModel(orderIndex: index, id: set.id) }
-    }
-
-    private var shape: UnevenRoundedRectangle {
-        UnevenRoundedRectangle(
-            topLeadingRadius: joinsPrevious ? 0 : Self.radius,
-            bottomLeadingRadius: joinsNext ? 0 : Self.radius,
-            bottomTrailingRadius: joinsNext ? 0 : Self.radius,
-            topTrailingRadius: joinsPrevious ? 0 : Self.radius,
-            style: .continuous
-        )
     }
 
     var body: some View {
@@ -51,8 +38,10 @@ struct MyDayWorkoutBuilderExerciseCard: View {
                 setsRow
             }
         }
-        .background(Color(UIColor.secondarySystemGroupedBackground), in: shape)
-        .clipShape(shape)
+        .background(
+            Color(UIColor.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+        )
     }
 
     // MARK: - Header
@@ -120,7 +109,8 @@ struct MyDayWorkoutBuilderExerciseCard: View {
                         index: index,
                         set: set,
                         matchedId: SessionSetDetail.matchedId(exerciseId: exercise.exercise.id, setId: set.id),
-                        animation: animation
+                        animation: animation,
+                        showsCompletionCircle: false
                     )
                 }
             }

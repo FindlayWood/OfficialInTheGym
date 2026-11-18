@@ -230,20 +230,17 @@ struct MyDayWorkoutCreationHomeScreen: View {
     }
 
     /// Each exercise its own card, with a `MyDayWorkoutBuilderLinkJoint` between each pair. Linked
-    /// cards close the gap and meet at a seam, so a superset reads as one card.
+    /// cards close the gap to a strip bridged by the link.
     private var exerciseCards: some View {
         let layout = manager.supersetLayout
         let count = manager.exercises.count
         return VStack(spacing: 0) {
             ForEach(Array(manager.exercises.enumerated()), id: \.element) { index, exercise in
                 let linkedToNext = manager.isLinkedToNext(exercise)
-                let linkedFromPrevious = index > 0 && manager.isLinkedToNext(manager.exercises[index - 1])
 
                 MyDayWorkoutBuilderExerciseCard(
                     exercise: exercise,
                     supersetEntry: layout.hasSupersets ? layout.entries[index] : nil,
-                    joinsPrevious: linkedFromPrevious,
-                    joinsNext: linkedToNext && index < count - 1,
                     animation: animation,
                     onRemove: {
                         withAnimation(linkAnimation) {

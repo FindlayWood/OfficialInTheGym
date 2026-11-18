@@ -10,11 +10,11 @@ import SwiftUI
 /// What sits between two exercise cards in the builder: the button that makes them a superset.
 ///
 /// **Apart**, it is a gap holding a small "Superset" capsule on the page. **Linked**, the gap
-/// closes, the two cards meet at a seam (they square off the corners they share, see
-/// `MyDayWorkoutBuilderExerciseCard`) and a filled link sits on the seam; tapping it splits them
-/// again. The change is one spring, so the cards visibly pull together and apart.
+/// closes to a narrow strip and a filled link bridges it, overlapping both cards; tapping it
+/// splits them again. The change is one spring, so the cards visibly pull together and apart.
+/// The cards keep their rounded corners throughout (see `MyDayWorkoutBuilderExerciseCard`).
 ///
-/// The linked badge overhangs the seam into both cards, so the stack must give the joint a higher
+/// The linked badge overhangs the gap into both cards, so the stack must give the joint a higher
 /// `zIndex` than its cards, or the card below draws over half of it and takes its taps.
 struct MyDayWorkoutBuilderLinkJoint: View {
 
@@ -22,11 +22,11 @@ struct MyDayWorkoutBuilderLinkJoint: View {
     let onToggle: () -> Void
 
     static let openHeight: CGFloat = 48
+    static let linkedHeight: CGFloat = 8
 
     var body: some View {
         ZStack {
             if isLinked {
-                seam
                 linkedBadge
                     .transition(.scale(scale: 0.4).combined(with: .opacity))
             } else {
@@ -34,16 +34,9 @@ struct MyDayWorkoutBuilderLinkJoint: View {
                     .transition(.scale(scale: 0.8).combined(with: .opacity))
             }
         }
-        .frame(height: isLinked ? 1 : Self.openHeight)
+        .frame(height: isLinked ? Self.linkedHeight : Self.openHeight)
         .frame(maxWidth: .infinity)
         .sensoryFeedback(.impact(weight: .medium), trigger: isLinked)
-    }
-
-    /// The divider a joined card draws between its halves, on the cards' own surface so the
-    /// seam does not show the page through it.
-    private var seam: some View {
-        Color(UIColor.secondarySystemGroupedBackground)
-            .overlay(Divider().padding(.horizontal, 16))
     }
 
     private var linkedBadge: some View {
@@ -53,9 +46,9 @@ struct MyDayWorkoutBuilderLinkJoint: View {
                 .foregroundStyle(.white)
                 .frame(width: 32, height: 32)
                 .background(Color.darkColor, in: Circle())
-                .overlay(
-                    Circle().strokeBorder(Color(UIColor.secondarySystemGroupedBackground), lineWidth: 3)
-                )
+                // A ring of the page colour, so the badge reads as sitting in the gap rather than
+                // as a hole in either card.
+                .overlay(Circle().strokeBorder(Color.pageColor, lineWidth: 3))
                 .frame(width: 44, height: 44)
                 .contentShape(Circle())
         }

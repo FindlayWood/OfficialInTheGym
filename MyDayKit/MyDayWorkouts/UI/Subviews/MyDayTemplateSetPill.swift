@@ -26,6 +26,9 @@ struct MyDayTemplateSetPill: View {
     let matchedId: String
     let animation: Namespace.ID
     var onTap: (() -> Void)?
+    /// `false` in the workout builder, where the set is still being written and there is nothing
+    /// a circle could stand for. The pill is then shorter, since the circle's slot is gone.
+    var showsCompletionCircle: Bool = true
 
     private var values: [SessionSetPillValue] {
         SessionSetPillValue.values(for: set, record: nil)
@@ -55,16 +58,18 @@ struct MyDayTemplateSetPill: View {
 
             Spacer(minLength: 4)
 
-            // The dimmed circle a `.planned` `SessionSetPill` draws. A template
-            // set has not been performed, so the empty state is the honest one,
-            // and it fills the slot that would otherwise leave these pills
-            // looking lopsided next to every other 72×88 pill in the app.
-            // Indicator only — the whole pill is the tap target.
-            Image(systemName: "circle")
-                .font(.system(size: 22, weight: .medium))
-                .foregroundStyle(Color.secondary.opacity(0.25))
+            if showsCompletionCircle {
+                // The dimmed circle a `.planned` `SessionSetPill` draws. A template
+                // set has not been performed, so the empty state is the honest one,
+                // and it fills the slot that would otherwise leave these pills
+                // looking lopsided next to every other 72×88 pill in the app.
+                // Indicator only — the whole pill is the tap target.
+                Image(systemName: "circle")
+                    .font(.system(size: 22, weight: .medium))
+                    .foregroundStyle(Color.secondary.opacity(0.25))
+            }
         }
-        .frame(width: 72, height: 88)
+        .frame(width: 72, height: showsCompletionCircle ? 88 : 60)
         .padding(.vertical, 8)
         .background {
             RoundedRectangle(cornerRadius: 14, style: .continuous)

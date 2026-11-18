@@ -1295,8 +1295,10 @@ no circuits, rounds or timed intervals. Built 2026-11-18. App only, no server ch
   saved template will have, an `xmark` to remove), a dashed `MyDayTimelinePlaceholder` when empty
   and as the last slot for adding, and the Upload bar pinned. Between each pair of cards,
   `MyDayWorkoutBuilderLinkJoint`: apart, a "Superset" capsule in the gap; linked, the gap closes
-  on one spring, the two cards square off the corners they share and meet at a seam with a
-  filled link on it (tap to split). The joint is drawn above the cards (`zIndex`), since its
+  on one spring to an 8pt strip bridged by a filled link (tap to split). The cards keep their
+  rounded corners: squaring off the shared ones was tried and read as the cards being cut off.
+  The builder's pills draw no completion circle (`showsCompletionCircle: false`), since nothing
+  can be done to a set still being written. The joint is drawn above the cards (`zIndex`), since its
   badge overhangs both. **`WorkoutExerciseSetManager.setModel(orderIndex:id:)` is the one
   builder-set → `WorkoutSetModel` mapping**, used by the pills and by `buildTemplate()`.
 - **Every rebuild of an exercise must carry `supersetId`** — `WorkoutSessionManager.addSet`
