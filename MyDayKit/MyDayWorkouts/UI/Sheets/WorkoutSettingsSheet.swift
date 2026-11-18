@@ -18,8 +18,6 @@ struct WorkoutSettingsSheet: View {
     @ObservedObject var manager: WorkoutBuilderManager
 
     @State private var saveToLibrary: Bool = true
-    @State private var tagInput: String = ""
-    @FocusState private var tagFieldFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -28,7 +26,7 @@ struct WorkoutSettingsSheet: View {
 
                     // MARK: Visibility + Save Row
                     HStack(spacing: 12) {
-                        SettingsCard(title: "Visibility", icon: "eye") {
+                        WorkoutSettingsCard(title: "Visibility", icon: "eye") {
                             Toggle(isOn: $manager.isPublic) {
                                 Text(manager.isPublic ? "Public" : "Private")
                                     .font(.system(size: 15, weight: .medium))
@@ -36,7 +34,7 @@ struct WorkoutSettingsSheet: View {
                             .tint(Color.darkColor)
                         }
 
-                        SettingsCard(title: "Save", icon: "square.and.arrow.down") {
+                        WorkoutSettingsCard(title: "Save", icon: "square.and.arrow.down") {
                             Toggle(isOn: $saveToLibrary) {
                                 Text(saveToLibrary ? "Yes" : "No")
                                     .font(.system(size: 15, weight: .medium))
@@ -46,68 +44,12 @@ struct WorkoutSettingsSheet: View {
                     }
 
                     // MARK: Tags
-                    SettingsCard(title: "Tags", icon: "tag") {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack(spacing: 8) {
-                                TextField("Add a tag...", text: $tagInput)
-                                    .tint(Color.darkColor)
-                                    .focused($tagFieldFocused)
-                                    .font(.system(size: 15))
-                                    .submitLabel(.done)
-                                    .textInputAutocapitalization(.never)
-                                    .autocorrectionDisabled()
-                                    // Normalise as the user types, so the box never shows
-                                    // a tag that would be stored differently.
-                                    .onChange(of: tagInput) { _, newValue in
-                                        let normalized = WorkoutTag.normalized(newValue)
-                                        if normalized != newValue { tagInput = normalized }
-                                    }
-                                    .onSubmit { commitTag() }
-
-                                if !tagInput.isEmpty {
-                                    Button { commitTag() } label: {
-                                        Image(systemName: "return")
-                                            .font(.system(size: 13, weight: .semibold))
-                                            .foregroundColor(.white)
-                                            .frame(width: 28, height: 28)
-                                            .background(Circle().fill(Color.darkColor))
-                                    }
-                                    .transition(.scale.combined(with: .opacity))
-                                }
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(Color(.tertiarySystemBackground))
-                            )
-                            .animation(.easeInOut(duration: 0.15), value: tagInput.isEmpty)
-
-                            if !manager.tags.isEmpty {
-                                FlowLayout(spacing: 8) {
-                                    ForEach(manager.tags, id: \.self) { tag in
-                                        HStack(spacing: 5) {
-                                            Text(tag)
-                                                .font(.system(size: 13, weight: .medium))
-                                            Button {
-                                                withAnimation(.easeInOut(duration: 0.15)) {
-                                                    manager.removeTag(tag)
-                                                }
-                                            } label: {
-                                                Image(systemName: "xmark")
-                                                    .font(.system(size: 10, weight: .bold))
-                                            }
-                                        }
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 6)
-                                        .background(Capsule().fill(Color.darkColor.opacity(0.12)))
-                                        .foregroundColor(Color.darkColor)
-                                    }
-                                }
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                            }
-                        }
-                        .animation(.easeInOut(duration: 0.2), value: manager.tags.count)
+                    WorkoutSettingsCard(title: "Tags", icon: "tag") {
+                        WorkoutTagsField(
+                            tags: manager.tags,
+                            onAdd: { manager.addTag($0) },
+                            onRemove: { manager.removeTag($0) }
+                        )
                     }
                 }
                 .padding(.horizontal, 20)
@@ -126,41 +68,6 @@ struct WorkoutSettingsSheet: View {
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(24)
-    }
-
-    private func commitTag() {
-        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-            manager.addTag(tagInput)
-            tagInput = ""
-        }
-    }
-}
-
-// MARK: - SettingsCard
-private struct SettingsCard<Content: View>: View {
-    let title: String
-    let icon: String
-    @ViewBuilder let content: Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 7) {
-                Image(systemName: icon)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color.darkColor)
-                Text(title)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.secondary)
-                    .textCase(.uppercase)
-                    .tracking(0.8)
-            }
-            content
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.secondarySystemBackground))
-        )
     }
 }
 

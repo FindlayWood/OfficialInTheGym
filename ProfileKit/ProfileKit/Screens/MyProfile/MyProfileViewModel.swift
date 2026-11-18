@@ -37,6 +37,9 @@ final class MyProfileViewModel: ObservableObject {
     @Published private(set) var pendingRequestCount = 0
     @Published private(set) var highlights: ProfileHighlights?
     @Published private(set) var clips: [ProfileClip] = []
+    /// Your public workouts, as others see them. One more than the section shows, so it knows
+    /// whether to offer See all.
+    @Published private(set) var workouts: [ProfileWorkout] = []
 
     static let clipLimit = 12
 
@@ -46,6 +49,7 @@ final class MyProfileViewModel: ObservableObject {
     private let requestCountLoader: FollowRequestCountLoader
     private let highlightsLoader: ProfileHighlightsLoader
     private let clipsLoader: ProfileClipsLoader
+    private let workoutsLoader: ProfileWorkoutsLoader
     private let subscription: ProfileSubscriptionService
 
     var onOpenSettings: (() -> Void)?
@@ -55,6 +59,10 @@ final class MyProfileViewModel: ObservableObject {
     /// The current pins, empty when highlights are automatic.
     var onEditHighlights: (([String]) -> Void)?
     var onOpenClip: ((ProfileClip) -> Void)?
+    var onSeeAllWorkouts: (() -> Void)?
+    /// Your whole library. `nil` leaves All workouts out, when this router has no MyDay to open a
+    /// workout in.
+    var onOpenAllWorkouts: (() -> Void)?
 
     init(
         profileLoader: MyProfileLoader,
@@ -63,6 +71,7 @@ final class MyProfileViewModel: ObservableObject {
         requestCountLoader: FollowRequestCountLoader,
         highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
+        workoutsLoader: ProfileWorkoutsLoader,
         subscription: ProfileSubscriptionService
     ) {
         self.profileLoader = profileLoader
@@ -71,6 +80,7 @@ final class MyProfileViewModel: ObservableObject {
         self.requestCountLoader = requestCountLoader
         self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
+        self.workoutsLoader = workoutsLoader
         self.subscription = subscription
     }
 
@@ -116,13 +126,15 @@ final class MyProfileViewModel: ObservableObject {
     }
 
     /// Called when the tab reappears: the counts, which a follow list may have
-    /// changed, and the clips, which a clip opened from the grid may have been
-    /// liked or deleted in. The header cannot change behind the screen.
+    /// changed, the clips, which a clip opened from the grid may have been
+    /// liked or deleted in, and the workouts, which may have been rated or made public
+    /// in MyDay meanwhile. The header cannot change behind the screen.
     func refreshCounts() async {
         guard case .loaded(let header) = header else { return }
         async let counts: Void = loadCounts(for: header.userId)
         async let clips: Void = loadClips(for: header.userId)
-        _ = await (counts, clips)
+        async let workouts: Void = loadWorkouts(for: header.userId)
+        _ = await (counts, clips, workouts)
     }
 
     /// A failed read keeps whatever counts were already shown. The request
@@ -142,12 +154,22 @@ final class MyProfileViewModel: ObservableObject {
         }
     }
 
-    /// Highlights and clips load independently; either failing leaves its own
+    /// Highlights, workouts and clips load independently; any failing leaves its own
     /// section empty and the rest of the profile intact.
     private func loadContent(for userId: String) async {
         async let highlights: Void = loadHighlights(for: userId)
         async let clips: Void = loadClips(for: userId)
-        _ = await (highlights, clips)
+        async let workouts: Void = loadWorkouts(for: userId)
+        _ = await (highlights, clips, workouts)
+    }
+
+    /// A failed read keeps whatever was already shown.
+    private func loadWorkouts(for userId: String) async {
+        do {
+            workouts = try await workoutsLoader.publicWorkouts(of: userId, limit: ProfileWorkoutsSection.previewCount + 1)
+        } catch {
+            print("❌ Profile workouts failed: \(error)")
+        }
     }
 
     private func loadHighlights(for userId: String) async {

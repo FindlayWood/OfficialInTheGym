@@ -6,6 +6,7 @@
 //  Copyright © 2026 FindlayWood. All rights reserved.
 //
 import DiscoverKit
+import MyDayKit
 import UIKit
 import ProfileKit
 
@@ -16,9 +17,30 @@ class ProfileKitComposition {
     /// `MyProfileCoordinator` until the coach/player split is removed. See
     /// `PROFILE_PLAN.md`.
     @MainActor
-    func composeCombination(_ navigationController: UINavigationController, purchaseManager: PurchaseManager, openGettingStarted: (() -> Void)? = nil, reminderSettings: ReminderSettingsService? = nil) {
+    func composeCombination(
+        _ navigationController: UINavigationController,
+        purchaseManager: PurchaseManager,
+        openGettingStarted: (() -> Void)? = nil,
+        reminderSettings: ReminderSettingsService? = nil,
+        workoutLibrary: MyDayWorkoutLibrary? = nil,
+        makeWorkoutLibraryRouter: ((UINavigationController) -> MyDayWorkoutLibraryRouter)? = nil
+    ) {
 
-        let router = makeRouter(navigationController, purchaseManager: purchaseManager)
+        let router = makeRouter(navigationController, workoutLibrary: workoutLibrary, purchaseManager: purchaseManager)
+
+        // MARK: - Your workouts
+
+        // All workouts and the choice card, on the tab only: a router built for DISCOVER or a
+        // legacy screen has no MyDay to open a workout in, and leaves both out
+        // (`PROFILE_WORKOUTS_PLAN.md` step 5). The library is MyDay's own, read device first.
+        if let workoutLibrary, let makeWorkoutLibraryRouter {
+            router.libraryLoader = MyDayLibraryProfileWorkoutsLoader(manager: workoutLibrary.manager)
+            let workoutOpener = MyDayProfileWorkoutOpener(
+                navigationController: navigationController,
+                makeRouter: makeWorkoutLibraryRouter
+            )
+            router.onOpenLibraryWorkout = { workoutOpener.open(workoutId: $0) }
+        }
 
         // MARK: - App screens
 
@@ -39,8 +61,11 @@ class ProfileKitComposition {
     /// `showUserProfile(_:)`. One graph for every entry point, so a profile
     /// opened from DISCOVER behaves exactly like one opened from a follow list
     /// (`PROFILE_PLAN.md` step 7).
+    ///
+    /// `workoutLibrary` is MyDay's, passed on to DISCOVER's workout page so Save to Library works on
+    /// someone else's workout. `nil` where the caller has none, and the page then offers no Save.
     @MainActor
-    func makeRouter(_ navigationController: UINavigationController, purchaseManager: PurchaseManager) -> ProfileKitRouter {
+    func makeRouter(_ navigationController: UINavigationController, workoutLibrary: MyDayWorkoutLibrary? = nil, purchaseManager: PurchaseManager) -> ProfileKitRouter {
 
         // MARK: - Profile
 
@@ -111,6 +136,8 @@ class ProfileKitComposition {
 
         let clipsLoader: ProfileClipsLoader = FirestoreProfileClipsLoader()
 
+        let workoutsLoader: ProfileWorkoutsLoader = FirestoreProfileWorkoutsLoader()
+
         let highlightCandidatesLoader: HighlightCandidatesLoader = FirestoreHighlightCandidatesLoader(userId: userId)
 
         let pinnedHighlightsWriter: PinnedHighlightsWriter = FirestorePinnedHighlightsWriter(userId: userId)
@@ -173,6 +200,7 @@ class ProfileKitComposition {
             publicProfileLoader: publicProfileLoader,
             highlightsLoader: highlightsLoader,
             clipsLoader: clipsLoader,
+            workoutsLoader: workoutsLoader,
             highlightCandidatesLoader: highlightCandidatesLoader,
             pinnedHighlightsWriter: pinnedHighlightsWriter,
             reporter: reporter,
@@ -189,6 +217,14 @@ class ProfileKitComposition {
         // would recurse: DISCOVER's composition builds a ProfileKit router too.
         let clipOpener = DiscoverClipOpener(navigationController: navigationController, purchaseManager: purchaseManager)
         router.onOpenClip = { clipOpener.open($0) }
+
+        // Public workouts open on DISCOVER's workout page, the same way and for the same reason.
+        let workoutOpener = DiscoverWorkoutOpener(
+            navigationController: navigationController,
+            workoutLibrary: workoutLibrary,
+            purchaseManager: purchaseManager
+        )
+        router.onOpenPublicWorkout = { workoutOpener.open($0) }
 
         return router
     }

@@ -53,6 +53,7 @@ public final class ProfileKitRouter {
     let publicProfileLoader: PublicProfileLoader
     let highlightsLoader: ProfileHighlightsLoader
     let clipsLoader: ProfileClipsLoader
+    let workoutsLoader: ProfileWorkoutsLoader
     let highlightCandidatesLoader: HighlightCandidatesLoader
     let pinnedHighlightsWriter: PinnedHighlightsWriter
     let reporter: ProfileReporter
@@ -80,6 +81,17 @@ public final class ProfileKitRouter {
     /// ProfileKit cannot build. Set on every router, tab or embedded, by
     /// `ProfileKitComposition.makeRouter`.
     public var onOpenClip: ((ProfileClip) -> Void)?
+    /// Someone's public workout, opened on DISCOVER's workout page, which ProfileKit cannot build.
+    /// Set on every router by `ProfileKitComposition.makeRouter`. `nil` leaves a public row with
+    /// nowhere to go but your own workout page (`ProfileWorkoutDestination`).
+    public var onOpenPublicWorkout: ((ProfileWorkout) -> Void)?
+    /// One of your own workouts, by id, opened on MyDay's workout page (Add to Today, Schedule),
+    /// which ProfileKit cannot build. **Set by the tab's composition only**, with `libraryLoader`:
+    /// a router built for DISCOVER or a legacy screen has no MyDay to open it in, and then offers
+    /// neither All workouts nor the choice card.
+    public var onOpenLibraryWorkout: ((String) -> Void)?
+    /// Your whole library, for All workouts. `nil` leaves All workouts out, as above.
+    public var libraryLoader: ProfileLibraryLoader?
 
     // MARK: - Init
 
@@ -111,6 +123,7 @@ public final class ProfileKitRouter {
         publicProfileLoader: PublicProfileLoader,
         highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
+        workoutsLoader: ProfileWorkoutsLoader,
         highlightCandidatesLoader: HighlightCandidatesLoader,
         pinnedHighlightsWriter: PinnedHighlightsWriter,
         reporter: ProfileReporter,
@@ -148,6 +161,7 @@ public final class ProfileKitRouter {
         self.publicProfileLoader = publicProfileLoader
         self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
+        self.workoutsLoader = workoutsLoader
         self.highlightCandidatesLoader = highlightCandidatesLoader
         self.pinnedHighlightsWriter = pinnedHighlightsWriter
         self.reporter = reporter
@@ -196,9 +210,17 @@ extension ProfileKitRouter {
                 requestCountLoader: followRequestCountLoader,
                 highlightsLoader: highlightsLoader,
                 clipsLoader: clipsLoader,
+                workoutsLoader: workoutsLoader,
                 subscription: subscription
             )
             viewModel.onOpenClip = { [weak self] in self?.onOpenClip?($0) }
+            viewModel.onSeeAllWorkouts = { [weak self, weak viewModel] in
+                guard let self, case .loaded(let header) = viewModel?.header else { return }
+                self.navigate(to: .workoutList(.publicWorkouts(userId: header.userId)))
+            }
+            if canOpenLibrary {
+                viewModel.onOpenAllWorkouts = { [weak self] in self?.navigate(to: .workoutList(.library)) }
+            }
             viewModel.onEditHighlights = { [weak self, weak viewModel] pins in
                 self?.present(.editHighlights(pinned: pins, onSaved: { viewModel?.applySavedHighlights($0) }))
             }
@@ -214,7 +236,7 @@ extension ProfileKitRouter {
                 }))
             }
             let vc = ProfileKitBoundaryViewController()
-            vc.display = MyProfileScreen(viewModel: viewModel)
+            vc.display = MyProfileScreen(viewModel: viewModel, opener: makeWorkoutOpener())
             vc.router = self
             vc.onWillAppear = { [weak viewModel] in
                 Task { await viewModel?.refreshCounts() }
@@ -311,6 +333,7 @@ extension ProfileKitRouter {
                 unfollower: unfollower,
                 highlightsLoader: highlightsLoader,
                 clipsLoader: clipsLoader,
+                workoutsLoader: workoutsLoader,
                 reporter: reporter,
                 blocker: blocker,
                 blockStatusLoader: blockStatusLoader
@@ -319,7 +342,25 @@ extension ProfileKitRouter {
             viewModel.onOpenFollowList = { [weak self] kind in
                 self?.navigate(to: .followList(kind, userId: userId))
             }
-            let vc = UIHostingController(rootView: UserProfileScreen(viewModel: viewModel))
+            viewModel.onSeeAllWorkouts = { [weak self] in
+                self?.navigate(to: .workoutList(.publicWorkouts(userId: userId)))
+            }
+            // Your own profile reached from a list or DISCOVER: All workouts, when this router has
+            // MyDay to open it in, as on the tab.
+            if userId == currentUserId, canOpenLibrary {
+                viewModel.onOpenAllWorkouts = { [weak self] in self?.navigate(to: .workoutList(.library)) }
+            }
+            let vc = UIHostingController(rootView: UserProfileScreen(viewModel: viewModel, opener: makeWorkoutOpener()))
+            vc.hidesBottomBarWhenPushed = true
+            return vc
+
+        case .workoutList(let kind):
+            let viewModel = ProfileWorkoutListViewModel(
+                kind: kind,
+                workoutsLoader: workoutsLoader,
+                libraryLoader: libraryLoader
+            )
+            let vc = UIHostingController(rootView: ProfileWorkoutListScreen(viewModel: viewModel, opener: makeWorkoutOpener()))
             vc.hidesBottomBarWhenPushed = true
             return vc
 
@@ -355,6 +396,20 @@ extension ProfileKitRouter {
             viewModel.onFinished = { [weak modal] in modal?.dismiss(animated: true) }
             return modal
         }
+    }
+
+    /// All workouts needs both halves: something to list and somewhere to open a row.
+    var canOpenLibrary: Bool { libraryLoader != nil && onOpenLibraryWorkout != nil }
+
+    /// One opener per screen, carrying only the closures this router can actually answer, so the
+    /// destination rule never sends a row to a page that cannot open.
+    @MainActor
+    func makeWorkoutOpener() -> ProfileWorkoutOpener {
+        ProfileWorkoutOpener(
+            currentUserId: currentUserId,
+            openWorkout: onOpenLibraryWorkout == nil ? nil : { [weak self] in self?.onOpenLibraryWorkout?($0) },
+            openDiscover: onOpenPublicWorkout == nil ? nil : { [weak self] in self?.onOpenPublicWorkout?($0) }
+        )
     }
 
     @MainActor

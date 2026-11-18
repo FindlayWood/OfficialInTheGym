@@ -51,7 +51,7 @@ Two existing defects this plan has to deal with rather than copy:
 | Posts | **Gone.** No posts feed, no post creation from the profile. NEWSFEED's future is decided separately. |
 | Followers / following | **Kept, rebuilt on Firestore** as a new model (`Follows`, below). The RTDB graph is migrated. |
 | Follow model | **Open by default, with an optional private account.** A private account turns new follows into requests the owner approves. |
-| Sections | **Header with stamps → PBs / highlights → Clips.** Public workouts were *not* chosen for the profile. |
+| Sections | **Header with stamps → PBs / highlights → Workouts → Clips.** Public workouts were not chosen at first; they were added on 2026-11-13 (`PROFILE_WORKOUTS_PLAN.md`), with an All workouts library on your own profile. |
 | Workout history | **Not in this plan.** |
 | Stats entries | **Exercise Stats and Workout Stats come out of the profile**; the STATS tab covers them. |
 | Performance Center | **Out of scope, a separate roadmap task. Do not delete any of its code.** Its entry point is the only question (see open questions). |

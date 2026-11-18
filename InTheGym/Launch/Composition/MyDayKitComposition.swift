@@ -15,6 +15,11 @@ class MyDayKitComposition {
     /// MyDay's workout library, for DISCOVER's "Save to Library" — the same
     /// saver and manager MyDay itself uses. Set by `composeCombination`.
     private(set) var workoutLibrary: MyDayWorkoutLibrary?
+    /// Builds MyDay's workout page router on another tab's navigation stack, for PROFILE's
+    /// workouts (`PROFILE_WORKOUTS_PLAN.md` step 2). **It closes over the managers MyDay itself
+    /// holds**, so Add to Today and Schedule from there land where MyDay reads them. Set by
+    /// `composeCombination`.
+    private(set) var makeWorkoutLibraryRouter: ((UINavigationController) -> MyDayWorkoutLibraryRouter)?
     /// Opens MyDay's Getting Started, for Settings on the PROFILE tab. Holds the
     /// coordinator weakly — the tab's stack owns it. Set by `composeCombination`.
     private(set) var showGettingStarted: (() -> Void)?
@@ -260,6 +265,19 @@ class MyDayKitComposition {
         )
 
         workoutLibrary = MyDayWorkoutLibrary(saver: saver, manager: workoutLibraryManager, local: localTemplates)
+
+        // A workout's visibility and tags, changed from its page, go through the builder's own
+        // saver: device first, then Firestore or the sync queue.
+        let templateSettings = WorkoutTemplateSettingsDependencies(saver: saver, userId: userId)
+        makeWorkoutLibraryRouter = { [workoutLibraryManager, dayManager, scheduleManager] navigationController in
+            MyDayWorkoutLibraryRouter(
+                navigationController: navigationController,
+                libraryManager: workoutLibraryManager,
+                dayManager: dayManager,
+                scheduleManager: scheduleManager,
+                templateSettings: templateSettings
+            )
+        }
         
         let coordinator = MyDayCoordinator(
             navigationController: navigationController,
@@ -283,7 +301,8 @@ class MyDayKitComposition {
             ),
             customExercises: customExercises,
             scheduleManager: scheduleManager,
-            injuryManager: injuryManager
+            injuryManager: injuryManager,
+            templateSettings: templateSettings
         )
         showGettingStarted = { [weak coordinator] in coordinator?.showGettingStarted() }
         showToday = { [weak coordinator] in coordinator?.showToday() }

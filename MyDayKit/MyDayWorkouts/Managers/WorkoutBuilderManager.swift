@@ -69,9 +69,7 @@ public final class WorkoutBuilderManager: ObservableObject {
     /// Normalises through `WorkoutTag`, and ignores a tag that normalises to
     /// nothing or is already added.
     func addTag(_ tag: String) {
-        let normalized = WorkoutTag.normalized(tag)
-        guard !normalized.isEmpty, !tags.contains(normalized) else { return }
-        tags.append(normalized)
+        tags = WorkoutTag.appending(tag, to: tags)
     }
 
     func removeTag(_ tag: String) {

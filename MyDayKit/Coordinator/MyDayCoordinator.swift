@@ -38,6 +38,9 @@ public final class MyDayCoordinator {
     let scheduleManager: ScheduleManager?
     /// The user's injuries, rated in the check-in step. `nil` leaves them out.
     let injuryManager: InjuryManager?
+    /// What the workout page needs to change a workout's visibility and tags. `nil` leaves the
+    /// page's `⋯` off.
+    let templateSettings: WorkoutTemplateSettingsDependencies?
     
     // MARK: - Properties
     private var workoutCoordinator: MyDayWorkoutCoordinator?
@@ -65,7 +68,8 @@ public final class MyDayCoordinator {
         welcome: MyDayWelcome? = nil,
         customExercises: CustomExerciseDependencies? = nil,
         scheduleManager: ScheduleManager? = nil,
-        injuryManager: InjuryManager? = nil
+        injuryManager: InjuryManager? = nil,
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil
     ) {
         self.navigationController = navigationController
         self.userId = userId
@@ -84,6 +88,7 @@ public final class MyDayCoordinator {
         self.customExercises = customExercises
         self.scheduleManager = scheduleManager
         self.injuryManager = injuryManager
+        self.templateSettings = templateSettings
     }
 
     // MARK: - Root
@@ -275,7 +280,8 @@ extension MyDayCoordinator {
                 workoutManager: workoutManager,
                 libraryManager: workoutLibraryManager,
                 customExercises: customExercises,
-                scheduleManager: scheduleManager
+                scheduleManager: scheduleManager,
+                templateSettings: templateSettings
             )
             sub.onWorkoutAddedToDay = { [weak self] in self?.popToCoordinatorRoot() }
             workoutCoordinator = sub

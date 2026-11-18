@@ -26,7 +26,7 @@ public struct RatingSummary: Equatable, Sendable {
     public static let empty = RatingSummary(count: 0, sum: 0)
 
     /// `nil` with no ratings — an absence, never drawn as a 0.
-    var average: Double? {
+    public var average: Double? {
         count > 0 ? Double(sum) / Double(count) : nil
     }
 

@@ -31,7 +31,23 @@ final class DiscoverKitRoutesTests: XCTestCase {
         }
     }
 
+    // A workout page is free, and is now also reached from a profile's Workouts section through
+    // `showWorkout`. Gating it would put a paywall between someone and a workout their profile
+    // lists as public.
+    func test_requiresPro_deliversFalseForAWorkoutPage() {
+        let sut = DiscoverKitRoutes.workoutDetail(workoutCard)
+
+        XCTAssertFalse(sut.requiresPro)
+    }
+
     // MARK: - Helpers
+
+    private var workoutCard: DiscoverWorkoutCard {
+        DiscoverWorkoutCard(
+            templateId: "w1", title: "Saturday Upper", createdBy: "u1", exerciseCount: 5,
+            createdAt: nil, isPublic: true
+        )
+    }
 
     private var clipCard: DiscoverClipCard {
         DiscoverClipCard(

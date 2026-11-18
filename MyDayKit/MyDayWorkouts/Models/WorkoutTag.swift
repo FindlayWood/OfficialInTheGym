@@ -46,4 +46,13 @@ public enum WorkoutTag {
                 .map(Character.init)
         )
     }
+
+    /// `tags` with `raw` added, normalised, unless it normalises to nothing or is already there.
+    /// The builder's settings sheet and the workout page's both add tags through this, so a tag
+    /// typed into either is stored the same way.
+    public static func appending(_ raw: String, to tags: [String]) -> [String] {
+        let tag = normalized(raw)
+        guard !tag.isEmpty, !tags.contains(tag) else { return tags }
+        return tags + [tag]
+    }
 }
