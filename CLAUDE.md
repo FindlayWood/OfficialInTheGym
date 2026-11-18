@@ -1937,7 +1937,9 @@ the header (`DiscoverWorkoutCommunitySection`). The community half of *Workout h
 - **Every number is a recount** over two server-only ledgers, `WorkoutCommunitySessions/{sessionId}`
   and `WorkoutCommunityPeople/{workoutId}_{uid}` (no client reads or writes them). Averages skip a
   session missing that measure, the same rule as `WorkoutHistorySummary`. Firestore counts only the
-  documents holding **every** field in one aggregation query, so each figure is its own query.
+  documents holding **every** field in one aggregation query, so each figure is its own query. Each
+  average needs a composite index `(originTemplateId, field)` in `firestore.indexes.json` — the
+  emulator does not enforce them, so the first production backfill failed without them.
 - **Account deletion takes a user out** as it deletes their sessions (`deleteUserData`), not left
   to the trigger. `rebuildDiscoverCards` with kind `workout-community` is the backfill.
 - Private workouts are counted too, so one made public later has its numbers at once; the card's
