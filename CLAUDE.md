@@ -121,9 +121,9 @@ bottom, unchanged, so returning users are not slowed down.
   detail overlay), so the previews and the demo's summary hide it too and draw the same 44pt
   chevron/title bar: `StatsSamplePreviewNavBar` / `PerformanceSamplePreviewNavBar` are copies of
   `MyDayWorkoutNavBar`, hosted in copies of `NavBarHidingHostingController`, and
-  `WorkoutSessionSummaryScreen(onBack:)` draws `MyDayWorkoutNavBar` when given one. System bars
-  here made moving between them read as two apps. MyDay's own summary still uses the system bar
-  (`onBack: nil`), which forces `.toolbarColorScheme(.light)` and so is wrong in dark mode.
+  `WorkoutSessionSummaryScreen` draws `MyDayWorkoutNavBar`. System bars here made moving between
+  them read as two apps. **MyDay's own summary draws it too** (since 2026-11-18, `onBack` now
+  required): its system bar was forced light and showed white in dark mode.
 
 ### Example workout — before signup
 "Try a workout" pushes `MyDayDemoWorkoutRouter` (MyDayKit) onto LoginKit's stack: the **real**
