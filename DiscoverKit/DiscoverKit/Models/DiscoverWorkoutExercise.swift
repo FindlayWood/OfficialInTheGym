@@ -13,12 +13,27 @@ public struct DiscoverWorkoutExercise: Identifiable, Hashable, Sendable {
     public let name: String
     public let sets: [DiscoverWorkoutSet]
     public let notes: String?
+    /// Its place in a workout that has supersets — "1a", "2" — worked out by the composition root
+    /// from MyDayKit's `WorkoutSupersetLayout`, the one definition. `nil` on a workout with none,
+    /// which numbers its exercises 1, 2, 3 as it always has. DiscoverKit never derives it.
+    public let supersetLabel: String?
+    /// Whether the next exercise is in the same superset, so the page joins the two rows.
+    public let continuesSuperset: Bool
 
-    public init(id: String, name: String, sets: [DiscoverWorkoutSet], notes: String?) {
+    public init(
+        id: String,
+        name: String,
+        sets: [DiscoverWorkoutSet],
+        notes: String?,
+        supersetLabel: String? = nil,
+        continuesSuperset: Bool = false
+    ) {
         self.id = id
         self.name = name
         self.sets = sets
         self.notes = notes
+        self.supersetLabel = supersetLabel
+        self.continuesSuperset = continuesSuperset
     }
 
     /// `4 × 8 · 80 kg`, `3 × 8–12`, `5 × 400 m`, `1 set`. Every set the same

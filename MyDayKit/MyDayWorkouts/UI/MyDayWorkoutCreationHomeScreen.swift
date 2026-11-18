@@ -140,6 +140,12 @@ struct MyDayWorkoutCreationHomeScreen: View {
                         .textCase(.uppercase)
                         .tracking(1.2)
                     Spacer()
+                    if manager.exercises.count > 1 {
+                        Label("Link to make a superset", systemImage: "link")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .labelStyle(.titleAndIcon)
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -197,32 +203,26 @@ struct MyDayWorkoutCreationHomeScreen: View {
                         // MARK: Exercise List
                         ScrollViewReader { proxy in
                             List {
-                                ForEach(manager.exercises, id: \.self) { exercise in
-                                    HStack(spacing: 12) {
-                                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                            .fill(Color.darkColor.opacity(0.12))
-                                            .frame(width: 32, height: 32)
-                                            .overlay(
-                                                Image(systemName: "dumbbell.fill")
-                                                    .font(.system(size: 13, weight: .medium))
-                                                    .foregroundColor(Color.darkColor)
-                                            )
-                                        
-                                        Text(exercise.exercise.name)
-                                            .font(.system(size: 16, weight: .medium))
-                                        
-                                        Spacer()
-                                        
-                                        Image(systemName: "line.3.horizontal")
-                                            .font(.system(size: 13, weight: .medium))
-                                            .foregroundStyle(.tertiary)
-                                    }
-                                    .padding(.vertical, 4)
+                                let layout = manager.supersetLayout
+                                ForEach(Array(manager.exercises.enumerated()), id: \.element) { index, exercise in
+                                    MyDayWorkoutBuilderExerciseRow(
+                                        name: exercise.exercise.name,
+                                        entry: layout.hasSupersets ? layout.entries[index] : nil,
+                                        isLinkedToNext: manager.isLinkedToNext(exercise),
+                                        canLink: index < manager.exercises.count - 1,
+                                        onToggleLink: {
+                                            withAnimation(.easeInOut(duration: 0.2)) {
+                                                manager.toggleLink(after: exercise)
+                                            }
+                                        }
+                                    )
                                     .listRowBackground(Color(.secondarySystemBackground))
+                                    // Joined rows read as one block: no line between them.
+                                    .listRowSeparator(manager.isLinkedToNext(exercise) ? .hidden : .automatic, edges: .bottom)
                                 }
                                 .onDelete { indexSet in
                                     withAnimation {
-                                        manager.exercises.remove(atOffsets: indexSet)
+                                        manager.removeExercises(atOffsets: indexSet)
                                     }
                                 }
                                 

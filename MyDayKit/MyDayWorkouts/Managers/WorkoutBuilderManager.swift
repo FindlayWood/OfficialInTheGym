@@ -44,6 +44,10 @@ public final class WorkoutBuilderManager: ObservableObject {
     @Published var isPublic: Bool = false
     @Published private(set) var tags: [String] = []
     @Published var uploadState: WorkoutUploadState = .idle
+    /// The exercises joined to the one after them in a superset. Held as links rather than as
+    /// `supersetId`s so the builder never has to invent or renumber ids while the user edits:
+    /// the ids are minted once, in `buildTemplate()`.
+    @Published private(set) var supersetLinks: Set<ObjectIdentifier> = []
 
     public var onUploadSuccess: ((WorkoutTemplateModel) -> Void)?
 
@@ -62,6 +66,70 @@ public final class WorkoutBuilderManager: ObservableObject {
     // MARK: - Add Exercise
     func addExercise(_ exercise: WorkoutExerciseBuilderManager) {
         exercises.append(exercise)
+    }
+
+    /// Removes exercises and drops any link left pointing past the end, so an exercise added
+    /// later does not join a superset the user had already closed by deleting its last member.
+    /// Removing one from the middle of a superset keeps the rest of it together.
+    func removeExercises(atOffsets offsets: IndexSet) {
+        exercises.remove(atOffsets: offsets)
+        normaliseLinks()
+    }
+
+    // MARK: - Supersets
+
+    /// Whether `exercise` is joined to the next one.
+    func isLinkedToNext(_ exercise: WorkoutExerciseBuilderManager) -> Bool {
+        supersetLinks.contains(ObjectIdentifier(exercise))
+    }
+
+    /// Joins `exercise` to the one after it, or splits them if they are joined. Joining onto an
+    /// existing superset extends it (A–B linked, then B to C, is A–B–C); splitting in the middle
+    /// leaves two supersets, or an exercise on its own. The last exercise has nothing to join.
+    func toggleLink(after exercise: WorkoutExerciseBuilderManager) {
+        guard let index = exercises.firstIndex(of: exercise), index < exercises.count - 1 else { return }
+        let id = ObjectIdentifier(exercise)
+        if supersetLinks.contains(id) {
+            supersetLinks.remove(id)
+        } else {
+            supersetLinks.insert(id)
+        }
+    }
+
+    /// The builder's exercises as `WorkoutSupersetLayout` reads them, for the labels it draws while
+    /// building. The ids only need to compare equal within a group.
+    var supersetLayout: WorkoutSupersetLayout {
+        WorkoutSupersetLayout(supersetIds: Self.supersetIds(linkedToNext: linkedToNext, makeId: { "\($0)" }))
+    }
+
+    private var linkedToNext: [Bool] {
+        exercises.map(isLinkedToNext)
+    }
+
+    private func normaliseLinks() {
+        let present = Set(exercises.dropLast().map(ObjectIdentifier.init))
+        supersetLinks.formIntersection(present)
+    }
+
+    /// One id per group of linked exercises, `nil` for an exercise on its own. `makeId` is given the
+    /// group's first index, so tests and the builder's labels can use something stable while
+    /// `buildTemplate()` mints UUIDs.
+    static func supersetIds(linkedToNext: [Bool], makeId: (Int) -> String) -> [String?] {
+        var ids: [String?] = []
+        var current: String?
+        for (index, linked) in linkedToNext.enumerated() {
+            let joinedFromPrevious = index > 0 && linkedToNext[index - 1]
+            if joinedFromPrevious {
+                ids.append(current)
+            } else if linked {
+                current = makeId(index)
+                ids.append(current)
+            } else {
+                current = nil
+                ids.append(nil)
+            }
+        }
+        return ids
     }
 
     // MARK: - Tags
@@ -117,12 +185,14 @@ public final class WorkoutBuilderManager: ObservableObject {
         exercises = []
         isPublic = false
         tags = []
+        supersetLinks = []
     }
 
     // MARK: - Private
 
     private func buildTemplate() -> WorkoutTemplateModel {
         let now = Date()
+        let supersetIds = Self.supersetIds(linkedToNext: linkedToNext, makeId: { _ in UUID().uuidString })
         return WorkoutTemplateModel(
             id: UUID().uuidString,
             title: title,
@@ -150,7 +220,8 @@ public final class WorkoutBuilderManager: ObservableObject {
                         )
                     },
                     muscleGroups: manager.exercise.muscleGroups,
-                    movementPatterns: manager.exercise.movementPatterns
+                    movementPatterns: manager.exercise.movementPatterns,
+                    supersetId: supersetIds[index]
                 )
             },
             createdBy: userId,

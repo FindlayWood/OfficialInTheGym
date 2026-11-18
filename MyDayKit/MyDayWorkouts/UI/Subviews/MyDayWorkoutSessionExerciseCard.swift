@@ -30,6 +30,9 @@ struct MyDayWorkoutSessionExerciseCard: View {
     /// The demo has nowhere to put a clip (no account, no upload), so it hides
     /// the button rather than showing one that does nothing.
     var showsClip: Bool = true
+    /// Its place in the workout ("1a"), drawn before the name. `nil` on a workout with no
+    /// superset, which then looks as it always did.
+    var supersetEntry: WorkoutSupersetLayout.Entry? = nil
 
     private var completedRepsText: String {
         let reps = setRecords.filter(\.isCompleted).compactMap(\.reps)
@@ -60,6 +63,9 @@ struct MyDayWorkoutSessionExerciseCard: View {
 
     private var header: some View {
         HStack(spacing: 12) {
+            if let supersetEntry {
+                WorkoutSupersetBadge(entry: supersetEntry)
+            }
             VStack(alignment: .leading, spacing: 3) {
                 Button {
                     onExerciseTapped?()

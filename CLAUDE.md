@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
+`WorkoutSupersetLayout` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1269,6 +1269,33 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`.
   `MyDayCoordinator` now stores `rootViewController` in `start()` and exposes
   `popToCoordinatorRoot()`; `popToRoot()` / `popToRootViewController` are gone.
+
+## Supersets
+Exercises done back to back, labelled **1a, 1b, 1c, 2, 3a, 3b**. Supersets only, by decision:
+no circuits, rounds or timed intervals. Built 2026-11-18. App only, no server change.
+
+- **`WorkoutExerciseModel.supersetId`, optional.** Consecutive exercises sharing it are one
+  superset. No template written before carries it, and those read as having none.
+- **`WorkoutSupersetLayout` is the one definition** of a superset and its labels. Labels are
+  **never stored**, worked out from the order on every render, so unlinking or deleting cannot
+  leave a stale "3b". An id on one exercise alone, or split by another exercise, is not a
+  superset. DISCOVER's page gets its labels from it through the composition root
+  (`DiscoverWorkoutExercise.supersetLabel`); DiscoverKit never derives them.
+- **Labels only show on a workout that has a superset** (`hasSupersets`), so every other
+  workout looks as it did.
+- **The builder holds links, not ids** (`WorkoutBuilderManager.supersetLinks`, "joined to the
+  next"); `buildTemplate()` mints one UUID per group. The link button on each row but the last
+  took the place of the drag handle, which promised a reorder the list never had. Linking onto
+  a superset extends it; unlinking in the middle splits it. Deleting drops a link left pointing
+  past the end, or the next exercise added would join without asking.
+- **Every rebuild of an exercise must carry `supersetId`** — `WorkoutSessionManager.addSet`
+  does. Copy and the settings change pass exercises through whole.
+- **Rest comes after the last exercise of a superset only**
+  (`WorkoutSupersetLayout.Position.restsAfter`, read in the session's `log`). Logging order is
+  not enforced, and set counts may differ within a superset.
+- Cards keep their own chrome: a `WorkoutSupersetBadge` before the name, and
+  `supersetConnector` draws a line between linked cards' badges. Its `gap` must equal the stack's
+  spacing (12).
 
 ## Workout Completion Rules
 Three guards on what counts as a finished workout. All three protect the same thing: a completed

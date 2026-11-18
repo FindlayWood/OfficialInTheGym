@@ -193,7 +193,9 @@ public final class WorkoutSessionManager: ObservableObject, @unchecked Sendable 
             restSeconds: exercise.restSeconds,
             notes: exercise.notes,
             muscleGroups: exercise.muscleGroups,
-            movementPatterns: exercise.movementPatterns
+            movementPatterns: exercise.movementPatterns,
+            // Dropping it here would split a superset the moment a set is added.
+            supersetId: exercise.supersetId
         )
         entry.template = WorkoutTemplateModel(
             id: entry.template.id,

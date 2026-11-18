@@ -55,6 +55,10 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
     /// required field would stop all of them decoding.
     public let muscleGroups: [String]?
     public let movementPatterns: [String]?
+    /// Consecutive exercises with the same id are one superset ("1a, 1b"). Read through
+    /// `WorkoutSupersetLayout`, never compared by hand. **Optional, and must stay so**: no template
+    /// written before supersets carries it, and those read as having none.
+    public let supersetId: String?
 
     public init(
         id: String,
@@ -66,7 +70,8 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
         restSeconds: Int? = nil,
         notes: String? = nil,
         muscleGroups: [String]? = nil,
-        movementPatterns: [String]? = nil
+        movementPatterns: [String]? = nil,
+        supersetId: String? = nil
     ) {
         self.id = id
         self.exerciseId = exerciseId
@@ -78,6 +83,7 @@ public struct WorkoutExerciseModel: Identifiable, Codable {
         self.notes = notes
         self.muscleGroups = muscleGroups
         self.movementPatterns = movementPatterns
+        self.supersetId = supersetId
     }
 }
 

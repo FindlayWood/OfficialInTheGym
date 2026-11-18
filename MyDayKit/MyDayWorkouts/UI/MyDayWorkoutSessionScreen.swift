@@ -76,7 +76,10 @@ struct MyDayWorkoutSessionScreen: View {
 
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 12) {
-                        ForEach(manager.entry.template.exercises) { exercise in
+                        let exercises = manager.entry.template.exercises
+                        let supersets = WorkoutSupersetLayout(exercises: exercises)
+                        ForEach(Array(exercises.enumerated()), id: \.element.id) { index, exercise in
+                            let supersetEntry = supersets.hasSupersets ? supersets.entries[index] : nil
                             MyDayWorkoutSessionExerciseCard(
                                 exercise: exercise,
                                 setRecords: manager.setRecords(for: exercise.exerciseId),
@@ -110,8 +113,10 @@ struct MyDayWorkoutSessionScreen: View {
                                 onAddSet: canAddSets ? {
                                     manager.addSet(toExercise: exercise.exerciseId)
                                 } : nil,
-                                showsClip: showsClips
+                                showsClip: showsClips,
+                                supersetEntry: supersetEntry
                             )
+                            .supersetConnector(supersetEntry)
                         }
                         Color.clear.frame(height: sessionStarted ? 100 : 200)
                     }
@@ -271,10 +276,19 @@ struct MyDayWorkoutSessionScreen: View {
         )
 
         // Only on first completion — editing an already-logged set must not
-        // restart the rest timer.
-        if !wasLogged, let rest = exercise.restSeconds, rest > 0 {
+        // restart the rest timer. Inside a superset the rest comes after the
+        // last exercise only: 1a goes straight into 1b.
+        if !wasLogged, restsAfter(exercise), let rest = exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
         }
+    }
+
+    /// Whether logging a set of `exercise` is followed by rest: always on its own, and only on the
+    /// last exercise of a superset. The rule is `WorkoutSupersetLayout.Position.restsAfter`.
+    private func restsAfter(_ exercise: WorkoutExerciseModel) -> Bool {
+        let exercises = manager.entry.template.exercises
+        guard let index = exercises.firstIndex(where: { $0.id == exercise.id }) else { return true }
+        return WorkoutSupersetLayout(exercises: exercises).entries[index].position.restsAfter
     }
 
     // MARK: - Quick Complete
