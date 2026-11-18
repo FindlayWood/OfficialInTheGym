@@ -151,56 +151,15 @@ final class MyProfileViewModelTests: XCTestCase {
         XCTAssertTrue(sut.privacy.receivedMessages.isEmpty)
     }
 
-    // MARK: - Highlights and clips
+    // MARK: - Clips
 
-    func test_load_deliversHighlightsAndClips() async {
+    func test_load_deliversClips() async {
         let sut = makeSUT(results: [.success(.make(userId: "me"))])
-        sut.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("squat")], isPinned: false))
         sut.content.clipsResult = .success([clip("c1")])
 
         await sut.viewModel.load()
 
-        XCTAssertEqual(sut.viewModel.highlights?.highlights.map(\.exerciseId), ["squat"])
         XCTAssertEqual(sut.viewModel.clips.map(\.clipId), ["c1"])
-    }
-
-    // A failed section leaves only itself empty.
-    func test_load_keepsTheClipsWhenHighlightsFail() async {
-        let sut = makeSUT(results: [.success(.make())])
-        sut.content.highlightsResult = .failure(anyError)
-        sut.content.clipsResult = .success([clip("c1")])
-
-        await sut.viewModel.load()
-
-        XCTAssertNil(sut.viewModel.highlights)
-        XCTAssertEqual(sut.viewModel.clips.map(\.clipId), ["c1"])
-    }
-
-    // The editor opens on the current choice; automatic highlights are not a
-    // choice, so it opens with none picked.
-    func test_editHighlights_passesThePinsOnlyWhenPinned() async {
-        let pinned = makeSUT(results: [.success(.make())])
-        pinned.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
-        await pinned.viewModel.load()
-        var received: [String]?
-        pinned.viewModel.onEditHighlights = { received = $0 }
-        pinned.viewModel.editHighlights()
-        XCTAssertEqual(received, ["curl"])
-
-        let automatic = makeSUT(results: [.success(.make())])
-        automatic.content.highlightsResult = .success(ProfileHighlights(highlights: [highlight("squat")], isPinned: false))
-        await automatic.viewModel.load()
-        automatic.viewModel.onEditHighlights = { received = $0 }
-        automatic.viewModel.editHighlights()
-        XCTAssertEqual(received, [])
-    }
-
-    func test_applySavedHighlights_showsTheResultAtOnce() {
-        let sut = makeSUT()
-
-        sut.viewModel.applySavedHighlights(ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
-
-        XCTAssertEqual(sut.viewModel.highlights, ProfileHighlights(highlights: [highlight("curl")], isPinned: true))
     }
 
     func test_load_deliversThePendingRequestCount() async {
@@ -299,7 +258,6 @@ final class MyProfileViewModelTests: XCTestCase {
             photoLoader: photoLoader,
             publicProfileLoader: profiles,
             requestCountLoader: privacy,
-            highlightsLoader: content,
             clipsLoader: content,
             workoutsLoader: workouts,
             subscription: ProfileSubscriptionServiceSpy(hasUnlockedPro: hasUnlockedPro)
@@ -309,10 +267,6 @@ final class MyProfileViewModelTests: XCTestCase {
 
     private func publicProfile(followers: Int) -> PublicProfile {
         PublicProfile(header: .make(), isPrivate: false, counts: ProfileCounts(followers: followers, following: 2), clipCount: 7)
-    }
-
-    private func highlight(_ id: String) -> ProfileHighlight {
-        ProfileHighlight(exerciseId: id, exerciseName: id, maxWeightKilograms: 100, maxTimeSeconds: 0, isTimeBased: false)
     }
 
     private func clip(_ id: String) -> ProfileClip {

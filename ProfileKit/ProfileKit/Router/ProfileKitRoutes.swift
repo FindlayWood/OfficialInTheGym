@@ -19,7 +19,6 @@ enum ProfileKitRoutes {
     case deleteAccount
     /// A section's See all, or All workouts on your own profile.
     case workoutList(ProfileWorkoutListKind)
-    case editHighlights(pinned: [String], onSaved: (ProfileHighlights) -> Void)
     /// Carries what the profile already holds, so the editor opens filled in
     /// without a second read.
     case editProfile(header: ProfileHeader, photo: UIImage?, onSaved: () -> Void)

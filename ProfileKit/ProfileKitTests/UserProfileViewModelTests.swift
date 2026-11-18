@@ -93,28 +93,7 @@ final class UserProfileViewModelTests: XCTestCase {
         XCTAssertEqual(sut.viewModel.stamps, [.elite])
     }
 
-    // MARK: - Highlights and clips
-
-    func test_load_deliversHighlightsAndClipsForAPublicAccount() async {
-        let sut = makeSUT(profile: profile(isPrivate: false), status: .notFollowing)
-        sut.content.highlightsResult = .success(ProfileHighlights(highlights: [], isPinned: false))
-
-        await sut.viewModel.load()
-
-        XCTAssertTrue(sut.content.receivedMessages.contains(.highlights("alex")))
-        XCTAssertNotNil(sut.viewModel.highlights)
-    }
-
-    // A private account's highlights are for followers; the rules would deny
-    // the read, so the screen does not make it.
-    func test_load_doesNotAskForAPrivateAccountsHighlightsUntilFollowing() async {
-        let sut = makeSUT(profile: profile(isPrivate: true), status: .notFollowing)
-
-        await sut.viewModel.load()
-
-        XCTAssertFalse(sut.content.receivedMessages.contains(.highlights("alex")))
-        XCTAssertNil(sut.viewModel.highlights)
-    }
+    // MARK: - Clips
 
     // A clip marked public stays public, private account or not, as it does
     // in DISCOVER.
@@ -186,7 +165,6 @@ final class UserProfileViewModelTests: XCTestCase {
         XCTAssertEqual(sut.viewModel.isBlocked, true)
         XCTAssertFalse(sut.viewModel.canSeeActivity)
         XCTAssertFalse(sut.content.receivedMessages.contains { if case .clips = $0 { true } else { false } })
-        XCTAssertFalse(sut.content.receivedMessages.contains(.highlights("alex")))
     }
 
     // The server cuts both follows on a block; the screen reflects it rather
@@ -311,7 +289,6 @@ final class UserProfileViewModelTests: XCTestCase {
             statusLoader: follows,
             followWriter: follows,
             unfollower: follows,
-            highlightsLoader: content,
             clipsLoader: content,
             workoutsLoader: workouts,
             reporter: moderation,

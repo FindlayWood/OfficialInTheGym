@@ -12,7 +12,7 @@ import UIKit
 ///
 /// The header: photo, name, @username, stamps, bio, and from step 5 of
 /// `PROFILE_PLAN.md` the follower and following counts, then from step 8 the
-/// highlights and clips sections, the same ones other people see. **Counts are absent, not zero, until the
+/// workouts and clips sections, the same ones other people see. **Counts are absent, not zero, until the
 /// user's `Profiles` document exists.** A "0 followers" before the backfill would
 /// be a claim, not a placeholder.
 ///
@@ -35,7 +35,6 @@ final class MyProfileViewModel: ObservableObject {
     @Published private(set) var publicProfile: PublicProfile?
     /// Requests waiting for approval. Zero, or a failed read, draws no row.
     @Published private(set) var pendingRequestCount = 0
-    @Published private(set) var highlights: ProfileHighlights?
     @Published private(set) var clips: [ProfileClip] = []
     /// Your public workouts, as others see them. One more than the section shows, so it knows
     /// whether to offer See all.
@@ -47,7 +46,6 @@ final class MyProfileViewModel: ObservableObject {
     private let photoLoader: ProfilePhotoLoader
     private let publicProfileLoader: PublicProfileLoader
     private let requestCountLoader: FollowRequestCountLoader
-    private let highlightsLoader: ProfileHighlightsLoader
     private let clipsLoader: ProfileClipsLoader
     private let workoutsLoader: ProfileWorkoutsLoader
     private let subscription: ProfileSubscriptionService
@@ -56,8 +54,6 @@ final class MyProfileViewModel: ObservableObject {
     var onEditProfile: ((ProfileHeader, UIImage?) -> Void)?
     var onOpenFollowList: ((FollowListKind) -> Void)?
     var onOpenFollowRequests: (() -> Void)?
-    /// The current pins, empty when highlights are automatic.
-    var onEditHighlights: (([String]) -> Void)?
     var onOpenClip: ((ProfileClip) -> Void)?
     var onSeeAllWorkouts: (() -> Void)?
     /// Your whole library. `nil` leaves All workouts out, when this router has no MyDay to open a
@@ -69,7 +65,6 @@ final class MyProfileViewModel: ObservableObject {
         photoLoader: ProfilePhotoLoader,
         publicProfileLoader: PublicProfileLoader,
         requestCountLoader: FollowRequestCountLoader,
-        highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
         workoutsLoader: ProfileWorkoutsLoader,
         subscription: ProfileSubscriptionService
@@ -78,24 +73,12 @@ final class MyProfileViewModel: ObservableObject {
         self.photoLoader = photoLoader
         self.publicProfileLoader = publicProfileLoader
         self.requestCountLoader = requestCountLoader
-        self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
         self.workoutsLoader = workoutsLoader
         self.subscription = subscription
     }
 
     var counts: ProfileCounts? { publicProfile?.counts }
-
-    func editHighlights() {
-        let pins = highlights?.isPinned == true ? highlights?.highlights.map(\.exerciseId) ?? [] : []
-        onEditHighlights?(pins)
-    }
-
-    /// The editor's result, shown at once. The server's rebuild of
-    /// `ProfileHighlights` lags by a few seconds.
-    func applySavedHighlights(_ saved: ProfileHighlights) {
-        highlights = saved
-    }
 
     /// Premium is passed in because this is your own profile. See `ProfileStamp`.
     var stamps: [ProfileStamp] {
@@ -154,13 +137,12 @@ final class MyProfileViewModel: ObservableObject {
         }
     }
 
-    /// Highlights, workouts and clips load independently; any failing leaves its own
+    /// Workouts and clips load independently; either failing leaves its own
     /// section empty and the rest of the profile intact.
     private func loadContent(for userId: String) async {
-        async let highlights: Void = loadHighlights(for: userId)
         async let clips: Void = loadClips(for: userId)
         async let workouts: Void = loadWorkouts(for: userId)
-        _ = await (highlights, clips, workouts)
+        _ = await (clips, workouts)
     }
 
     /// A failed read keeps whatever was already shown.
@@ -169,14 +151,6 @@ final class MyProfileViewModel: ObservableObject {
             workouts = try await workoutsLoader.publicWorkouts(of: userId, limit: ProfileWorkoutsSection.previewCount + 1)
         } catch {
             print("❌ Profile workouts failed: \(error)")
-        }
-    }
-
-    private func loadHighlights(for userId: String) async {
-        do {
-            highlights = try await highlightsLoader.highlights(for: userId)
-        } catch {
-            print("❌ Profile highlights failed: \(error)")
         }
     }
 

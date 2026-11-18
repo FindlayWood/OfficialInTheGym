@@ -130,17 +130,11 @@ class ProfileKitComposition {
 
         let publicProfileLoader: PublicProfileLoader = FirestorePublicProfileLoader()
 
-        // MARK: - Highlights and clips
-
-        let highlightsLoader: ProfileHighlightsLoader = FirestoreProfileHighlightsLoader()
+        // MARK: - Clips and workouts
 
         let clipsLoader: ProfileClipsLoader = FirestoreProfileClipsLoader()
 
         let workoutsLoader: ProfileWorkoutsLoader = FirestoreProfileWorkoutsLoader()
-
-        let highlightCandidatesLoader: HighlightCandidatesLoader = FirestoreHighlightCandidatesLoader(userId: userId)
-
-        let pinnedHighlightsWriter: PinnedHighlightsWriter = FirestorePinnedHighlightsWriter(userId: userId)
 
         // MARK: - Report and block
 
@@ -198,11 +192,8 @@ class ProfileKitComposition {
             followRequestCountLoader: followRequestCountLoader,
             followRequestApprover: followRequestApprover,
             publicProfileLoader: publicProfileLoader,
-            highlightsLoader: highlightsLoader,
             clipsLoader: clipsLoader,
             workoutsLoader: workoutsLoader,
-            highlightCandidatesLoader: highlightCandidatesLoader,
-            pinnedHighlightsWriter: pinnedHighlightsWriter,
             reporter: reporter,
             blocker: blocker,
             blockStatusLoader: blockStatusLoader,

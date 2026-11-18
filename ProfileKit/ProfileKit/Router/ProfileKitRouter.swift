@@ -51,11 +51,8 @@ public final class ProfileKitRouter {
     let followRequestCountLoader: FollowRequestCountLoader
     let followRequestApprover: FollowRequestApprover
     let publicProfileLoader: PublicProfileLoader
-    let highlightsLoader: ProfileHighlightsLoader
     let clipsLoader: ProfileClipsLoader
     let workoutsLoader: ProfileWorkoutsLoader
-    let highlightCandidatesLoader: HighlightCandidatesLoader
-    let pinnedHighlightsWriter: PinnedHighlightsWriter
     let reporter: ProfileReporter
     let blocker: ProfileBlocker
     let blockStatusLoader: ProfileBlockStatusLoader
@@ -121,11 +118,8 @@ public final class ProfileKitRouter {
         followRequestCountLoader: FollowRequestCountLoader,
         followRequestApprover: FollowRequestApprover,
         publicProfileLoader: PublicProfileLoader,
-        highlightsLoader: ProfileHighlightsLoader,
         clipsLoader: ProfileClipsLoader,
         workoutsLoader: ProfileWorkoutsLoader,
-        highlightCandidatesLoader: HighlightCandidatesLoader,
-        pinnedHighlightsWriter: PinnedHighlightsWriter,
         reporter: ProfileReporter,
         blocker: ProfileBlocker,
         blockStatusLoader: ProfileBlockStatusLoader,
@@ -159,11 +153,8 @@ public final class ProfileKitRouter {
         self.followRequestCountLoader = followRequestCountLoader
         self.followRequestApprover = followRequestApprover
         self.publicProfileLoader = publicProfileLoader
-        self.highlightsLoader = highlightsLoader
         self.clipsLoader = clipsLoader
         self.workoutsLoader = workoutsLoader
-        self.highlightCandidatesLoader = highlightCandidatesLoader
-        self.pinnedHighlightsWriter = pinnedHighlightsWriter
         self.reporter = reporter
         self.blocker = blocker
         self.blockStatusLoader = blockStatusLoader
@@ -208,7 +199,6 @@ extension ProfileKitRouter {
                 photoLoader: photoLoader,
                 publicProfileLoader: publicProfileLoader,
                 requestCountLoader: followRequestCountLoader,
-                highlightsLoader: highlightsLoader,
                 clipsLoader: clipsLoader,
                 workoutsLoader: workoutsLoader,
                 subscription: subscription
@@ -220,9 +210,6 @@ extension ProfileKitRouter {
             }
             if canOpenLibrary {
                 viewModel.onOpenAllWorkouts = { [weak self] in self?.navigate(to: .workoutList(.library)) }
-            }
-            viewModel.onEditHighlights = { [weak self, weak viewModel] pins in
-                self?.present(.editHighlights(pinned: pins, onSaved: { viewModel?.applySavedHighlights($0) }))
             }
             viewModel.onOpenFollowRequests = { [weak self] in self?.navigate(to: .followRequests) }
             viewModel.onOpenFollowList = { [weak self, weak viewModel] kind in
@@ -331,7 +318,6 @@ extension ProfileKitRouter {
                 statusLoader: followStatusLoader,
                 followWriter: followWriter,
                 unfollower: unfollower,
-                highlightsLoader: highlightsLoader,
                 clipsLoader: clipsLoader,
                 workoutsLoader: workoutsLoader,
                 reporter: reporter,
@@ -370,18 +356,6 @@ extension ProfileKitRouter {
             ))
             vc.hidesBottomBarWhenPushed = true
             return vc
-
-        case .editHighlights(let pinned, let onSaved):
-            let viewModel = EditHighlightsViewModel(
-                pinned: pinned,
-                loader: highlightCandidatesLoader,
-                writer: pinnedHighlightsWriter
-            )
-            viewModel.onSaved = onSaved
-            let host = UIHostingController(rootView: EditHighlightsScreen(viewModel: viewModel))
-            let modal = UINavigationController(rootViewController: host)
-            viewModel.onFinished = { [weak modal] in modal?.dismiss(animated: true) }
-            return modal
 
         case .editProfile(let header, let photo, let onSaved):
             let viewModel = EditProfileViewModel(

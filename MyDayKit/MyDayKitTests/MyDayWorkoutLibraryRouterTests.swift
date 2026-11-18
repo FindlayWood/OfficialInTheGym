@@ -5,6 +5,7 @@
 //  Created by Findlay Wood on 11/11/2026.
 //
 
+import Combine
 import UIKit
 import XCTest
 @testable import MyDayKit
@@ -38,11 +39,12 @@ final class MyDayWorkoutLibraryRouterTests: XCTestCase {
     // PROFILE can ask for a workout before MyDay's library has ever been opened. Opening nothing
     // then would make the first tap on the profile look broken.
     func test_showTemplate_loadsTheLibraryAndWaitsWhenItHasNotLoaded() async {
-        let (sut, navigation, _) = await makeSUT(templates: [.fixture(id: "a")])
+        let (sut, navigation, library) = await makeSUT(templates: [.fixture(id: "a")])
+        let settled = loadSettled(library)
 
         sut.showTemplate(id: "a")
 
-        await waitUntil { navigation.viewControllers.count == 2 }
+        await waitUntil { navigation.viewControllers.count == 2 && settled() }
         XCTAssertEqual(navigation.viewControllers.count, 2)
     }
 
@@ -50,9 +52,10 @@ final class MyDayWorkoutLibraryRouterTests: XCTestCase {
     // Waiting with a plain subscription would push the same page twice.
     func test_showTemplate_pushesOncePerRequestWhileTheLibraryLoads() async {
         let (sut, navigation, library) = await makeSUT(templates: [.fixture(id: "a")])
+        let settled = loadSettled(library)
 
         sut.showTemplate(id: "a")
-        await waitUntil { navigation.viewControllers.count == 2 }
+        await waitUntil(settled)
         library.addTemplate(.fixture(id: "b"))
 
         XCTAssertEqual(navigation.viewControllers.count, 2)
@@ -109,6 +112,21 @@ final class MyDayWorkoutLibraryRouterTests: XCTestCase {
         await waitUntil {
             if case .loaded = library.state { return true }
             return false
+        }
+    }
+
+    /// True once the library has published both its local and its remote `.loaded`. The page is
+    /// pushed on the first, while the load's `Task` still holds the manager awaiting the remote
+    /// fetch, so a test that ended there failed the leak check whenever the runner was slow
+    /// enough for the fetch to outlast it (CI, 2026-11-18). It also makes the "pushes once" test
+    /// see the second `.loaded` it is about, rather than only an `addTemplate`.
+    private func loadSettled(_ library: WorkoutLibraryManager) -> () -> Bool {
+        var loadedCount = 0
+        let subscription = library.$state.sink { state in
+            if case .loaded = state { loadedCount += 1 }
+        }
+        return {
+            withExtendedLifetime(subscription) { loadedCount >= 2 }
         }
     }
 

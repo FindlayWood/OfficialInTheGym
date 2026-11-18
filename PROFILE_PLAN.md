@@ -628,6 +628,12 @@ for a public account and a private one, in the Rules Playground before publishin
 
 ### Step 8 — Highlights (PBs) and clips — rolled out 2026-10-25
 
+> **Highlights were removed from the app on 2026-11-18** (branch `remove-profile-highlights`):
+> the tiles, the Edit sheet, their loaders, writer and adapters. Ranked by `setCount`, they showed
+> the most-trained exercises rather than PBs. The server half below (`ProfileHighlights`, its
+> function, rule and `pinnedHighlights`) still exists and is to be retired in
+> `InTheGym-CloudFunctions`. The clips half of this step is unchanged.
+
 **Decided at the start of the step** (2026-10-04):
 - **Highlights are automatic until pinned.** They are your three most-trained exercises (by
   `setCount`) until you pin up to three of your own. This settles open question 4.
