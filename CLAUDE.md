@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`WorkoutSupersetLayout` · `WorkoutExerciseSetManager.setModel(orderIndex:id:)` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
+`WorkoutSupersetLayout` · `WorkoutSetOrder` · `WorkoutExerciseSetManager.setModel(orderIndex:id:)` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1306,6 +1306,13 @@ no circuits, rounds or timed intervals. Built 2026-11-18. App only, no server ch
 - **Rest comes after the last exercise of a superset only**
   (`WorkoutSupersetLayout.Position.restsAfter`, read in the session's `log`). Logging order is
   not enforced, and set counts may differ within a superset.
+- **Logging a set points at the next one**: on first completion only (as with rest), the
+  session screen scrolls the card holding the next set to the middle, centres the pill in its
+  row and flashes it twice (`SessionSetFlashRing`). Logged through the set detail overlay, it
+  waits for the overlay to close. **`WorkoutSetOrder` is the one order**: an exercise on its own
+  in set order; a superset in rounds (1a set 1, 1b set 1, back to 1a set 2), a shorter exercise
+  dropping out of later rounds. Next is the first set after the logged one not yet logged,
+  wrapping round to anything skipped; nothing once all are logged.
 - Cards keep their own chrome: a `WorkoutSupersetBadge` before the name, and
   `supersetConnector` draws a line between linked cards' badges. Its `gap` must equal the stack's
   spacing (12).

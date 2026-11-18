@@ -33,6 +33,9 @@ struct MyDayWorkoutSessionExerciseCard: View {
     /// Its place in the workout ("1a"), drawn before the name. `nil` on a workout with no
     /// superset, which then looks as it always did.
     var supersetEntry: WorkoutSupersetLayout.Entry? = nil
+    /// The set to do next, flashed and scrolled to the middle of the row when it is one of this
+    /// card's. The screen scrolls the card itself into the middle of the page.
+    var flash: SessionSetFlash? = nil
 
     private var completedRepsText: String {
         let reps = setRecords.filter(\.isCompleted).compactMap(\.reps)
@@ -93,32 +96,42 @@ struct MyDayWorkoutSessionExerciseCard: View {
     // MARK: - Sets Row
 
     private var setsRow: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
-                    let record = setRecords.first(where: { $0.id == set.id })
-                    let matchedId = SessionSetDetail.matchedId(exerciseId: exercise.id, setId: set.id)
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
+                        let record = setRecords.first(where: { $0.id == set.id })
+                        let matchedId = SessionSetDetail.matchedId(exerciseId: exercise.id, setId: set.id)
 
-                    if selectedSetId == matchedId {
-                        SessionSetPillPlaceholder(index: index, set: set, record: record)
-                    } else {
-                        SessionSetPill(
-                            index: index,
-                            set: set,
-                            record: record,
-                            isInactive: !isSessionStarted || isSessionCompleted,
-                            matchedId: matchedId,
-                            animation: animation,
-                            onTap: { onSetTapped?(set, record, index) },
-                            onQuickComplete: canQuickComplete(set, record)
-                                ? { onSetQuickCompleted?(set) }
-                                : nil
-                        )
+                        if selectedSetId == matchedId {
+                            SessionSetPillPlaceholder(index: index, set: set, record: record)
+                        } else {
+                            SessionSetPill(
+                                index: index,
+                                set: set,
+                                record: record,
+                                isInactive: !isSessionStarted || isSessionCompleted,
+                                matchedId: matchedId,
+                                animation: animation,
+                                onTap: { onSetTapped?(set, record, index) },
+                                onQuickComplete: canQuickComplete(set, record)
+                                    ? { onSetQuickCompleted?(set) }
+                                    : nil
+                            )
+                            .overlay { SessionSetFlashRing(flash: flash, setId: set.id) }
+                            .id(set.id)
+                        }
                     }
                 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+            .onChange(of: flash) { _, flash in
+                guard let flash, flash.exerciseId == exercise.id else { return }
+                withAnimation(.easeInOut(duration: 0.35)) {
+                    proxy.scrollTo(flash.setId, anchor: .center)
+                }
+            }
         }
     }
 

@@ -34,6 +34,11 @@ struct MyDayWorkoutSessionScreen: View {
     @State private var elapsedSeconds = 0
     @State private var rpeExercise: WorkoutExerciseModel?
     @State private var selectedSet: SessionSetDetail?
+    /// The set to do next, flashed on its pill (`WorkoutSetOrder`).
+    @State private var flash: SessionSetFlash?
+    /// The next set worked out while the set detail overlay is still open, flashed once it closes
+    /// — behind the overlay nobody would see it.
+    @State private var pendingFlash: SessionSetFlash?
     @State private var dialog: WorkoutSessionDialog?
 
     private let heroAnimation: Animation = .interactiveSpring(response: 0.3, dampingFraction: 0.8, blendDuration: 0.8)
@@ -74,56 +79,68 @@ struct MyDayWorkoutSessionScreen: View {
                     Divider()
                 }
 
-                ScrollView(showsIndicators: false) {
-                    LazyVStack(spacing: 12) {
-                        let exercises = manager.entry.template.exercises
-                        let supersets = WorkoutSupersetLayout(exercises: exercises)
-                        ForEach(Array(exercises.enumerated()), id: \.element.id) { index, exercise in
-                            let supersetEntry = supersets.hasSupersets ? supersets.entries[index] : nil
-                            MyDayWorkoutSessionExerciseCard(
-                                exercise: exercise,
-                                setRecords: manager.setRecords(for: exercise.exerciseId),
-                                isSessionStarted: sessionStarted,
-                                isSessionCompleted: sessionCompleted,
-                                exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
-                                animation: animation,
-                                selectedSetId: selectedSet?.matchedId,
-                                // Always available. Before starting, the overlay
-                                // is how a set is read in full; after finishing,
-                                // it is how it is revisited.
-                                onSetTapped: { targetSet, record, index in
-                                    withAnimation(heroAnimation) {
-                                        selectedSet = SessionSetDetail(
-                                            exercise: exercise,
-                                            setModel: targetSet,
-                                            setRecord: record,
-                                            index: index
-                                        )
-                                    }
-                                },
-                                // Tapping the pill's circle logs the set as
-                                // prescribed without opening the overlay. The
-                                // card decides per set whether to offer it.
-                                onSetQuickCompleted: { targetSet in
-                                    quickComplete(targetSet, for: exercise)
-                                },
-                                onRPETapped: sessionStarted && !sessionCompleted ? {
-                                    rpeExercise = exercise
-                                } : nil,
-                                onAddSet: canAddSets ? {
-                                    manager.addSet(toExercise: exercise.exerciseId)
-                                } : nil,
-                                showsClip: showsClips,
-                                supersetEntry: supersetEntry
-                            )
-                            .supersetConnector(supersetEntry)
+                ScrollViewReader { proxy in
+                    ScrollView(showsIndicators: false) {
+                        LazyVStack(spacing: 12) {
+                            let exercises = manager.entry.template.exercises
+                            let supersets = WorkoutSupersetLayout(exercises: exercises)
+                            ForEach(Array(exercises.enumerated()), id: \.element.id) { index, exercise in
+                                let supersetEntry = supersets.hasSupersets ? supersets.entries[index] : nil
+                                MyDayWorkoutSessionExerciseCard(
+                                    exercise: exercise,
+                                    setRecords: manager.setRecords(for: exercise.exerciseId),
+                                    isSessionStarted: sessionStarted,
+                                    isSessionCompleted: sessionCompleted,
+                                    exerciseRPE: manager.exerciseRPE(for: exercise.exerciseId),
+                                    animation: animation,
+                                    selectedSetId: selectedSet?.matchedId,
+                                    // Always available. Before starting, the overlay
+                                    // is how a set is read in full; after finishing,
+                                    // it is how it is revisited.
+                                    onSetTapped: { targetSet, record, index in
+                                        withAnimation(heroAnimation) {
+                                            selectedSet = SessionSetDetail(
+                                                exercise: exercise,
+                                                setModel: targetSet,
+                                                setRecord: record,
+                                                index: index
+                                            )
+                                        }
+                                    },
+                                    // Tapping the pill's circle logs the set as
+                                    // prescribed without opening the overlay. The
+                                    // card decides per set whether to offer it.
+                                    onSetQuickCompleted: { targetSet in
+                                        quickComplete(targetSet, for: exercise)
+                                    },
+                                    onRPETapped: sessionStarted && !sessionCompleted ? {
+                                        rpeExercise = exercise
+                                    } : nil,
+                                    onAddSet: canAddSets ? {
+                                        manager.addSet(toExercise: exercise.exerciseId)
+                                    } : nil,
+                                    showsClip: showsClips,
+                                    supersetEntry: supersetEntry,
+                                    flash: flash
+                                )
+                                .supersetConnector(supersetEntry)
+                                .id(exercise.id)
+                            }
+                            Color.clear.frame(height: sessionStarted ? 100 : 200)
                         }
-                        Color.clear.frame(height: sessionStarted ? 100 : 200)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .background(Color.pageColor)
+                    // The card holding the next set comes to the middle of the screen; the
+                    // card centres the pill in its own row.
+                    .onChange(of: flash) { _, flash in
+                        guard let flash else { return }
+                        withAnimation(.easeInOut(duration: 0.35)) {
+                            proxy.scrollTo(flash.exerciseId, anchor: .center)
+                        }
+                    }
                 }
-                .background(Color.pageColor)
             }
 
             if !sessionStarted {
@@ -180,6 +197,15 @@ struct MyDayWorkoutSessionScreen: View {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 if sessionStarted { elapsedSeconds += 1 }
+            }
+        }
+        .onChange(of: selectedSet == nil) { _, closed in
+            guard closed, let next = pendingFlash else { return }
+            pendingFlash = nil
+            // After the hero has flown back into its pill.
+            Task {
+                try? await Task.sleep(nanoseconds: 350_000_000)
+                flash = next
             }
         }
         .sheet(item: $rpeExercise) { exercise in
@@ -280,6 +306,34 @@ struct MyDayWorkoutSessionScreen: View {
         // last exercise only: 1a goes straight into 1b.
         if !wasLogged, restsAfter(exercise), let rest = exercise.restSeconds, rest > 0 {
             manager.startRestTimer(seconds: rest)
+        }
+
+        // Point at the next set, on first completion only, as with rest: correcting a set must
+        // not send the screen somewhere else.
+        if !wasLogged {
+            pointAtNextSet(after: exercise, set: set)
+        }
+    }
+
+    /// Flashes the set that comes next (`WorkoutSetOrder.next`) and brings it to the middle of the
+    /// screen: the next set of this exercise, or in a superset the partner's set of the same round.
+    /// Waits for the set detail overlay to close if the set was logged through it.
+    private func pointAtNextSet(after exercise: WorkoutExerciseModel, set: WorkoutSetModel) {
+        let exercises = manager.entry.template.exercises
+        let next = WorkoutSetOrder.next(
+            after: WorkoutSetOrder.Step(exerciseId: exercise.id, setId: set.id),
+            in: exercises,
+            isLogged: { step in
+                guard let target = exercises.first(where: { $0.id == step.exerciseId }) else { return true }
+                return manager.setRecord(exerciseId: target.exerciseId, setId: step.setId)?.isCompleted ?? false
+            }
+        )
+        guard let next else { return }
+        let pointer = SessionSetFlash(exerciseId: next.exerciseId, setId: next.setId)
+        if selectedSet == nil {
+            flash = pointer
+        } else {
+            pendingFlash = pointer
         }
     }
 
