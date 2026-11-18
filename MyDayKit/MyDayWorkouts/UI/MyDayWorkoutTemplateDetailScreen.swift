@@ -23,6 +23,8 @@ struct MyDayWorkoutTemplateDetailScreen: View {
     var onSettingsTapped: (() -> Void)?
     /// A line under the bar when the last settings change could not be saved.
     var settingsNotice: String?
+    /// The user's own sessions of this workout. `nil` leaves the history card off, as in the demo.
+    var history: WorkoutHistoryViewModel?
 
     @State private var showDim = false
     @State private var showCard = false
@@ -68,6 +70,9 @@ struct MyDayWorkoutTemplateDetailScreen: View {
 
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 12) {
+                    if let history {
+                        WorkoutHistoryCard(viewModel: history)
+                    }
                     ForEach(template.exercises) { exercise in
                         MyDayExerciseTemplateCard(
                             exercise: exercise,

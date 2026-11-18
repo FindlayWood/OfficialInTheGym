@@ -929,6 +929,7 @@
 		F09C539C2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */; };
 		F09C53E02FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */; };
 		E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */; };
+		B7A5C0DE0000000000000002 /* FirestoreWorkoutHistoryLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A5C0DE0000000000000001 /* FirestoreWorkoutHistoryLoader.swift */; };
 		E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */; };
 		A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */; };
 		A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */; };
@@ -1931,6 +1932,7 @@
 		F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateSyncService.swift; sourceTree = "<group>"; };
 		F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionSaver.swift"; sourceTree = "<group>"; };
+		B7A5C0DE0000000000000001 /* FirestoreWorkoutHistoryLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreWorkoutHistoryLoader.swift; sourceTree = "<group>"; };
 		E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreCompletedWorkoutSessionDeleter.swift"; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerWorkoutTemplateFetcher.swift; sourceTree = "<group>"; };
 		A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateStoreLocation.swift; sourceTree = "<group>"; };
@@ -4770,6 +4772,7 @@
 				F09C539B2FD76234007CDAB4 /* WorkoutTemplateSyncService.swift */,
 				F09C53DF2FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift */,
 				E4C90B7A15D24F8E9A330005 /* FirestoreCompletedWorkoutSessionSaver.swift */,
+				B7A5C0DE0000000000000001 /* FirestoreWorkoutHistoryLoader.swift */,
 				E4C90B7A15D24F8E9A330007 /* FirestoreCompletedWorkoutSessionDeleter.swift */,
 				A1D0E5F200024C0A9B110001 /* FileManagerWorkoutTemplateFetcher.swift */,
 				A1D0E5F200024C0A9B110003 /* WorkoutTemplateStoreLocation.swift */,
@@ -4988,6 +4991,7 @@
 				74DE6DAA27D6299E009FB44A /* WorkloadSearchModel.swift in Sources */,
 				F09C53E02FD9EAD1007CDAB4 /* FirestoreWorkoutTemplateFetcher.swift in Sources */,
 				E4C90B7A15D24F8E9A330006 /* FirestoreCompletedWorkoutSessionSaver.swift in Sources */,
+				B7A5C0DE0000000000000002 /* FirestoreWorkoutHistoryLoader.swift in Sources */,
 				E4C90B7A15D24F8E9A330008 /* FirestoreCompletedWorkoutSessionDeleter.swift in Sources */,
 				A1D0E5F200024C0A9B110002 /* FileManagerWorkoutTemplateFetcher.swift in Sources */,
 				A1D0E5F200024C0A9B110004 /* WorkoutTemplateStoreLocation.swift in Sources */,

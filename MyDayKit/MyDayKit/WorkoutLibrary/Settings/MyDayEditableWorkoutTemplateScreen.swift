@@ -17,6 +17,7 @@ struct MyDayEditableWorkoutTemplateScreen: View {
 
     @ObservedObject var editor: WorkoutTemplateSettingsEditor
     var scheduleManager: ScheduleManager?
+    var history: WorkoutHistoryViewModel?
     var onAddToTodayTapped: ((WorkoutTemplateModel) -> Void)?
     var onReadyToDismiss: (() -> Void)?
     var onBack: (() -> Void)?
@@ -31,7 +32,8 @@ struct MyDayEditableWorkoutTemplateScreen: View {
             onReadyToDismiss: onReadyToDismiss,
             onBack: onBack,
             onSettingsTapped: { showsSettings = true },
-            settingsNotice: editor.saveError
+            settingsNotice: editor.saveError,
+            history: history
         )
         .sheet(isPresented: $showsSettings, onDismiss: {
             Task { await editor.save() }

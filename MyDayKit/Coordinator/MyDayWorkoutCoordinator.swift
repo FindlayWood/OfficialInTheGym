@@ -32,6 +32,8 @@ class MyDayWorkoutCoordinator {
     let scheduleManager: ScheduleManager?
     /// `nil` leaves the workout page's `⋯` off.
     let templateSettings: WorkoutTemplateSettingsDependencies?
+    /// The user's own sessions, for the workout page's history card. `nil` leaves the card off.
+    let workoutHistory: WorkoutHistoryLoader?
     
     // MARK: - Callbacks
 
@@ -58,7 +60,8 @@ class MyDayWorkoutCoordinator {
         libraryManager: WorkoutLibraryManager,
         customExercises: CustomExerciseDependencies? = nil,
         scheduleManager: ScheduleManager? = nil,
-        templateSettings: WorkoutTemplateSettingsDependencies? = nil
+        templateSettings: WorkoutTemplateSettingsDependencies? = nil,
+        workoutHistory: WorkoutHistoryLoader? = nil
     ) {
         self.navigationController = navigationController
         self.exerciseManager = exerciseManager
@@ -72,6 +75,7 @@ class MyDayWorkoutCoordinator {
         self.customExercises = customExercises
         self.scheduleManager = scheduleManager
         self.templateSettings = templateSettings
+        self.workoutHistory = workoutHistory
     }
 
     // MARK: - Root
@@ -111,6 +115,7 @@ extension MyDayWorkoutCoordinator {
                     settings: templateSettings,
                     libraryManager: libraryManager,
                     scheduleManager: scheduleManager,
+                    historyLoader: workoutHistory,
                     onAddToTodayTapped: dayManager.addWorkoutToToday,
                     onReadyToDismiss: { [weak self] in
                         self?.onWorkoutAddedToDay?()
