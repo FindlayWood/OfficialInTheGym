@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`WorkoutSupersetLayout` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
+`WorkoutSupersetLayout` · `WorkoutExerciseSetManager.setModel(orderIndex:id:)` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -1284,10 +1284,21 @@ no circuits, rounds or timed intervals. Built 2026-11-18. App only, no server ch
 - **Labels only show on a workout that has a superset** (`hasSupersets`), so every other
   workout looks as it did.
 - **The builder holds links, not ids** (`WorkoutBuilderManager.supersetLinks`, "joined to the
-  next"); `buildTemplate()` mints one UUID per group. The link button on each row but the last
-  took the place of the drag handle, which promised a reorder the list never had. Linking onto
-  a superset extends it; unlinking in the middle splits it. Deleting drops a link left pointing
-  past the end, or the next exercise added would join without asking.
+  next"); `buildTemplate()` mints one UUID per group. Linking onto a superset extends it;
+  unlinking in the middle splits it. Deleting drops a link left pointing past the end, or the
+  next exercise added would join without asking.
+- **The builder is MyDay's page, a card per exercise** (`MyDayWorkoutCreationHomeScreen`,
+  redone 2026-11-18). It was a `List` of rows inside a tinted box on a white page, with a
+  floating + and a drag handle that never reordered. Now: `MyDayWorkoutNavBar` over the hidden
+  system bar (`NavBarHidingHostingController`), the title on `systemBackground`, then
+  `pageColor` with a `MyDayWorkoutBuilderExerciseCard` each (name, set count, the set pills the
+  saved template will have, an `xmark` to remove), a dashed `MyDayTimelinePlaceholder` when empty
+  and as the last slot for adding, and the Upload bar pinned. Between each pair of cards,
+  `MyDayWorkoutBuilderLinkJoint`: apart, a "Superset" capsule in the gap; linked, the gap closes
+  on one spring, the two cards square off the corners they share and meet at a seam with a
+  filled link on it (tap to split). The joint is drawn above the cards (`zIndex`), since its
+  badge overhangs both. **`WorkoutExerciseSetManager.setModel(orderIndex:id:)` is the one
+  builder-set → `WorkoutSetModel` mapping**, used by the pills and by `buildTemplate()`.
 - **Every rebuild of an exercise must carry `supersetId`** — `WorkoutSessionManager.addSet`
   does. Copy and the settings change pass exercises through whole.
 - **Rest comes after the last exercise of a superset only**

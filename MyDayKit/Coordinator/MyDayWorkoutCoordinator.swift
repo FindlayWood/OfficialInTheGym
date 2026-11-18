@@ -128,8 +128,10 @@ extension MyDayWorkoutCoordinator {
             return vc
         case .creation:
             workoutManager.onUploadSuccess = libraryManager.addTemplate
-            let vc = selectorVC(
-                MyDayWorkoutCreationHomeScreen(
+            // The screen draws `MyDayWorkoutNavBar` itself, as the workout page does, so its
+            // page can be MyDay's.
+            let vc = MainActor.assumeIsolated { NavBarHidingHostingController(
+                rootView: MyDayWorkoutCreationHomeScreen(
                     manager: workoutManager,
                     onOptionsTapped: { [weak self] in
                         self?.presentSheet(.workoutSettings)
@@ -139,9 +141,12 @@ extension MyDayWorkoutCoordinator {
                     },
                     uploadComplete: { [weak self] in
                         self?.popToCoordinatorRoot()
+                    },
+                    onBack: { [weak self] in
+                        self?.popBack()
                     }
                 )
-            )
+            ) }
             vc.hidesBottomBarWhenPushed = true
             creationRootViewController = vc
             return vc

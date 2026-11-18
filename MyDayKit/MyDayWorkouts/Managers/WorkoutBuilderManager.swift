@@ -205,19 +205,7 @@ public final class WorkoutBuilderManager: ObservableObject {
                     exerciseCategory: manager.exercise.category,
                     orderIndex: index,
                     sets: manager.sets.enumerated().map { setIndex, setManager in
-                        WorkoutSetModel(
-                            id: UUID().uuidString,
-                            orderIndex: setIndex,
-                            reps: setManager.reps,
-                            weight: setManager.weight,
-                            weightUnit: setManager.weightUnits,
-                            time: setManager.time,
-                            distance: setManager.distance,
-                            distanceUnit: setManager.distanceUnits,
-                            tempo: setManager.tempo,
-                            note: setManager.note,
-                            eachSide: setManager.eachSide
-                        )
+                        setManager.setModel(orderIndex: setIndex, id: UUID().uuidString)
                     },
                     muscleGroups: manager.exercise.muscleGroups,
                     movementPatterns: manager.exercise.movementPatterns,
