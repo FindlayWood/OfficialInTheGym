@@ -952,6 +952,12 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
 - **Set rows end in `SetRowTrailingSpace`** (MyDay's exercise cards and the session's), sized
   off the row's width so the last pill can scroll to the middle. Without it the set just logged,
   usually the last, stopped short of the centre.
+- **The units screens' option cards are dashed until added** — weight, distance, time, tempo and
+  note, on the builder's `MyDayWorkoutBuilderUnitsScreen` and logging's `MyDayUnitsHomeView`.
+  `unitOptionCardChrome(isAdded:)` is the one look for both: not added, a soft-grey dashed
+  outline with no fill (MyDay's slot mark, grey because the page is `systemBackground`); added,
+  a solid card with a `darkColor` border. Empty used to be a solid grey card and added the same
+  card under a 6% tint, which read alike.
 - **Check-in is `matteGreen`, RPE `matteAmber`** — the cards, their score scales and the markers.
   They were system `.orange` / `.purple` over system red/orange/yellow/blue/green scales, which
   read as another app beside `darkColor`. MyDayKit's matte set is a copy of StatsKit's — keep in

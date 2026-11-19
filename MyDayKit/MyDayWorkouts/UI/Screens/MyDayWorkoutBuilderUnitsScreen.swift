@@ -164,7 +164,7 @@ private struct OptionCard: View {
                     
                     ZStack {
                         Circle()
-                            .fill(status.hasAny ? Color.darkColor : Color(UIColor.tertiarySystemBackground))
+                            .fill(status.hasAny ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                             .frame(width: 24, height: 24)
                         Image(systemName: status.hasAny ? "checkmark" : "plus")
                             .font(.system(size: 10, weight: .bold))
@@ -206,13 +206,7 @@ private struct OptionCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 120)
-            .background(status.hasAny ? Color.darkColor.opacity(0.06) : Color(UIColor.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(status.hasAny ? Color.darkColor.opacity(0.25) : Color.clear, lineWidth: 1)
-            }
-            .animation(.easeInOut(duration: 0.2), value: status.hasAny)
+            .unitOptionCardChrome(isAdded: status.hasAny)
         }
         .buttonStyle(.plain)
     }
