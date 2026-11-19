@@ -123,7 +123,7 @@ struct MyDayUnitsHomeView: View {
                     
                     ZStack {
                         Circle()
-                            .fill(added ? Color.darkColor : Color(UIColor.tertiarySystemBackground))
+                            .fill(added ? Color.darkColor : Color(UIColor.tertiarySystemFill))
                             .frame(width: 24, height: 24)
                         Image(systemName: added ? "checkmark" : "plus")
                             .font(.system(size: 10, weight: .bold))
@@ -173,20 +173,7 @@ struct MyDayUnitsHomeView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 120)
-            .background(
-                added
-                    ? Color.darkColor.opacity(0.06)
-                    : Color(UIColor.secondarySystemBackground)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(
-                        added ? Color.darkColor.opacity(0.25) : Color.clear,
-                        lineWidth: 1
-                    )
-            }
-            .animation(.easeInOut(duration: 0.2), value: added)
+            .unitOptionCardChrome(isAdded: added)
         }
         .buttonStyle(.plain)
     }
