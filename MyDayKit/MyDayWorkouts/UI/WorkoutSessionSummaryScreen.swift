@@ -12,11 +12,11 @@ struct WorkoutSessionSummaryScreen: View {
     @ObservedObject var manager: WorkoutSessionManager
     let endedAt: Date
     var onComplete: (() -> Void)?
-    /// When set, the screen draws `MyDayWorkoutNavBar` itself and must be hosted in
-    /// `NavBarHidingHostingController`. The demo workout does this so the summary carries on the
-    /// session screen's bar rather than switching to a system one mid-flow. `nil` keeps the system
-    /// bar, as MyDay's own summary does today.
-    var onBack: (() -> Void)? = nil
+    /// The screen draws `MyDayWorkoutNavBar` itself and must be hosted in
+    /// `NavBarHidingHostingController`, as the session screen before it is, so the flow keeps one
+    /// bar. **There is no system-bar version any more.** MyDay's summary used one, forced light
+    /// with `.toolbarColorScheme(.light)`, and in dark mode it was a white slab over a dark page.
+    let onBack: () -> Void
 
     @State private var selectedRPE: Int?
     @State private var notes: String = ""
@@ -45,21 +45,9 @@ struct WorkoutSessionSummaryScreen: View {
     }
 
     var body: some View {
-        if let onBack {
-            VStack(spacing: 0) {
-                MyDayWorkoutNavBar(title: "Summary", onBack: onBack)
-                content
-            }
-        } else {
-            // The system bar's configuration only where there is a system bar. On the custom-bar
-            // path the forced-light toolbar applied to the hidden bar, and showed as a white flash
-            // in dark mode whenever the bar appeared during a transition.
+        VStack(spacing: 0) {
+            MyDayWorkoutNavBar(title: "Summary", onBack: onBack)
             content
-                .navigationTitle("Summary")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarBackground(Color(UIColor.systemBackground), for: .navigationBar)
-                .toolbarBackground(.visible, for: .navigationBar)
-                .toolbarColorScheme(.light, for: .navigationBar)
         }
     }
 

@@ -16,12 +16,15 @@ import MyDayKit
 extension WorkoutTemplateModel {
 
     var discoverDetail: DiscoverWorkoutDetail {
-        DiscoverWorkoutDetail(
+        let ordered = exercises.sorted { $0.orderIndex < $1.orderIndex }
+        // Labels come from MyDayKit's one definition, on the same order the page draws.
+        let supersets = WorkoutSupersetLayout(exercises: ordered)
+        return DiscoverWorkoutDetail(
             templateId: id,
             title: title,
             description: description,
             createdBy: createdBy,
-            exercises: exercises.sorted { $0.orderIndex < $1.orderIndex }.map { exercise in
+            exercises: zip(ordered, supersets.entries).map { exercise, entry in
                 DiscoverWorkoutExercise(
                     id: exercise.id,
                     name: exercise.exerciseName,
@@ -35,7 +38,9 @@ extension WorkoutTemplateModel {
                             distanceUnit: set.distanceUnit?.rawValue
                         )
                     },
-                    notes: exercise.notes
+                    notes: exercise.notes,
+                    supersetLabel: supersets.hasSupersets ? entry.label : nil,
+                    continuesSuperset: entry.position.continuesToNext
                 )
             }
         )

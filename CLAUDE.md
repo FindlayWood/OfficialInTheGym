@@ -121,9 +121,9 @@ bottom, unchanged, so returning users are not slowed down.
   detail overlay), so the previews and the demo's summary hide it too and draw the same 44pt
   chevron/title bar: `StatsSamplePreviewNavBar` / `PerformanceSamplePreviewNavBar` are copies of
   `MyDayWorkoutNavBar`, hosted in copies of `NavBarHidingHostingController`, and
-  `WorkoutSessionSummaryScreen(onBack:)` draws `MyDayWorkoutNavBar` when given one. System bars
-  here made moving between them read as two apps. MyDay's own summary still uses the system bar
-  (`onBack: nil`), which forces `.toolbarColorScheme(.light)` and so is wrong in dark mode.
+  `WorkoutSessionSummaryScreen` draws `MyDayWorkoutNavBar`. System bars here made moving between
+  them read as two apps. **MyDay's own summary draws it too** (since 2026-11-18, `onBack` now
+  required): its system bar was forced light and showed white in dark mode.
 
 ### Example workout — before signup
 "Try a workout" pushes `MyDayDemoWorkoutRouter` (MyDayKit) onto LoginKit's stack: the **real**
@@ -647,7 +647,7 @@ call sites and drifted apart. Do not re-inline any of them:
 `WorkoutTemplateStoreLocation` · `WorkoutSetRecord.statsLogId(sessionId:setId:)` · `Tempo.isEmpty` · `AppSignOut` ·
 `ReportDocumentWriter` · `ProfileNamesReader` · `ProfileJoinedMonth` · `FollowsPageQuery` · `MyDayStoreLocation` ·
 `PendingSyncStoreLocation` · `DiscoverSearchQuery.normalized(_:)` · `DiscoverSearchPrefix` ·
-`ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
+`WorkoutSupersetLayout` · `WorkoutSetOrder` · `WorkoutExerciseSetManager.setModel(orderIndex:id:)` · `ScheduleRecurrence` · `Schedule.merged(local:remote:)` · `ScheduleStoreLocation` · `ReminderPlanner` · `Injury.merged(local:remote:)` · `InjuryStoreLocation` · `StatsHistoryWindow.days` · `InjuryChartBands` · `WorkoutTag.appending(_:to:)`
 
 ## Testing
 Before writing any tests, read the suite you are adding to and one of `StatsKit/StatsKitTests/`,
@@ -941,6 +941,17 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   **Rating opens once anything is recorded, workouts included** (`MyDayDayMarkers.hasExercise`);
   it used to need a standalone exercise, so a workout-only day could never be rated. Before that
   the step is drawn dimmed ("Opens once you've trained") so the user knows it is coming.
+- **Whatever was just added or filled in comes to the middle of the screen** — a new exercise,
+  a new or edited set (also centred in its card's row), a workout or sport added, the check-in
+  or rating given. **Worked out by comparing the day before and after each save**
+  (`MyDayScrollTarget.after`), never by each action saying where it went, so every way of adding
+  gets it. The before is a `MyDayDaySnapshot`, **a value copy**: `MyDayExerciseModel` is a class
+  and a save appends to the instance the previous day already held. Nothing scrolls on load, on
+  a removal, or on moving to another day. A focus made while the logging flow covers the screen
+  is applied when the screen is back.
+- **Set rows end in `SetRowTrailingSpace`** (MyDay's exercise cards and the session's), sized
+  off the row's width so the last pill can scroll to the middle. Without it the set just logged,
+  usually the last, stopped short of the centre.
 - **Check-in is `matteGreen`, RPE `matteAmber`** — the cards, their score scales and the markers.
   They were system `.orange` / `.purple` over system red/orange/yellow/blue/green scales, which
   read as another app beside `darkColor`. MyDayKit's matte set is a copy of StatsKit's — keep in
@@ -1269,6 +1280,53 @@ made in one sitting would otherwise all read "Today" and differentiate nothing.
   parent sets it after `let sub = ChildCoordinator(...)` before returning `sub.start()`.
   `MyDayCoordinator` now stores `rootViewController` in `start()` and exposes
   `popToCoordinatorRoot()`; `popToRoot()` / `popToRootViewController` are gone.
+
+## Supersets
+Exercises done back to back, labelled **1a, 1b, 1c, 2, 3a, 3b**. Supersets only, by decision:
+no circuits, rounds or timed intervals. Built 2026-11-18. App only, no server change.
+
+- **`WorkoutExerciseModel.supersetId`, optional.** Consecutive exercises sharing it are one
+  superset. No template written before carries it, and those read as having none.
+- **`WorkoutSupersetLayout` is the one definition** of a superset and its labels. Labels are
+  **never stored**, worked out from the order on every render, so unlinking or deleting cannot
+  leave a stale "3b". An id on one exercise alone, or split by another exercise, is not a
+  superset. DISCOVER's page gets its labels from it through the composition root
+  (`DiscoverWorkoutExercise.supersetLabel`); DiscoverKit never derives them.
+- **Labels only show on a workout that has a superset** (`hasSupersets`), so every other
+  workout looks as it did.
+- **The builder holds links, not ids** (`WorkoutBuilderManager.supersetLinks`, "joined to the
+  next"); `buildTemplate()` mints one UUID per group. Linking onto a superset extends it;
+  unlinking in the middle splits it. Deleting drops a link left pointing past the end, or the
+  next exercise added would join without asking.
+- **The builder is MyDay's page, a card per exercise** (`MyDayWorkoutCreationHomeScreen`,
+  redone 2026-11-18). It was a `List` of rows inside a tinted box on a white page, with a
+  floating + and a drag handle that never reordered. Now: `MyDayWorkoutNavBar` over the hidden
+  system bar (`NavBarHidingHostingController`), the title on `systemBackground`, then
+  `pageColor` with a `MyDayWorkoutBuilderExerciseCard` each (name, set count, the set pills the
+  saved template will have, an `xmark` to remove), a dashed `MyDayTimelinePlaceholder` when empty
+  and as the last slot for adding, and the Upload bar pinned. Between each pair of cards,
+  `MyDayWorkoutBuilderLinkJoint`: apart, a "Superset" capsule in the gap; linked, the gap closes
+  on one spring to an 8pt strip bridged by a filled link (tap to split). The cards keep their
+  rounded corners: squaring off the shared ones was tried and read as the cards being cut off.
+  The builder's pills draw no completion circle (`showsCompletionCircle: false`), since nothing
+  can be done to a set still being written. The joint is drawn above the cards (`zIndex`), since its
+  badge overhangs both. **`WorkoutExerciseSetManager.setModel(orderIndex:id:)` is the one
+  builder-set → `WorkoutSetModel` mapping**, used by the pills and by `buildTemplate()`.
+- **Every rebuild of an exercise must carry `supersetId`** — `WorkoutSessionManager.addSet`
+  does. Copy and the settings change pass exercises through whole.
+- **Rest comes after the last exercise of a superset only**
+  (`WorkoutSupersetLayout.Position.restsAfter`, read in the session's `log`). Logging order is
+  not enforced, and set counts may differ within a superset.
+- **Logging a set points at the next one**: on first completion only (as with rest), the
+  session screen scrolls the card holding the next set to the middle, centres the pill in its
+  row and flashes it twice (`SessionSetFlashRing`). Logged through the set detail overlay, it
+  waits for the overlay to close. **`WorkoutSetOrder` is the one order**: an exercise on its own
+  in set order; a superset in rounds (1a set 1, 1b set 1, back to 1a set 2), a shorter exercise
+  dropping out of later rounds. Next is the first set after the logged one not yet logged,
+  wrapping round to anything skipped; nothing once all are logged.
+- Cards keep their own chrome: a `WorkoutSupersetBadge` before the name, and
+  `supersetConnector` draws a line between linked cards' badges. Its `gap` must equal the stack's
+  spacing (12).
 
 ## Workout Completion Rules
 Three guards on what counts as a finished workout. All three protect the same thing: a completed

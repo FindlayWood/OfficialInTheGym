@@ -414,9 +414,14 @@ extension MyDayCoordinator {
             endedAt: Date(),
             onComplete: { [weak self] in
                 self?.popToCoordinatorRoot()
+            },
+            onBack: { [weak self] in
+                self?.navigationController.popViewController(animated: true)
             }
         )
-        let vc = UIHostingController(rootView: screen)
+        // The custom bar, as on the session screen it follows; see `WorkoutSessionSummaryScreen`.
+        let vc = MainActor.assumeIsolated { NavBarHidingHostingController(rootView: screen) }
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
 }

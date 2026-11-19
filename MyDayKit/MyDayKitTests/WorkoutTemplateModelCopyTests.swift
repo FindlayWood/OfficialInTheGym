@@ -57,6 +57,17 @@ final class WorkoutTemplateModelCopyTests: XCTestCase {
         XCTAssertFalse(String(decoding: data, as: UTF8.self).contains("copiedFrom"))
     }
 
+    // `supersetId` is new and optional, like `copiedFrom`: a template saved before supersets
+    // must still decode, as a workout with none.
+    func test_decode_deliversNilSupersetIdForTemplatesWrittenBeforeIt() throws {
+        let data = try JSONEncoder().encode(original())
+
+        let sut = try JSONDecoder().decode(WorkoutTemplateModel.self, from: data)
+
+        XCTAssertNil(sut.exercises.first?.supersetId)
+        XCTAssertFalse(String(decoding: data, as: UTF8.self).contains("supersetId"))
+    }
+
     // MARK: - Helpers
 
     private let fixedDate = Date(timeIntervalSince1970: 1_790_000_000)

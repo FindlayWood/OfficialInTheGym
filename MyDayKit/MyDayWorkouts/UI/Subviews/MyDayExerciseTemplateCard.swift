@@ -14,6 +14,9 @@ struct MyDayExerciseTemplateCard: View {
     var selectedSetId: String?
     var onExerciseTapped: (() -> Void)?
     var onSetTapped: ((WorkoutSetModel, Int) -> Void)?
+    /// Its place in the workout ("1a"), drawn before the name. `nil` on a workout with no
+    /// superset, which then looks as it always did.
+    var supersetEntry: WorkoutSupersetLayout.Entry? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,6 +37,9 @@ struct MyDayExerciseTemplateCard: View {
 
     private var header: some View {
         HStack(spacing: 12) {
+            if let supersetEntry {
+                WorkoutSupersetBadge(entry: supersetEntry)
+            }
             VStack(alignment: .leading, spacing: 3) {
                 Button {
                     onExerciseTapped?()

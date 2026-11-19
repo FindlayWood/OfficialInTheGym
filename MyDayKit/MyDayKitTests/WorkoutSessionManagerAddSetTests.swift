@@ -66,9 +66,19 @@ final class WorkoutSessionManagerAddSetTests: XCTestCase {
         XCTAssertEqual(updates.last?.template.exercises[0].sets.count, 3)
     }
 
+    // `addSet` rebuilds the exercise field by field. Leaving the superset id out would split a
+    // superset the moment a set was added to one of its exercises.
+    func test_addSet_keepsTheExercisesSuperset() {
+        let sut = WorkoutSessionManager(entry: entry(supersetId: "A"), userId: "user")
+
+        sut.addSet(toExercise: "squat")
+
+        XCTAssertEqual(sut.entry.template.exercises[0].supersetId, "A")
+    }
+
     // MARK: - Helpers
 
-    private func entry() -> DailyWorkoutEntry {
+    private func entry(supersetId: String? = nil) -> DailyWorkoutEntry {
         DailyWorkoutEntry(
             template: WorkoutTemplateModel(
                 id: "t1",
@@ -84,7 +94,8 @@ final class WorkoutSessionManagerAddSetTests: XCTestCase {
                         sets: [
                             WorkoutSetModel(id: "s1", orderIndex: 0, reps: 10, weight: 50, weightUnit: .kg),
                             WorkoutSetModel(id: "s2", orderIndex: 1, reps: 8, weight: 60, weightUnit: .kg)
-                        ]
+                        ],
+                        supersetId: supersetId
                     )
                 ],
                 createdBy: "user",

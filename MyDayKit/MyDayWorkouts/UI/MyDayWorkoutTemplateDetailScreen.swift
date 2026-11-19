@@ -73,7 +73,9 @@ struct MyDayWorkoutTemplateDetailScreen: View {
                     if let history {
                         WorkoutHistoryCard(viewModel: history)
                     }
-                    ForEach(template.exercises) { exercise in
+                    let supersets = WorkoutSupersetLayout(exercises: template.exercises)
+                    ForEach(Array(template.exercises.enumerated()), id: \.element.id) { index, exercise in
+                        let supersetEntry = supersets.hasSupersets ? supersets.entries[index] : nil
                         MyDayExerciseTemplateCard(
                             exercise: exercise,
                             animation: animation,
@@ -90,8 +92,10 @@ struct MyDayWorkoutTemplateDetailScreen: View {
                                         index: index
                                     )
                                 }
-                            }
+                            },
+                            supersetEntry: supersetEntry
                         )
+                        .supersetConnector(supersetEntry)
                     }
                     Color.clear.frame(height: 100)
                 }
